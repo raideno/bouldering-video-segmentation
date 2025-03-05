@@ -5,6 +5,9 @@ weights
 weights/
 weights/*
 
+*.pt
+*.pth
+
 **.ignore**
 
 .DS_Store
