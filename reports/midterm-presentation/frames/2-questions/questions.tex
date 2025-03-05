@@ -1,0 +1,19 @@
+\begin{frame}
+    \textbf{Questions may already arise such as:}
+    
+    \vspace{0.5em}
+
+    \begin{itemize}
+        \item How to construct our dataset ? \underline{By Frame} ? \underline{By Segment} ? \underline{By Clip} ?
+        \item How to measure the accuracy ? at the \underbar{Frame Level} ? At the \underline{Segment Level} ?
+        % NOTE: talk about the climbing classes and how they are not balanced. And thus maybe we should penalize it more ?
+        \item Penalize more the model for miss predicting a specific class ?
+        \item \underline{Post Processing} using priors ?
+        \item How to take advantage of our un-annotated videos ? \underline{Semi Supervised Learning} ?
+    \end{itemize}
+\end{frame}
+
+% NOTE: - s7: Par exemple:  "Should we use any Post Treatment on the predicted video annotations ?" ->  "Post processing using priors?" (on a des priors sur des durées d'actions, ..., des ordres) pour éviter des phrases.
+
+% NOTE: these slides serves to show that we have taken some perspective ("du recul") on the problem.
+% NOTE: follow this by the fact that we shouldn't share videos between the testing and validation set otherwise we'll have biased accuracy.

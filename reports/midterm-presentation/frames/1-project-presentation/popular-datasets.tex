@@ -1,0 +1,29 @@
+\begin{frame}
+    \textbf{Popular Datasets in the Field:}
+    
+    \vspace{0.5em}
+
+    \begin{table}[ht]
+        \centering
+        \resizebox{\textwidth}{!}{
+            \begin{tabular}{|l|l|l|l|l|l|l|}
+            \hline
+            \textbf{Dataset Name}                               & \textbf{Number of Classes / Actions}    & \textbf{Number of Videos / Clips}   & \textbf{Duration (hours)}          \\ \hline
+            Kinetics \cite{KineticsHumanAction2017}             & 400                           & 160,000                                   & 450                            \\ \hline
+            HowTo100M \cite{HowTo100MDataset}     & -                             & 136 millions                              & 131,400                            \\ \hline
+            Breakfast \cite{SerreLabBreakfast}                  & 10 / 48                       & 1700                                      & 66                                  \\ \hline
+            50Salads \cite{50Salads}                   & 17                            & 50                                        & 4                                   \\ \hline
+            SomethingV2 \cite{SomethingSomethingDataset} & - & 220,847 & 246 \\ \hline
+            $\cdots$                                            & $\cdots$                      & $\cdots$                                  & $\cdots$                                   \\ \hline
+            \end{tabular}
+        }
+
+        % TODO: cite the UFC101 dataset - https://www.crcv.ucf.edu/data/UCF101.php
+    \end{table}
+
+    \vspace{1em}
+
+    % \text{- Print the percentage of presence of each class in the dataset and see how this correlates with the training results, accuracies for each class. Because since we have a lot of climbing parts it might affect the model.}
+\end{frame}
+
+% NOTE: the HowTo100M dataset contains a bunch of un annotated youtube videos. But with the youtube videos we have the sound / narration and the description and the subtitles; thus the goal was to test if we could create a sort of text / video embedding from that.

@@ -1,0 +1,117 @@
+@misc{50Salads,
+  title = {50 {{Salads}}},
+  journal = {Discovery - the University of Dundee Research Portal},
+  urldate = {2025-01-22},
+  howpublished = {https://discovery.dundee.ac.uk/en/datasets/50-salads},
+  langid = {english},
+  file = {/Users/nadir/Zotero/storage/L54F2GA2/50-salads.html}
+}
+
+@article{bardesRevisitingFeaturePrediction,
+  title = {Revisiting {{Feature Prediction}} for {{Learning Visual Representations}} from {{Video}}},
+  author = {Bardes, Adrien and Garrido, Quentin and Ponce, Jean and Chen, Xinlei and Rabbat, Michael and LeCun, Yann and Assran, Mahmoud and Ballas, Nicolas},
+  langid = {english},
+  file = {/Users/nadir/Zotero/storage/Y4Z4JKAJ/Bardes et al. - Revisiting Feature Prediction for Learning Visual Representations from Video.pdf}
+}
+
+@misc{HowTo100MDataset,
+  title = {{{HowTo100M}}: {{Learning}} a {{Text-Video Embedding}} by {{Watching Hundred Million Narrated Video Clips}}},
+  shorttitle = {{{HowTo100M}}},
+  author = {Miech, Antoine and Zhukov, Dimitri and Alayrac, Jean-Baptiste and Tapaswi, Makarand and Laptev, Ivan and Sivic, Josef},
+  year = {2019},
+  month = jul,
+  number = {arXiv:1906.03327},
+  eprint = {1906.03327},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1906.03327},
+  urldate = {2025-01-22},
+  abstract = {Learning text-video embeddings usually requires a dataset of video clips with manually provided captions. However, such datasets are expensive and time consuming to create and therefore difficult to obtain on a large scale. In this work, we propose instead to learn such embeddings from video data with readily available natural language annotations in the form of automatically transcribed narrations. The contributions of this work are three-fold. First, we introduce HowTo100M: a large-scale dataset of 136 million video clips sourced from 1.22M narrated instructional web videos depicting humans performing and describing over 23k different visual tasks. Our data collection procedure is fast, scalable and does not require any additional manual annotation. Second, we demonstrate that a text-video embedding trained on this data leads to state-of-the-art results for text-to-video retrieval and action localization on instructional video datasets such as YouCook2 or CrossTask. Finally, we show that this embedding transfers well to other domains: fine-tuning on generic Youtube videos (MSR-VTT dataset) and movies (LSMDC dataset) outperforms models trained on these datasets alone. Our dataset, code and models will be publicly available at: www.di.ens.fr/willow/research/howto100m/.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  file = {/Users/nadir/Zotero/storage/KL8EKCHS/Miech et al. - 2019 - HowTo100M Learning a Text-Video Embedding by Watching Hundred Million Narrated Video Clips.pdf;/Users/nadir/Zotero/storage/CZ98BSF3/1906.html}
+}
+
+@misc{KineticsHumanAction2017,
+  title = {The {{Kinetics Human Action Video Datase}}},
+  author = {Kay, Will and Carreira, Joao and Simonyan, Karen and Zhang, Brian and Hillier, Chloe and Vijayanarasimhan, Sudheendra and Viola, Fabio and Green, Tim and Back, Trevor and Natsev, Paul and Suleyman, Mustafa and Zisserman, Andrew},
+  year = {2017},
+  month = may,
+  number = {arXiv:1705.06950},
+  eprint = {1705.06950},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1705.06950},
+  urldate = {2025-01-22},
+  abstract = {We describe the DeepMind Kinetics human action video dataset. The dataset contains 400 human action classes, with at least 400 video clips for each action. Each clip lasts around 10s and is taken from a different YouTube video. The actions are human focussed and cover a broad range of classes including human-object interactions such as playing instruments, as well as human-human interactions such as shaking hands. We describe the statistics of the dataset, how it was collected, and give some baseline performance figures for neural network architectures trained and tested for human action classification on this dataset. We also carry out a preliminary analysis of whether imbalance in the dataset leads to bias in the classifiers.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  file = {/Users/nadir/Zotero/storage/QMWYLYH8/Kay et al. - 2017 - The Kinetics Human Action Video Dataset.pdf;/Users/nadir/Zotero/storage/L7FX9RV5/1705.html}
+}
+
+@misc{oquabDINOv2LearningRobust2024,
+  title = {{{DINOv2}}: {{Learning Robust Visual Features}} without {{Supervision}}},
+  shorttitle = {{{DINOv2}}},
+  author = {Oquab, Maxime and Darcet, Timoth{\'e}e and Moutakanni, Th{\'e}o and Vo, Huy and Szafraniec, Marc and Khalidov, Vasil and Fernandez, Pierre and Haziza, Daniel and Massa, Francisco and {El-Nouby}, Alaaeldin and Assran, Mahmoud and Ballas, Nicolas and Galuba, Wojciech and Howes, Russell and Huang, Po-Yao and Li, Shang-Wen and Misra, Ishan and Rabbat, Michael and Sharma, Vasu and Synnaeve, Gabriel and Xu, Hu and Jegou, Herv{\'e} and Mairal, Julien and Labatut, Patrick and Joulin, Armand and Bojanowski, Piotr},
+  year = {2024},
+  month = feb,
+  number = {arXiv:2304.07193},
+  eprint = {2304.07193},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2304.07193},
+  urldate = {2025-01-23},
+  abstract = {The recent breakthroughs in natural language processing for model pretraining on large quantities of data have opened the way for similar foundation models in computer vision. These models could greatly simplify the use of images in any system by producing all-purpose visual features, i.e., features that work across image distributions and tasks without finetuning. This work shows that existing pretraining methods, especially self-supervised methods, can produce such features if trained on enough curated data from diverse sources. We revisit existing approaches and combine different techniques to scale our pretraining in terms of data and model size. Most of the technical contributions aim at accelerating and stabilizing the training at scale. In terms of data, we propose an automatic pipeline to build a dedicated, diverse, and curated image dataset instead of uncurated data, as typically done in the self-supervised literature. In terms of models, we train a ViT model (Dosovitskiy et al., 2020) with 1B parameters and distill it into a series of smaller models that surpass the best available all-purpose features, OpenCLIP (Ilharco et al., 2021) on most of the benchmarks at image and pixel levels.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  file = {/Users/nadir/Zotero/storage/IUA2FVLG/Oquab et al. - 2024 - DINOv2 Learning Robust Visual Features without Supervision.pdf;/Users/nadir/Zotero/storage/SMGHWPIQ/2304.html}
+}
+
+@misc{S3d,
+  title = {End-to-{{End Learning}} of {{Visual Representations}} from {{Uncurated Instructional Videos}}},
+  author = {Miech, Antoine and Alayrac, Jean-Baptiste and Smaira, Lucas and Laptev, Ivan and Sivic, Josef and Zisserman, Andrew},
+  year = {2020},
+  month = aug,
+  number = {arXiv:1912.06430},
+  eprint = {1912.06430},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1912.06430},
+  urldate = {2025-01-23},
+  abstract = {Annotating videos is cumbersome, expensive and not scalable. Yet, many strong video models still rely on manually annotated data. With the recent introduction of the HowTo100M dataset, narrated videos now offer the possibility of learning video representations without manual supervision. In this work we propose a new learning approach, MIL-NCE, capable of addressing misalignments inherent to narrated videos. With this approach we are able to learn strong video representations from scratch, without the need for any manual annotation. We evaluate our representations on a wide range of four downstream tasks over eight datasets: action recognition (HMDB-51, UCF-101, Kinetics-700), text-to-video retrieval (YouCook2, MSR-VTT), action localization (YouTube-8M Segments, CrossTask) and action segmentation (COIN). Our method outperforms all published self-supervised approaches for these tasks as well as several fully supervised baselines.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  file = {/Users/nadir/Zotero/storage/I7Q2TJXW/Miech et al. - 2020 - End-to-End Learning of Visual Representations from Uncurated Instructional Videos.pdf;/Users/nadir/Zotero/storage/4533ELKK/1912.html}
+}
+
+@misc{SerreLabBreakfast,
+  title = {Serre {{Lab}} >> {{The Breakfast Actions Dataset}}},
+  urldate = {2025-01-22},
+  abstract = {Research in the Serre lab focuses on understanding the brain mechanisms underlying the recognition of objects and complex visual scenes using a combination of behavioral, imaging and physiological techniques.},
+  file = {/Users/nadir/Zotero/storage/MXWDMKQT/breakfast-actions-dataset.html}
+}
+
+@misc{SomethingSomethingDataset,
+  title = {The "Something Something" Video Database for Learning and Evaluating Visual Common Sense},
+  author = {Goyal, Raghav and Kahou, Samira Ebrahimi and Michalski, Vincent and Materzy{\'n}ska, Joanna and Westphal, Susanne and Kim, Heuna and Haenel, Valentin and Fruend, Ingo and Yianilos, Peter and {Mueller-Freitag}, Moritz and Hoppe, Florian and Thurau, Christian and Bax, Ingo and Memisevic, Roland},
+  year = {2017},
+  month = jun,
+  number = {arXiv:1706.04261},
+  eprint = {1706.04261},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1706.04261},
+  urldate = {2025-01-22},
+  abstract = {Neural networks trained on datasets such as ImageNet have led to major advances in visual object classification. One obstacle that prevents networks from reasoning more deeply about complex scenes and situations, and from integrating visual knowledge with natural language, like humans do, is their lack of common sense knowledge about the physical world. Videos, unlike still images, contain a wealth of detailed information about the physical world. However, most labelled video datasets represent high-level concepts rather than detailed physical aspects about actions and scenes. In this work, we describe our ongoing collection of the "something-something" database of video prediction tasks whose solutions require a common sense understanding of the depicted situation. The database currently contains more than 100,000 videos across 174 classes, which are defined as caption-templates. We also describe the challenges in crowd-sourcing this data at scale.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  file = {/Users/nadir/Zotero/storage/7WIKE8XA/Goyal et al. - 2017 - The something something video database for learning and evaluating visual common sense.pdf;/Users/nadir/Zotero/storage/RUWI82DW/1706.html}
+}
+
+@article{ding2023temporal,
+  title={Temporal action segmentation: An analysis of modern techniques},
+  author={Ding, Guodong and Sener, Fadime and Yao, Angela},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  year={2023},
+  publisher={IEEE}
+}

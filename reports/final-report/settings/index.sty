@@ -1,0 +1,88 @@
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{booktabs} % NOTE: for professional tables
+\usepackage{makecell}
+\usepackage{listings}
+\usepackage{xcolor}
+\lstset{
+  breaklines=true,              % NOTE: enable automatic line breaking
+  basicstyle=\small\ttfamily,   % NOTE: adjust the font size and type
+  escapeinside={||},            % NOTE: define escape characters for LaTeX commands
+}
+\usepackage{fancyvrb}
+\usepackage{minted}
+% Set options for minted:
+\setminted{
+  breaklines=true,   % Enable automatic line breaking
+  fontsize=\small,   % Adjust the font size if needed
+  escapeinside=||,
+  % Any other options you need
+}
+\usepackage{mdframed}
+
+
+\usepackage{lipsum}
+\usepackage{listings}
+% Rename "Listing: " to "Extract: "
+\renewcommand{\lstlistingname}{Extract}
+
+\usepackage{hyperref}
+
+
+% NOTE: make hyperref and algorithmic work together better:
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% \usepackage{icml2025} % NOTE: will display the line numbers
+\usepackage[accepted]{./settings/icml2025} % NOTE: won't display the line numbers
+% \usepackage[nohyperref, accepted]{icml2025} % NOTE: won't display the line numbers
+
+% For theorems and such
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+% if you use cleveref..
+\usepackage[capitalize,noabbrev]{cleveref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% TODO: is useful during development; simply uncomment the next line
+%    and comment out the line below the next line to turn off comments
+%\usepackage[disable,textsize=tiny]{todonotes}
+\usepackage[textsize=tiny]{todonotes}
+
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{enumitem}
+% c.f. Efficient Online Reinforcement Learning Fine-Tuning Need Not Retain Offline Data
+\usepackage[most,skins,theorems]{tcolorbox}
+\tcbset{
+  aibox/.style={
+    width=\linewidth,
+    top=8pt,
+    bottom=4pt,
+    colback=blue!6!white,
+    colframe=black,
+    colbacktitle=black,
+    enhanced,
+    center,
+    attach boxed title to top left={yshift=-0.1in,xshift=0.15in},
+    boxed title style={boxrule=0pt,colframe=white,},
+  }
+}
+
+\newtcolorbox{AIbox}[2][]{aibox,title=#2,#1}

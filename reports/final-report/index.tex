@@ -1,0 +1,60 @@
+\documentclass{article}
+
+\input{settings/index.sty}
+
+\begin{document}
+
+\twocolumn[
+    \icmltitle{Bouldering Video Segmentation \\ \textit{M1 DS Research Project}}
+
+    \icmlsetsymbol{equal}{*}
+
+    \begin{icmlauthorlist}
+    \icmlauthor{Nadir Kichou}{ul}
+    \icmlauthor{Jérémie Boulanger}{sigma}
+    \icmlauthor{Ludivine Plumhans}{ur}
+    \icmlauthor{Ludovic Seifert}{ur}
+    \end{icmlauthorlist}
+
+    \icmlaffiliation{ul}{Université de Lille}
+    \icmlaffiliation{sigma}{CRIStAL Lab, SIGMA}
+    \icmlaffiliation{ur}{Université de Rouen}
+
+    \icmlcorrespondingauthor{Nadir Kichou }{nadir.kichou.etu@univ-lille.fr}
+
+    \icmlkeywords{Temporal Action Segmnetation, TAS, Video Machine Learning, Machine Learning, ICML}
+
+    \vskip 0.3in
+]
+
+\begin{abstract}
+Scaling \todo{Hellow world \ldots} inference compute enhances reasoning in large language models (LLMs), with long chains-of-thought (CoTs) enabling strategies like backtracking and error correction. Reinforcement learning (RL) has emerged as a crucial method for developing these capabilities, yet the conditions under which long CoTs emerge remain unclear, and RL training requires careful design choices. In this study, we systematically investigate the mechanics of long CoT reasoning, identifying the key factors that enable models to generate long CoT trajectories. Through extensive supervised fine-tuning (SFT) and RL experiments, we present four main findings: (1) While SFT is not strictly necessary, it simplifies training and improves efficiency; (2) Reasoning capabilities tend to emerge with increased training compute, but their development is not guaranteed, making reward shaping crucial for stabilizing CoT length growth; (3) Scaling verifiable reward signals is critical for RL. We find that leveraging noisy, web-extracted solutions with filtering mechanisms shows strong potential, particularly for out-of-distribution (OOD) tasks such as STEM reasoning; and (4) Core abilities like error correction are inherently present in base models, but incentivizing these skills effectively for complex tasks via RL demands significant compute, and measuring their emergence requires a nuanced approach. These insights provide practical guidance for optimizing training strategies to enhance long CoT reasoning in LLMs. Our code is available at: \href{https://github.com/eddycmu/demystify-long-cot}{https://github.com/eddycmu/demystify-long-cot}.
+\end{abstract}
+
+\input{sections/1-introduction.tex}
+\input{sections/2-context.tex}
+\input{sections/3-objective.tex}
+\input{sections/4-problem-presentation.tex}
+\input{sections/5-dataset.tex}
+\input{sections/6-popular-methods.tex}
+\input{sections/7-our-approaches.tex}
+\input{sections/8-other-possiblities.tex}
+\input{sections/9-conclusion.tex}
+
+\begin{tcolorbox}[colback=lightgray!10, colframe=black, title={Research Aim}]
+    Our goal is to \textit{demystify long chain-of-thought reasoning} in LLMs. Through systematic analysis and ablations, we extract key insights and offer practical strategies to enhance and stabilize its performance.
+\end{tcolorbox}
+\vspace{-10pt}
+
+\section*{Acknowledgment}
+Thanks to \lipsum[10].
+
+\listoftodos
+
+\bibliography{reference}
+\bibliographystyle{icml2025}
+
+\input{sections/10-appendix.tex}
+
+\end{document}
+
