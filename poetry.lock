@@ -3537,14 +3537,14 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "video-dataset"
-version = "0.2.9"
+version = "0.2.9.dev20250305153439"
 description = "A pytorch compatible video dataset that is fully customizable."
 optional = false
 python-versions = ">=3.12"
 groups = ["main"]
 files = [
-    {file = "video_dataset-0.2.9-py3-none-any.whl", hash = "sha256:1cf03f13a1c6736419fbdae37dcd6a75bd44d7b18471c39b0ffb96456d5332a4"},
-    {file = "video_dataset-0.2.9.tar.gz", hash = "sha256:581da317676986dae24f8c55cd3c42f14f523aed049e6293a996f36089adec7a"},
+    {file = "video_dataset-0.2.9.dev20250305153439-py3-none-any.whl", hash = "sha256:d0cb0b3d5578304fb085990a744c5f3d689278f5d5ae1c00c27ff78121e8cc4e"},
+    {file = "video_dataset-0.2.9.dev20250305153439.tar.gz", hash = "sha256:031c3abf9df3584791655e7b6233be3b7a32e5124fb29fe96e8f104e0cb449d8"},
 ]
 
 [package.dependencies]
@@ -3584,4 +3584,4 @@ PyYAML = "*"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "2484f190d60f101cb036da3c92a6596c37b35ca411b15ddebebc4dd8db2b987b"
+content-hash = "2f6cb7c1127a28bec957fbb967fa907fd5d7eb1728cb24a4419e6f4a78c1ef48"

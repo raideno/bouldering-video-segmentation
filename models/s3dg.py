@@ -23,7 +23,6 @@ import os
 import numpy as np
 import re
 
-
 class InceptionBlock(nn.Module):
     def __init__(
         self,

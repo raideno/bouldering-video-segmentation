@@ -1,3 +1,4 @@
+import os
 import torch
 import open_clip
 import torchvision
@@ -110,10 +111,6 @@ class DinoFeatureExtractor(FeatureExtractor):
     def transform_and_extract(self, x):
         return self.extract_features(self.transform(x))
 
-# SOURCE: https://pytorch.org/hub/facebookresearch_pytorchvideo_slowfast/
-class SlowFastFeatureExtractor(FeatureExtractor):
-    pass
-
 # SOURCE: https://github.com/google-deepmind/kinetics-i3d
 class I3DFeatureExtractor(FeatureExtractor):
     def __init__(self, verbose=True):
@@ -148,11 +145,7 @@ class I3DFeatureExtractor(FeatureExtractor):
         return self.model.extract_features(x).flatten()
     
     def transform_and_extract(self, x):
-        return self.extract_features(self.transform(x))
-
-# SOURCE: https://pytorch.org/hub/facebookresearch_pytorchvideo_x3d/
-class X3DFeatureExtractor(FeatureExtractor):
-    pass
+        return self.extract_features(self.transform(x))    
 
 class ClipFeatureExtractor(FeatureExtractor):
     def __init__(self):
@@ -274,5 +267,148 @@ class IJepaFeatureExtractor(FeatureExtractor):
     def transform_and_extract(self, x):
         return self.extract_features(self.transform(x))
     
-class S3DFeatureExtractor(FeatureExtractor):
+
+from models.s3d import S3D
+
+# SOURCE: https://github.com/kylemin/S3D?tab=readme-ov-file
+class S3DKineticsFeatureExtractor(FeatureExtractor):
+    def __init__(self, verbose:bool=False):
+        self.verbose = verbose
+        self.model = S3D(num_class=400)
+        
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        
+        weights_file = 'weights/s3d_kinetics400.pt'
+        
+        if os.path.isfile(weights_file):
+            if self.verbose:
+                print('[s3d]: loading weights.')
+                
+            weight_dict = torch.load(weights_file, map_location=device)
+            model_dict = self.model.state_dict()
+            for name, param in weight_dict.items():
+                if 'module' in name:
+                    name = '.'.join(name.split('.')[1:])
+                if name in model_dict:
+                    if param.size() == model_dict[name].size():
+                        model_dict[name].copy_(param)
+                    else:
+                        if verbose:
+                            print(' size? ' + name, param.size(), model_dict[name].size())
+                else:
+                    if verbose:
+                        print(' name? ' + name)
+
+            if self.verbose:
+                print('[s3d]: loaded weights.')
+        else:
+            raise ValueError('No weight file.')
+        
+        self.model.fc = torch.nn.Identity()
+        
+        self.model.eval()
+        
+    def transform(self, x):
+        return torchvision.transforms.Compose([
+            torchvision.transforms.Lambda(lambda x: torch.tensor(x, dtype=torch.float32)),
+            torchvision.transforms.Resize((224, 224)),
+            torchvision.transforms.Lambda(lambda x: x / max(255.0, x.max())),
+        ])(x)
+        
+    def extract_features(self, x):
+        x = x.unsqueeze(0)
+        
+        return self.model(x)[0]
+
+    def transform_and_extract(self, x):
+        return self.extract_features(self.transform(x))
+    
+from models.s3dg import S3D as S3DG
+
+# SOURCE: https://github.com/antoine77340/S3D_HowTo100M
+class S3DHowTo100MFeatureExtractor(FeatureExtractor):
+    def __init__(self):
+        self.network = S3DG(
+            dict_path='weights/s3d_dict.npy',
+            num_classes=512
+        )
+
+        self.network.load_state_dict(torch.load('weights/s3d_howto100m.pth'))
+
+        self.network.eval()
+        
+    def transform(self, x):
+        return torchvision.transforms.Compose([
+            torchvision.transforms.Lambda(lambda x: torch.tensor(x, dtype=torch.float32)),
+            torchvision.transforms.Resize((224, 224)),
+            torchvision.transforms.Lambda(lambda x: x / max(255.0, x.max())),
+        ])(x)
+        
+    def extract_features(self, x):
+        x = x.unsqueeze(0)
+        
+        return self.network(x)["mixed_5c"][0]
+    
+    def transform_and_extract(self, x):
+        return self.extract_features(self.transform(x))
+
+# SOURCE: https://pytorch.org/hub/facebookresearch_pytorchvideo_x3d/
+class X3DSFeatureExtractor(FeatureExtractor):
+    def __init__(self):
+        self.model_name = 'x3d_s'
+        self.model = torch.hub.load('facebookresearch/pytorchvideo', self.model_name, pretrained=True)
+        
+        self.model.blocks[-1].proj = torch.nn.Identity()
+        
+        
+        self.model.eval()
+        
+    def transform(self, x):
+        mean = [0.45, 0.45, 0.45]
+        std = [0.225, 0.225, 0.225]
+        model_transform_params  = {
+            "x3d_xs": {
+                "side_size": 182,
+                "crop_size": 182,
+                "num_frames": 4,
+                "sampling_rate": 12,
+            },
+            "x3d_s": {
+                "side_size": 182,
+                "crop_size": 182,
+                "num_frames": 13,
+                "sampling_rate": 6,
+            },
+            "x3d_m": {
+                "side_size": 256,
+                "crop_size": 256,
+                "num_frames": 16,
+                "sampling_rate": 5,
+            }
+        }
+
+        transform_params = model_transform_params[self.model_name]
+
+        transform =  torchvision.transforms.Compose([
+            torchvision.transforms.Lambda(lambda x: x / 255.0),
+            NormalizeVideo(mean, std),
+            ShortSideScale(size=transform_params["side_size"]),
+            CenterCropVideo(
+                crop_size=(transform_params["crop_size"], transform_params["crop_size"])
+            )
+        ])
+        
+        return transform(x)
+    
+    def extract_features(self, x):
+        with torch.no_grad():
+            x = x.unsqueeze(0)
+            
+            return self.model(x).flatten()
+        
+    def transform_and_extract(self, x):
+        return self.extract_features(self.transform(x))
+
+# SOURCE: https://pytorch.org/hub/facebookresearch_pytorchvideo_slowfast/
+class SlowFastFeatureExtractor(FeatureExtractor):
     pass
