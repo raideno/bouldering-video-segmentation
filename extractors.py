@@ -42,6 +42,9 @@ class ResNet3DFeatureExtractor(FeatureExtractor):
     def __init__(self):
         self.model = torch.hub.load('facebookresearch/pytorchvideo', 'slow_r50', pretrained=True)
         
+        self.model.blocks[-1].proj = torch.nn.Identity()
+        # del self.model.blocks[-1].output_pool
+        
         self.model.eval()
         
     def transform(self, x):
@@ -67,15 +70,7 @@ class ResNet3DFeatureExtractor(FeatureExtractor):
             # NOTE: add batch dimensions
             x = x.unsqueeze(0)
 
-            # NOTE: forward pass through all but last block
-            for i in range(len(self.model.blocks) - 2):  
-                x = self.model.blocks[i](x)
-
-            # NOTE: the second-to-last block contains the global average pooling layer
-            x = self.model.blocks[-2](x)
-
-            # NOTE: flatten to (batch_size, 2048) and global average pooling
-            x = x.mean(dim=[2, 3, 4])
+            x = self.model(x)
             
             # NOTE: we remove the added batch dimension
             x = x.flatten()
@@ -87,7 +82,8 @@ class ResNet3DFeatureExtractor(FeatureExtractor):
     
 # SOURCE: https://github.com/facebookresearch/dinov2
 class DinoFeatureExtractor(FeatureExtractor):
-    def __init__(self):
+    def __init__(self, average_pool:bool):
+        self.average_pool = average_pool
         self.model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14', pretrained=True)
         
         self.model.eval()
@@ -106,7 +102,17 @@ class DinoFeatureExtractor(FeatureExtractor):
         ])(x)
         
     def extract_features(self, clip):
-        return self.model.forward_features(clip.permute(1, 0, 2, 3))["x_norm_clstoken"].mean(dim=0).flatten()
+        # return self.model.forward_features(clip.permute(1, 0, 2, 3))["x_norm_clstoken"].mean(dim=0).flatten()
+            
+        # TODO: should probably be moved to the transform in my opinion
+        # NOTE: we need it to be [Time, Channel, Height, Width]
+        clip = clip.permute(1, 0, 2, 3)    
+        
+        with torch.no_grad():
+            if self.average_pool:
+                return self.model.forward_features(clip)["x_norm_clstoken"].mean(dim=0).flatten()
+            else:
+                return self.model.forward_features(clip)["x_norm_clstoken"]
 
     def transform_and_extract(self, x):
         return self.extract_features(self.transform(x))
@@ -148,7 +154,8 @@ class I3DFeatureExtractor(FeatureExtractor):
         return self.extract_features(self.transform(x))    
 
 class ClipFeatureExtractor(FeatureExtractor):
-    def __init__(self):
+    def __init__(self, average_pool:bool):
+        self.average_pool = average_pool
         self.model, preprocess_1, preprocess_2 = open_clip.create_model_and_transforms('ViT-B-32', pretrained='laion2b_s34b_b79k')
         
         # print("[self.model]:")
@@ -176,19 +183,23 @@ class ClipFeatureExtractor(FeatureExtractor):
     
     def extract_features(self, x):
         with torch.no_grad():
-            return self.model.encode_image(x).mean(dim=0).flatten()
+            if self.average_pool:
+                return self.model.encode_image(x).mean(dim=0).flatten()
+            else:
+                return self.model.encode_image(x)
 
     def transform_and_extract(self, x):
         return self.extract_features(self.transform(x))
 
 class YoloFeatureExtractor(FeatureExtractor):
-    def __init__(self, num_keypoints=17):
+    def __init__(self, average_pool:bool):
         """
         Initialize YOLO pose estimation model
         :param num_keypoints: Number of keypoints to extract (default is 17 for COCO keypoints)
         """
+        self.num_key_points = 17
+        self.average_pool = average_pool
         self.model = YOLO('weights/yolov8n-pose.pt', verbose=False)
-        self.num_keypoints = num_keypoints
         
     def transform(self, x):
         mean = [0.48145466, 0.4578275, 0.40821073]
@@ -205,35 +216,50 @@ class YoloFeatureExtractor(FeatureExtractor):
         
     def extract_features(self, x):
         """
-        Extract skeleton keypoints from the input video clip in batch
+        Extract skeleton keypoints from the input video clip in batch for each frame.
         
         :param x: Transformed video clip tensor (Time, Channel, Height, Width)
-        :return: Tensor of keypoint coordinates or zeros
+        :return: Tensor of keypoint coordinates for each frame, or zeros for frames with no detected person
         """
-        results = self.model(x)
+        results = self.model(x, verbose=False)
         
-        # NOTE: default zero tensor if no person detected
-        keypoints = torch.zeros(self.num_keypoints * 3)
+        # Initialize a list to hold keypoints for each frame
+        keypoints_list = []
         
-        # NOTE: check results for any frame with a detected person
+        # Iterate through the results for each frame
         for result in results:
+            # Default zero tensor if no person detected
+            keypoints = torch.zeros(self.num_key_points * 3)
+            
             if len(result.keypoints) > 0:
-                print("found a person")
-                # NOTE: take the first person's keypoints
+                # Take the first person's keypoints
                 first_person_keypoints = result.keypoints[0].xyn.numpy()
                 
-                # NOTE: flatten keypoints (x, y, confidence for each point)
+                # Flatten keypoints (x, y, confidence for each point)
                 keypoints_flat = first_person_keypoints.flatten()
                 
-                # NOTE: ensure we have exactly num_keypoints * 3 values
-                if len(keypoints_flat) >= self.num_keypoints * 3:
-                    keypoints = torch.tensor(keypoints_flat[:self.num_keypoints * 3], dtype=torch.float32)
-                
-                # NOTE: stop if a person is found in any frame
-                break
+                # Ensure we have exactly num_keypoints * 3 values
+                if len(keypoints_flat) >= self.num_key_points * 3:
+                    keypoints = torch.tensor(keypoints_flat[:self.num_key_points * 3], dtype=torch.float32)
+            
+            # Append the keypoints (or zero vector) for this frame
+            keypoints_list.append(keypoints)
         
-        return keypoints
-    
+        # Convert the list of keypoints to a tensor (Time, num_key_points * 3)
+        keypoints_tensor = torch.stack(keypoints_list)
+        
+        # If average_pool is True, compute the average position of the keypoints across frames
+        if self.average_pool:
+            # Compute the average of the keypoints across time, ignoring the zero vectors
+            non_zero_keypoints = keypoints_tensor[keypoints_tensor.sum(dim=-1) != 0]  # Remove zero vectors
+            if len(non_zero_keypoints) > 0:
+                keypoints_avg = non_zero_keypoints.mean(dim=0)
+            else:
+                keypoints_avg = torch.zeros(self.num_key_points * 3)  # If no keypoints detected, return a zero vector
+            return keypoints_avg
+        
+        return keypoints_tensor
+
     def transform_and_extract(self, x):
         """
         Transform input and extract features in one step
@@ -242,7 +268,8 @@ class YoloFeatureExtractor(FeatureExtractor):
     
     
 class IJepaFeatureExtractor(FeatureExtractor):
-    def __init__(self):
+    def __init__(self, average_pool):
+        self.average_pool = average_pool
         self.model_id = "facebook/ijepa_vith14_1k"
         
         self.processor = AutoProcessor.from_pretrained(self.model_id)
@@ -262,7 +289,10 @@ class IJepaFeatureExtractor(FeatureExtractor):
     
     @torch.no_grad()
     def extract_features(self, x):
-        return self.model(x).last_hidden_state.mean(dim=1).mean(dim=0)
+        if self.average_pool:
+            return self.model(x).last_hidden_state.mean(dim=1).mean(dim=0).flatten()
+        else:
+            return self.model(x).last_hidden_state.mean(dim=1)
     
     def transform_and_extract(self, x):
         return self.extract_features(self.transform(x))
@@ -390,6 +420,7 @@ class X3DSFeatureExtractor(FeatureExtractor):
         transform_params = model_transform_params[self.model_name]
 
         transform =  torchvision.transforms.Compose([
+            torchvision.transforms.Lambda(lambda x: torch.tensor(x, dtype=torch.float32)),
             torchvision.transforms.Lambda(lambda x: x / 255.0),
             NormalizeVideo(mean, std),
             ShortSideScale(size=transform_params["side_size"]),
@@ -409,6 +440,49 @@ class X3DSFeatureExtractor(FeatureExtractor):
     def transform_and_extract(self, x):
         return self.extract_features(self.transform(x))
 
+from utils import PackPathway
+
 # SOURCE: https://pytorch.org/hub/facebookresearch_pytorchvideo_slowfast/
 class SlowFastFeatureExtractor(FeatureExtractor):
-    pass
+    def __init__(self):
+        self.model = torch.hub.load('facebookresearch/pytorchvideo', 'slowfast_r50', pretrained=True)
+        
+        self.model.blocks[-1].proj = torch.nn.Identity()
+        
+    def transform(self, x):
+        side_size = 256
+        mean = [0.45, 0.45, 0.45]
+        std = [0.225, 0.225, 0.225]
+        crop_size = 256
+        num_frames = 32
+        sampling_rate = 2
+        frames_per_second = 30
+        slowfast_alpha = 4
+        num_clips = 10
+        num_crops = 3
+        
+        return torchvision.transforms.Compose([
+            torchvision.transforms.Lambda(lambda x: torch.tensor(x, dtype=torch.float32)),
+            UniformTemporalSubsample(num_frames),
+            torchvision.transforms.Lambda(lambda x: x/255.0),
+            NormalizeVideo(mean, std),
+            ShortSideScale(
+                size=side_size
+            ),
+            CenterCropVideo(crop_size),
+            PackPathway(slowfast_alpha=slowfast_alpha)
+        ])(x)
+        
+    def extract_features(self, x):
+        with torch.no_grad():
+            slow_pathway, fast_pathway = x
+            
+            slow_pathway = slow_pathway.unsqueeze(0)
+            fast_pathway = fast_pathway.unsqueeze(0)
+            
+            input = [slow_pathway, fast_pathway]
+            
+            return self.model(input)[0]
+        
+    def transform_and_extract(self, x):
+        return self.extract_features(self.transform(x))

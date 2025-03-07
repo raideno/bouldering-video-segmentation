@@ -37,8 +37,8 @@ ipykernel = "^6.29.5"
 transformers = "^4.49.0"
 cached-dataset = {git = "https://github.com/raideno/cached-dataset.git"}
 open-clip-torch = "^2.31.0"
-tas-helpers = {git = "https://github.com/raideno/tas-helpers.git"}
 video-dataset = "0.2.9.dev20250305153439"
+tas-helpers = {git = "https://github.com/raideno/tas-helpers.git"}
 
 [tool.poetry.scripts]
 main = "chambery.index:main"
