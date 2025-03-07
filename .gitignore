@@ -1,18 +1,20 @@
 experiments/
 temp/
 
-weights
-weights/
-weights/*
+# weights
+# weights/
+# weights/*
 
-*.pt
-*.pth
+*.zip
+
+# *.pt
+# *.pth
 
 **.ignore**
 
 .DS_Store
 
-weights/*
+# weights/*
 
 dataset
 dataset/
