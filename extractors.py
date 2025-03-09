@@ -3,6 +3,7 @@ import torch
 import open_clip
 import torchvision
 
+from enum import StrEnum
 from ultralytics import YOLO
 from models.i3d import InceptionI3d
 
@@ -198,8 +199,9 @@ class YoloFeatureExtractor(FeatureExtractor):
         :param num_keypoints: Number of keypoints to extract (default is 17 for COCO keypoints)
         """
         self.num_key_points = 17
+        self.coordinates_dimension = 2
         self.average_pool = average_pool
-        self.model = YOLO('weights/yolov8n-pose.pt', verbose=False)
+        self.model = YOLO('weights/yolo11n-pose.pt', verbose=False)
         
     def transform(self, x):
         mean = [0.48145466, 0.4578275, 0.40821073]
@@ -223,42 +225,42 @@ class YoloFeatureExtractor(FeatureExtractor):
         """
         results = self.model(x, verbose=False)
         
-        # Initialize a list to hold keypoints for each frame
-        keypoints_list = []
+        frames_keypoints = []
         
-        # Iterate through the results for each frame
         for result in results:
-            # Default zero tensor if no person detected
-            keypoints = torch.zeros(self.num_key_points * 3)
-            
             if len(result.keypoints) > 0:
-                # Take the first person's keypoints
-                first_person_keypoints = result.keypoints[0].xyn.numpy()
-                
-                # Flatten keypoints (x, y, confidence for each point)
-                keypoints_flat = first_person_keypoints.flatten()
-                
-                # Ensure we have exactly num_keypoints * 3 values
-                if len(keypoints_flat) >= self.num_key_points * 3:
-                    keypoints = torch.tensor(keypoints_flat[:self.num_key_points * 3], dtype=torch.float32)
-            
-            # Append the keypoints (or zero vector) for this frame
-            keypoints_list.append(keypoints)
-        
-        # Convert the list of keypoints to a tensor (Time, num_key_points * 3)
-        keypoints_tensor = torch.stack(keypoints_list)
-        
-        # If average_pool is True, compute the average position of the keypoints across frames
-        if self.average_pool:
-            # Compute the average of the keypoints across time, ignoring the zero vectors
-            non_zero_keypoints = keypoints_tensor[keypoints_tensor.sum(dim=-1) != 0]  # Remove zero vectors
-            if len(non_zero_keypoints) > 0:
-                keypoints_avg = non_zero_keypoints.mean(dim=0)
+                # keypoints = torch.tensor(result.keypoints[0].xyn.flatten())
+                keypoints = result.keypoints[0].xyn.flatten()
             else:
-                keypoints_avg = torch.zeros(self.num_key_points * 3)  # If no keypoints detected, return a zero vector
-            return keypoints_avg
+                keypoints = torch.zeros(self.num_key_points * self.coordinates_dimension)
+                
+            if keypoints.shape[0] < self.num_key_points * self.coordinates_dimension:
+                keypoints = torch.zeros(self.num_key_points * self.coordinates_dimension)
+                
+            frames_keypoints.append(keypoints)
         
-        return keypoints_tensor
+        # NOTE: (Time, num_key_points * coordinates_dimension)
+        frames_keypoints = torch.stack(frames_keypoints)
+        
+        if self.average_pool:
+            # NOTE: take average across time
+            frames_keypoints = frames_keypoints.mean(dim=0)
+        
+        return frames_keypoints
+
+    def count_persons(self, x):
+        """
+        Count the number of humans detected in the input video clip.
+        
+        :param x: Transformed video clip tensor (Time, Channel, Height, Width)
+        :return: Tensor of the shape (Time, #Persons), where for each frame we get the number of persons
+        """
+        results = self.model(x, verbose=False)
+        
+        # Count the number of persons in each frame
+        num_persons_per_frame = torch.tensor([len(result.keypoints) for result in results], dtype=torch.int)
+        
+        return num_persons_per_frame
 
     def transform_and_extract(self, x):
         """
@@ -381,11 +383,16 @@ class S3DHowTo100MFeatureExtractor(FeatureExtractor):
     
     def transform_and_extract(self, x):
         return self.extract_features(self.transform(x))
+    
+class X3DModelType(StrEnum):
+    XS = "x3d_xs"
+    S = "x3d_s"
+    M = "x3d_m"
 
 # SOURCE: https://pytorch.org/hub/facebookresearch_pytorchvideo_x3d/
 class X3DSFeatureExtractor(FeatureExtractor):
-    def __init__(self):
-        self.model_name = 'x3d_s'
+    def __init__(self, model_name:X3DModelType):
+        self.model_name = model_name
         self.model = torch.hub.load('facebookresearch/pytorchvideo', self.model_name, pretrained=True)
         
         self.model.blocks[-1].proj = torch.nn.Identity()
@@ -421,6 +428,7 @@ class X3DSFeatureExtractor(FeatureExtractor):
 
         transform =  torchvision.transforms.Compose([
             torchvision.transforms.Lambda(lambda x: torch.tensor(x, dtype=torch.float32)),
+            UniformTemporalSubsample(num_samples=transform_params["num_frames"], temporal_dim=1),
             torchvision.transforms.Lambda(lambda x: x / 255.0),
             NormalizeVideo(mean, std),
             ShortSideScale(size=transform_params["side_size"]),
@@ -486,3 +494,18 @@ class SlowFastFeatureExtractor(FeatureExtractor):
         
     def transform_and_extract(self, x):
         return self.extract_features(self.transform(x))
+    
+class TimeSFormer(FeatureExtractor):
+    pass
+    
+class ViTFeatureExtractor(FeatureExtractor):
+    pass
+
+class ActionClipFeatureExtractor(FeatureExtractor):
+    pass
+
+class SwinFeatureExtractor(FeatureExtractor):
+    pass
+    
+class ViVitFeatureExtractor(FeatureExtractor):
+    pass

@@ -35,10 +35,12 @@ timm = "^1.0.14"
 bitcoinlib = "^0.7.1"
 ipykernel = "^6.29.5"
 transformers = "^4.49.0"
-cached-dataset = {git = "https://github.com/raideno/cached-dataset.git"}
 open-clip-torch = "^2.31.0"
-video-dataset = "0.2.9.dev20250305153439"
 tas-helpers = {git = "https://github.com/raideno/tas-helpers.git"}
+video-dataset = "0.3.0.dev20250308093214"
+cached-dataset = {git = "https://github.com/raideno/cached-dataset.git"}
+timesformer = {git = "https://github.com/facebookresearch/TimeSformer"}
+simplejson = "^3.20.1"
 
 [tool.poetry.scripts]
 main = "chambery.index:main"

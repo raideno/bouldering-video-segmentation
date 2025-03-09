@@ -1,6 +1,8 @@
 experiments/
 temp/
 
+*.cache*
+
 # weights
 # weights/
 # weights/*
