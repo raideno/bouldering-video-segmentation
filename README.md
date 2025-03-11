@@ -1,4 +1,22 @@
-# Temporal Video Action Segmentation
+# Bouldering Video Segmentation
+
+## Context
+
+## Preview of Results
+
+## Pre-Trained Models
+
+Present the pre trained models & their different backbones.
+
+## Usage & Installation
+
+Show how to install and use one of the pre-trained models on some example video.
+
+## Re Produce Training
+
+This section goal is to make it possible for the research team to add new videos and easily re train the model if needed.
+
+---
 
 This repository contains the code for the research project about "Temporal Video Action Segmentation". The idea is to develop an AI model that can take a indoor bouldering video and segment the video based on a predefined set of actions (action-1, action-2, action-3, action-4).
 
