@@ -126,7 +126,7 @@ class I3DFeatureExtractor(FeatureExtractor):
             in_channels=3
         )
         
-        missing_keys = self.model.load_state_dict(torch.load('weights/i3d.pt'))
+        missing_keys = self.model.load_state_dict(torch.load('../weights/i3d.pt'))
         
         if verbose:
             print(f"[missing-keys]: {missing_keys}")
@@ -201,7 +201,7 @@ class YoloFeatureExtractor(FeatureExtractor):
         self.num_key_points = 17
         self.coordinates_dimension = 2
         self.average_pool = average_pool
-        self.model = YOLO('weights/yolo11n-pose.pt', verbose=False)
+        self.model = YOLO('../weights/yolo11n-pose.pt', verbose=False)
         
     def transform(self, x):
         mean = [0.48145466, 0.4578275, 0.40821073]
@@ -310,7 +310,7 @@ class S3DKineticsFeatureExtractor(FeatureExtractor):
         
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
-        weights_file = 'weights/s3d_kinetics400.pt'
+        weights_file = '../weights/s3d_kinetics400.pt'
         
         if os.path.isfile(weights_file):
             if self.verbose:
@@ -361,11 +361,11 @@ from models.s3dg import S3D as S3DG
 class S3DHowTo100MFeatureExtractor(FeatureExtractor):
     def __init__(self):
         self.network = S3DG(
-            dict_path='weights/s3d_dict.npy',
+            dict_path='../weights/s3d_dict.npy',
             num_classes=512
         )
 
-        self.network.load_state_dict(torch.load('weights/s3d_howto100m.pth'))
+        self.network.load_state_dict(torch.load('../weights/s3d_howto100m.pth'))
 
         self.network.eval()
         
