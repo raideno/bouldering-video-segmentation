@@ -102,6 +102,13 @@ FEATURES_EXTRACTORS = [
         "#frames": 32,
         "type": FeaturesType.TEMPORAL,
     },
+        {
+        "name": "x3d-l",
+        "features-directory-name": "features/x3d-l-features",
+        "extractor": X3DSFeatureExtractor(X3DModelType.L),
+        "#frames": 32,
+        "type": FeaturesType.TEMPORAL,
+    },
     {
         "name": "yolo",
         "features-directory-name": "features/yolo-features",
