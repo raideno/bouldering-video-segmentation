@@ -388,7 +388,7 @@ class X3DModelType(StrEnum):
     XS = "x3d_xs"
     S = "x3d_s"
     M = "x3d_m"
-    M = "x3d_l"
+    L = "x3d_l"
 
 # SOURCE: https://pytorch.org/hub/facebookresearch_pytorchvideo_x3d/
 class X3DSFeatureExtractor(FeatureExtractor):

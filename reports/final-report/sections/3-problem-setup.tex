@@ -21,55 +21,28 @@ The goal is to develop a model $f$ that takes a video as input and predicts the 
 
 The choice between these formulations may depend on the desired balance between temporal context awareness and computational efficiency.
 
-% As specified during the previous section we are dealing with videos and their annotations.
+\todo[inline]{Read papers and check for other possible alternative formulations.}
 
-% We are going to represent videos as a sequence of frames $Video_i = \{f_1, f_2, \cdots, f_N\}$ where $f_i$ is a frame which is represented by a tensor of size C, H, W with C the number of channels that is fixed to 3, H the video height and W the width and $N$ the number of frames in the video and $F$ the frame rate of the video.
-% The video duration in seconds can be retrieved by doing $\frac{N}{F}$ seconds. 
+\subsection{Statistics}
 
-% The annotations of a video will also be represented in a frame level, give a $Video_i$, its corresponding annotations $A_i = \{c_1, c_2, \cdots, c_N\}$ with $c_i \in C$ where $C$ is the set of all possible classes \ labels in the video, in our case $C = \{ \text{Observing}, \: \text{Brushing}, \: \text{Cleaning}, \: \text{Stopwatch} \}$.
+Scores and statistics to better explore the data and videos.
 
-% Given this the idea is to develop a model $f$ that will be given a video and produce annotations for each frame of it. We can also imagine that the model can take in a single frame and produce a single annotations for the corresponding frame, or take in sequence of T frames and produce a single annotations for the sequence.
+For the data we'll be mainly using two statistics to access information about our data, these two statistics are \textbf{Repetition Score} and \textbf{Order Variation Score} that have been introduced in \cite{tas-survey}.
 
-% Read other papers and see how they formulate the problem.
+\textbf{Repetition Score}: Definition..
 
+\textbf{Order Variation Score}: Definition..
 
-\subsection{Problem Formulations}
+\subsection{Metrics \& Scores}
 
-Here we give the notations, formulations, etc that will be used throughout the project.
+In order to access the model's performance, the most commonly used metrics in the literature are the following:
 
-We give the TAS formulation of the problem and cite the TAS review paper.
+- MoF (Accuracy): Define.., Pros, Cos.
 
-And we also present different equivalent formulations of the problem.
+- IoU: Define.., Pros, Cos.
 
-Each formulation and notation must be explained with an illustration, we'll be using a four column illustration in order to not take up too much space.
+- F1: Define.., Pros, Cos.
 
-Finally we end up by referring to the notation that we opted to use.
+- Precision: Define.., Pros, Cos.
 
-\begin{figure*}[h]
-    \centering
-    \begin{tikzpicture}
-        % First column
-        \draw[thick] (0,0) rectangle (4,3);
-        \node at (2,1.5) {\LARGE (a)};
-
-        % Second column
-        \draw[thick] (4.5,0) rectangle (8.5,3);
-        \node at (6.5,1.5) {\LARGE (b)};
-
-        % Third column
-        \draw[thick] (9,0) rectangle (13,3);
-        \node at (11,1.5) {\LARGE (c)};
-
-        % Fourth column
-        \draw[thick] (13.5,0) rectangle (17.5,3);
-        \node at (15.5,1.5) {\LARGE (d)};
-    \end{tikzpicture}
-    \caption{Example of a four-column placeholder with labels (a) to (d).}
-    \label{fig:four_columns}
-\end{figure*}
-
-\subsection{Scores}
-Introduce some scores that we'll be using throughout the report and the project.
-
-\subsection{Metrics}
-Introduce some metrics that we'll be using throughout the report and the project.
+- Recall: Define.., Pros, Cos.

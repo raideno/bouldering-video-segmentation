@@ -2,8 +2,16 @@
 
 \input{settings/index.sty}
 
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+
 % TODO: remove it in case of problem cuz idk what it do
 % \raggedbottom % NOTE: apparently when disabled latex will try to stretch the page's content to the bottom in order to fill the whole page
+
+% \bibliography{reference}
+% \bibliographystyle{icml2025}
+
+\usepackage{tabularx} % Add this in your preamble
 
 \begin{document}
 
@@ -30,7 +38,12 @@
 
 \input{sections/10-acknowledgment.tex}
 
-\input{sections/11-bibliography.tex}
+% \input{sections/11-bibliography.tex}
+
+\newpage
+
+\bibliography{reference}
+\bibliographystyle{icml2025}
 
 \input{sections/12-appendix.tex}
 
