@@ -1,123 +1,16 @@
 \newpage
 \appendix
 \onecolumn
-% You can have as much text here as you want. The main body must be at most $8$ pages long.
-% For the final version, one more page can be added.
-% If you want, you can use an appendix like this one.  
 
 % The $\mathtt{\backslash onecolumn}$ command above can be kept in place if you prefer a one-column appendix, or can be removed if you prefer a two-column appendix.  Apart from this possible change, the style (font size, spacing, margins, page numbering, etc.) should be kept the same as the main body.
 
-\section{Related Work}
-\paragraph{Complex reasoning and chain of thought prompting.} Large Language Models (LLMs) have demonstrated remarkable capabilities in various natural language processing tasks, including complex reasoning. A significant advancement in improving LLM reasoning ability is the implementation of Chain of Thought (CoT) prompting \cite{wei2022cot}. This technique involves guiding models to generate intermediate reasoning steps, thereby improving their performance on tasks that require logical deduction and multistep problem solving. Initial studies \cite{lambert2024tulu, wei2022cot, flan, yu2024metamath} focused on short CoT, where models produce concise reasoning paths to arrive at solutions. Although effective for straightforward problems, short CoT can be limiting when addressing more intricate tasks that necessitate deeper deliberation. OpenAI’s o1 \cite{openai2024o1} series models were the first to introduce inference-time scaling by increasing the length of the CoT reasoning process. This approach helps LLMs tackle complex problems by breaking them into finer steps and reflecting during problem-solving, leading to more accurate and comprehensive solutions. In this work, we explore long CoT by identifying key factors that enable models to exhibit this behavior, encouraging advanced reasoning capabilities.
+\section{Code}
 
-\paragraph{Reinforcement learning for LLM.} Reinforcement Learning (RL) has proven effective in enhancing LLM performance across domains. RL techniques, such as Reinforcement Learning from Human Feedback (RLHF), align model outputs with human preferences, improving coherence \cite{ouyang2022training}. Recent studies \cite{kimi2025k15, deepseekai2025r1, lambert2024tulu} leverage RL to enable LLMs to explore reasoning paths autonomously for complex problems. DeepSeek-R1 \cite{deepseekai2025r1} achieves strong performance in mathematics, coding, and reasoning tasks without relying on a trained reward model \cite{lightman2023verifystep, wang2024multistep} or tree search \cite{feng2023alphazerolike, snell2024scaling}. Notably, this capability emerges even in base models without supervised fine-tuning, albeit at the cost of output readability. Similarly, Kimi K1.5 \cite{kimi2025k15} enhances general reasoning with RL, focusing on multimodal reasoning and controlling thought process length. These works highlight RL’s role in optimizing reasoning when intermediate steps are hard to supervise, and only final outcomes are verifiable. Our research share a similar setup but with more detail on disentangling how different model behaviors emerge under varying training conditions and initialization strategies.
+\todo[inline]{Describe the different small functions used for computing the different scores and metrics.}
+
+\section{Related Work}
+
+\todo[inline]{Describe in more details each backbone network.}
 
 \newpage
 \section{Figures and Tables}
-
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[width=1\linewidth]{figs/viz-judge-rule.pdf}
-%    \vspace{-20pt}
-%    \caption{Downstream task performance when trained on clean data}
-%    \label{fig:reward-verifier-clean}
-%\end{figure}
-
-\begin{table}[H]
-\small
-\caption{Performance of model trained with different discount factors for the correctness (cosine) reward and repetition penalty. We see that different reward types have different optimal values.}
-\vspace{10pt}
-\centering
-\begin{tabular}{@{}cccccc@{}}
-\toprule
-\begin{tabular}[c]{@{}c@{}}Correctness \\ Discount\end{tabular} & \begin{tabular}[c]{@{}c@{}}Repetition\\ Discount\end{tabular} & \begin{tabular}[c]{@{}c@{}}MATH\\ -500\end{tabular} & \begin{tabular}[c]{@{}c@{}}AIME \\ 2024\end{tabular} & \begin{tabular}[c]{@{}c@{}}Theo.\\ QA\end{tabular} & \begin{tabular}[c]{@{}c@{}}MMLU\\ -Pro-1k\end{tabular} \\ \midrule
-\multicolumn{2}{c}{SFT} & 50.4 & 3.5 & 20.6 & 32.4 \\ \midrule
-\multirow{3}{*}{1.000} & 1.000 & 55.7 & \textbf{5.0} & 25.7 & 34.5 \\
- & 0.999 & \textbf{58.0} & 4.6 & \textbf{26.0} & \textbf{36.5} \\
- & 0.99 & 57.8 & 3.8 & 24.5 & 33.3 \\ \midrule
-\multirow{2}{*}{0.999} & 0.999 & 53.5 & 2.1 & 19.5 & 30.7 \\
- & 0.99 & 55.2 & 1.7 & 18.5 & 32.0 \\ \midrule
-0.99 & 0.99 & 47.9 & 0.2 & 15.6 & 25.5 \\ \bottomrule
-\end{tabular}%
-\label{fig:multiple-gamma}
-\end{table}
-
-\newpage
-\section{Algorithms and Formulas}
-
-\subsection{Cosine Reward Formula}
-
-\begin{equation}
-\label{eqn:cosine-lr}
-\textbf{CosFn}(t, T, \eta_{min}, \eta_{max}) = \eta_{min} + \frac{1}{2}(\eta_{max} - \eta_{min})(1 + \cos(\frac{t\pi}{T}))
-\end{equation}
-
-The formula above is commonly used as the learning rate schedule during gradient descent optimization. It was introduced by \cite{loshchilov2017sgdrstochasticgradientdescent}.
-
-\subsection{N-gram Repetition Penalty}
-
-\begin{algorithm}[H]
-\caption{N-gram Repetition Penalty}\label{alg:reward-repetition-penalty}
-\begin{algorithmic}[1]
-    \STATE {\bfseries Input:} 
-    \STATE \ \ \ \ $s$ : sequence of tokens
-    \STATE \ \ \ \ $l$ : sequence length
-    \STATE \ \ \ \ $N$ : n-gram size
-    \STATE \ \ \ \ $P$ : penalty value
-    \STATE \ \ \ \ $m$ : maximum sequence length
-    \STATE {\bfseries Output:} $r \in \mathbb{R}^m$
-    \STATE $seq \gets s[1:l]$ \COMMENT{Extract subsequence of length $l$}
-    \STATE $ngrams \gets \emptyset$ \COMMENT{Set of observed n-grams}
-    \STATE $r \gets \vec{0} \in \mathbb{R}^m$ \COMMENT{Initialize reward vector}
-    \FOR{$j \gets 1$ to $|seq| - N + 1$}
-        \STATE $ng \gets (seq[j], seq[j+1], ..., seq[j+N-1])$ \COMMENT{Current n-gram}
-        \IF{$ng \in ngrams$}
-            \FOR{$t \gets j$ to $j + N - 1$}
-                \STATE $r[t] \gets P$ \COMMENT{Apply penalty}
-            \ENDFOR
-        \ENDIF
-        \STATE $ngrams \gets ngrams \cup \{ng\}$
-    \ENDFOR
-    \STATE {\bfseries Output:} $r$
-\end{algorithmic}
-\end{algorithm}
-
-\newpage
-\section{Extracts}
-
-\begin{tcolorbox}[label=extract:reward-short-term, colback=lightgray!10, colframe=black, title={Short-Term Thinking ($\gamma_c = 0.99$)}]
-\textbf{But} in this case, we saw that the fixed points don't satisfy the equation 
-\[
-p(p(x)) = x.
-\]
-
-\textbf{Wait}, maybe the solutions to \( p(p(x)) = x \) are not the fixed points of \( p \), but something else.
-
-\textbf{Alternatively}, perhaps I can consider that \( p(p(x)) = x \) implies that \( p \) is a bijection, 
-but since \( p(x) \) is quadratic, it's not necessarily invertible over all real numbers.
-
-\textbf{Wait}, but the problem says that \( p(p(x)) = x \) has four real solutions, so perhaps there are four 
-values of \( x \) that satisfy this equation.
-
-\textbf{Alternatively}, perhaps I need to find the roots of 
-\[
-p(p(x)) - x = 0,
-\]
-and solve for \( x \). But that seems complicated. Maybe there's a better way.
-\end{tcolorbox}
-
-\newpage
-\section{Experimental Setup}
-
-\subsection{Evaluation Setup} \label{app:eval-setup}
-
-\paragraph{Benchmarks} Below are details of our evaluation benchmarks:
-
-\begin{itemize}
-    \item \textbf{MATH-500} \citep{hendrycks2021math}: an in-domain mathematical reasoning benchmark. MATH consists of 12,500 problems from American high school math competitions. For efficiency, we adopt MATH-500, a widely-used i.i.d. subset of its test split.
-    \item \textbf{AIME 2024}: an out-of-domain mathematical reasoning benchmark consisting of the 30 problems from American Invitational Mathematics Examination (AIME) 2024.
-    \item \textbf{TheoremQA} \citep{chen2023theoremqa}: an out-of-domain STEM reasoning benchmark consisting of 800 samples. It covers 350+ theorems spanning across Math, EE\&CS, Physics and Finance.
-    \item \textbf{MMLU-Pro-1k} \citep{wang2024mmlupro}: an out-of-domain general reasoning benchmark. MMLU-Pro comprises over 12,000 questions from academic exams and textbooks, spanning 14 diverse domains including Biology, Business, Chemistry, Computer Science, Economics, Engineering, Health, History, Law, Math, Philosophy, Physics, Psychology, and Others. For efficiency, we adopt an 1,000-sample i.i.d. subset of its test split, called MMLU-Pro-1k. We tried to keep the distribution identical to the original one. Figure \ref{fig:mmlu-pro-test-downsample} shows the distribution before/after the downsampling.
-\end{itemize}
-
-\paragraph{Statistical Metrics} We calculate the average accuracy with at least 4 random seeds. To tame the variance caused by the small size of AIME 2024, we sample 16 responses per prompt.

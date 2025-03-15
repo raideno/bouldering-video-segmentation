@@ -1,32 +1,67 @@
+\begin{figure*}[t]
+    \centering
+    \begin{minipage}{0.245\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/figures/average-duration-of-actions.png}
+        % \caption{Statistic 1}
+        \label{fig:distribution-of-actions-in-dataset}
+    \end{minipage}%
+    \hspace{0.02\textwidth} % Spacing between the figures
+    \begin{minipage}{0.245\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/figures/average-number-of-action-occurences-per-video.png}
+        % \caption{Statistic 2}
+        \label{fig:average-number-of-action-occurences-per-video}
+    \end{minipage}%
+    \hspace{0.02\textwidth} % Spacing between the figures
+    \begin{minipage}{0.245\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/figures/distribution-of-actions-in-dataset.png}
+        % \caption{Statistic 3}
+        \label{fig:average-duration-of-actions}
+    \end{minipage}%
+\end{figure*}
+
+\begin{table*}[t]
+    \centering
+    \small
+    \renewcommand{\arraystretch}{0.9}
+    \setlength{\tabcolsep}{6pt}
+    \begin{tabular}{|l|c|c|c|c|c|}
+      \hline
+      \textbf{Name} & \textbf{\#Classes} & \textbf{\#Videos} & \textbf{Duration (h)} & \textbf{Repetition} & \textbf{Order Variation} \\ \hline
+      50 Salads & 5 & 20 & 3.5 & NA & NA \\ \hline
+      GTEA & 8 & 35 & 6.0 & NA & NA \\ \hline
+      Breakfasts & 4 & 15 & 2.0 & NA & NA \\ \hline
+      Kinetics-400 & 6 & 25 & 4.5 & NA & NA \\ \hline
+      Assembly 101 & 6 & 25 & 4.5 & NA & NA \\ \hline
+      Howto100M & 6 & 25 & 4.5 & NA & NA \\ \hline
+      Something-Something-V2 & 6 & 25 & 4.5 & NA & NA \\ \hline
+      \textbf{Ours} & 6 & 25 & 4.5 & NA & NA \\ \hline
+    \end{tabular}
+    \caption{Other popular datasets.}
+    \label{tab:dataset_stats}
+\end{table*}
+
 \section{Dataset}
 
-In this section we'll present our dataset and the different steps that were involved in its construction and preparation, we'll also present some statistics about it and compare it to other popular datasets.
-
-\todo[inline]{Showcase some example images from the dataset, or not as we already have done it in the first context section ?}
+In this section, we present our dataset along with the different steps involved in its construction and preparation. We also provide some statistics about the dataset and compare it to other popular datasets.
 
 \subsection{Raw Format}
 
-Our dataset was constructed by filming 10 different climbers attempting to climb 2 different bouldering blocks (events) each. Each climb was filmed from two different angles, resulting in 40 unique videos of 4 mins each.
+The dataset was collected during "Manip Chambery" Our dataset was constructed by filming 10 different climbers attempting to climb 2 different bouldering blocks (events) each. Each climb was filmed from two different angles, resulting in 20 climbs and a total of 40 unique videos, each 4 minutes long.
 
-As specified in the \cite{section:context}, during the bouldering event the boulderer are free to do whatever they want during the 4 minutes, they can brush the holds (grips), observe them, climb, etc. Thus we have 20 climbs and 2 videos for each climb resulting in a total of 40 videos.
+As specified in \cite{section:context}, during the bouldering event, climbers are free to perform various activities within the 4-minute duration. They can brush the holds (grips), observe them, climb, etc.
 
-The dataset was collected during Manip Chamberry.
+The videos were annotated by the climbers themselves, and the annotations were provided in a raw Excel file. The annotations are at the segment level, meaning we are provided with the start time and duration of each action in the video, along with the corresponding label. Our of the 20 climbs only 11 have been annotated.
 
-Our dataset duration in hours is...
+The total duration of our dataset is 2 hours and 40 minutes from which only 1 hour and 28 minutes are annotated.
 
-The videos were annotated by the climbers themselves, and the annotations were provided in a raw excel file. The annotations were provided at segment level, meaning that we are given the start and duration of each action in the video and the corresponding label.
-
-From the 20 climbs only 11 are annotated.
-
-Constraints:
-- Dataset size is very limited.
-- The annotations format (excel) isn't adapted for data science tasks.
-- The annotations aren't perfect, they are shifted, and the videos don't start immediately on the event.
-- The climbers sometimes go out of the frame, some other times another person enters the frame, etc.
+The dataset has several limitations: \textbf{1.} The dataset size is very limited. \textbf{2.} The annotation format (Excel) is not suited for data science tasks. \textbf{3.} The annotations are not perfect: they are shifted, and the videos do not start immediately with the event. \textbf{4.} The climbers occasionally go out of the frame, and at other times, another person enters the frame.
 
 \subsection{Chosen Structure}
 
-We decided to structure the dataset in a way that is adapted for temporal action segmentation and classification tasks. Most importantly, we wanted to make it easy and efficient to use and train on.
+We decided to structure the dataset in a way that is specifically suited for temporal action segmentation and classification tasks. Our main objective was to ensure that it is both easy to use and efficient for training.
 
 \begin{verbatim}
     dataset
@@ -40,84 +75,49 @@ We decided to structure the dataset in a way that is adapted for temporal action
     |   +-- video-1.csv
     |   +-- video-2.csv
     |   +-- ...
-    +-- splits
-        +-- train.txt
-        +-- val.txt
-        +-- test.txt
 \end{verbatim}
 
-The advantages of this structure is that it don't require any additional video processing on top of the videos or annotations provided by the data collecting team, this makes it very easy and convenient to add annotations or videos in the future if available.
+The advantage of this structure is that it does not require any additional processing of the videos or annotations provided by the data collection team. This makes it convenient and easy to add new annotations or videos in the future, should they become available.
 
-For a faster video loading time we store the video as a sequence of jpg frames rather than the video itself, this also makes it easier to use the dataset with different libraries and tools.
+For faster video loading, we store the videos as a sequence of JPG frames instead of the video file itself. This approach also facilitates the use of the dataset with different libraries and tools.
 
-In order to load the dataset we developed a video dataset package in python: \href{https://github.com/raideno/video-dataset}{https://github.com/raideno/video-dataset}. This video-dataset class support this kind of dataset structure but is very customizable and comes with a lot of predefined tools in order to transform an existing dataset into this structure, load videos from video files, load annotations at frame level from text files, etc.
+To load the dataset, we developed a Python package: \href{https://github.com/raideno/video-dataset}{https://github.com/raideno/video-dataset}. This package supports this type of dataset structure but is highly customizable and includes many predefined tools for transforming an existing dataset into this format, loading videos from video files, and loading annotations at the frame level from text files.
 
-On top of that we also developed another python package: \href{https://github.com/raideno/cached-dataset}{https://github.com/raideno/cached-dataset}. Which is essentially a class that serves as a wrapper around an existing dataset and caches the transformed version of the dataset if any were applied into disk, this is very useful when we want to avoid re-extracting the features each time we train the model and for each epoch.
+Additionally, we developed another Python package: \href{https://github.com/raideno/cached-dataset}{https://github.com/raideno/cached-dataset}, which serves as a wrapper around an existing dataset and caches the transformed version of the dataset to disk. This is particularly useful to avoid re-extracting features each time we train the model or run an epoch.
 
-Using this structure and these tools we were able to easily load the dataset and start training the model on it.
+By using this structure and these tools, we were able to easily load the dataset and start training the model.
 
-\subsection{Statistics, Illustrations \& Data Exploration}
+\subsection{Data Exploration}
 
-\begin{figure}[H]
-    \centering
-    \begin{minipage}{0.245\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{assets/figures/average-duration-of-actions.png}
-        \caption{Statistic 1}
-        \label{fig:example1}
-    \end{minipage}%
-    \hspace{0.02\textwidth} % Spacing between the figures
-    \begin{minipage}{0.245\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{assets/figures/average-number-of-action-occurences-per-video.png}
-        \caption{Statistic 2}
-        \label{fig:example2}
-    \end{minipage}%
-    \hspace{0.02\textwidth} % Spacing between the figures
-    \begin{minipage}{0.245\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{assets/figures/distribution-of-actions-in-dataset.png}
-        \caption{Statistic 3}
-        \label{fig:example3}
-    \end{minipage}%
-\end{figure}
+In this section we are going to explore various aspects and statistics about our dataset.
 
-\todo[inline]{Discuss about the statstics above, add the order variation score and the repetitino score...}
+As the plot in Figure \ref{fig:distribution-of-actions-in-dataset} shows, the dataset contains 5 different actions, with each action occurring a different number of times. The distribution of actions is not uniform, with some actions appearing more frequently than others. This non-uniform distribution can be challenging for the model to learn, as it may lead to biases in the predictions. The dataset is unbalanced
 
-\subsection{Other Video Datasets}
+We can also see that a significant portion of the dataset (15\%) frames don't contain any person in the frame. We can also observe that 3\% of the time there is more than one person in the frame which can be a source of noise for the model.
+In addition to that we can see that 13\% of the climbs are not annotated at all and we thus replaced it by a "Nothing" label.
 
-\todo[inline]{Add an image from a video of each dataset for illustration.}
+From \ref{fig:average-number-of-action-occurences-per-video} we  can see that the most recurrent actions are "Lecture" and "Nothing".
 
-\begin{table}[h!]
-    \centering
-    \begin{tabular}{|l|c|c|c|}
-        \hline
-        \textbf{Name} & \textbf{\#Classes} & \textbf{\#Videos} & \textbf{Duration (h)} \\ \hline
-        50 Salads & 5 & 20 & 3.5 \\ \hline
-        GTEA & 8 & 35 & 6.0 \\ \hline
-        Breakfasts & 4 & 15 & 2.0 \\ \hline
-        Kinetics-400 & 6 & 25 & 4.5 \\ \hline
-        Assembly 101 & 6 & 25 & 4.5 \\ \hline
-        Howto100M & 6 & 25 & 4.5 \\ \hline
-        Something-Something-V2 & 6 & 25 & 4.5 \\ \hline
-        \textbf{Ours} & 6 & 25 & 4.5 \\ \hline
-    \end{tabular}
-    \caption{Other popular datasets.}
-    \label{tab:dataset_stats}
-\end{table}
+From the \ref{fig:average-duration-of-actions} we can see that the longest actions on average are the cleaning, climbing and observation. Even tho the nothing class is the most recurrent it is the shortest in duration on average.
 
-When it comes to temporal action segmentation, there is very few datasets available, and the most popular ones are:
+\todo[inline]{Add a fourth plot about the dataset.}
+
+\subsection{Popular Video Datasets}
+\label{subsection:popular-video-datasets}
+
+When it comes to temporal action segmentation, there are very few datasets available, and the most popular ones are:
 
 \subsection*{50 Salads, Breakfasts, and GTEA Datasets}
 These datasets were primarily designed for temporal action segmentation:
 
-\begin{itemize}
-    \item \textbf{50 Salads Dataset}: The 50 Salads dataset consists of 50 videos of people preparing salads, with each video lasting between 5 and 10 minutes. The dataset includes 17 distinct actions, with a total duration of 4 hours. The cameras are placed above the kitchen countertop, capturing primarily the interactions of the person's hands with the environment. This setup focuses on fine-grained actions and interactions \cite{50salads-dataset}.
-    
-    \item \textbf{GTEA Dataset}: The GTEA dataset was introduced in \cite{gtea-dataset}, and it consists of 28 Point of View (POV) videos, where a person is preparing something. Each video contains around 20 sub-actions.
-    
-    \item \textbf{Breakfasts Dataset}: Introduced in \cite{breakfast-dataset}, this dataset contains 1712 videos of people preparing breakfasts, with the camera positioned on the side.
-\end{itemize}
+\subsection*{50 Salads, Breakfasts, and GTEA Datasets}
+These datasets were primarily designed for temporal action segmentation:
+
+\textbf{1. 50 Salads Dataset}: The 50 Salads dataset consists of 50 videos of people preparing salads, with each video lasting between 5 and 10 minutes. The dataset includes 17 distinct actions, with a total duration of 4 hours. The cameras are placed above the kitchen countertop, capturing primarily the interactions of the person's hands with the environment. This setup focuses on fine-grained actions and interactions \cite{50salads-dataset}.
+
+\textbf{2. GTEA Dataset}: The GTEA dataset was introduced in \cite{gtea-dataset}, and it consists of 28 Point of View (POV) videos, where a person is preparing something. Each video contains around 20 sub-actions.
+
+\textbf{3. Breakfasts Dataset}: Introduced in \cite{breakfast-dataset}, this dataset contains 1712 videos of people preparing breakfasts, with the camera positioned on the side.
 
 \subsection*{Kinetics Family}
 The Kinetics family of datasets is available in three variants: Kinetics-400, Kinetics-600, and Kinetics-700 \cite{kinetics-400-dataset}, \cite{kinetics-600-dataset}, \cite{kinetics-700-dataset}. These datasets are composed of YouTube videos and are annotated with 400, 600, and 700 action classes, respectively. The videos typically last around 10 seconds, and each class contains at least 400 videos. The Kinetics datasets cover a wide variety of video content, focusing on humans performing large-scale tasks (as opposed to fine-grained actions). Originally designed for video classification, Kinetics contains single-labeled video clips.

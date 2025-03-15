@@ -1,4 +1,4 @@
-\section{Problem Formulations, Scores \& Evaluation Metrics}
+\section{Problem Setup}
 
 In this project, we address the task of temporal action segmentation in professional bouldering videos. The objective is to classify each frame of a video based on the climber's activity.
 
@@ -8,41 +8,45 @@ We represent each video as a sequence of frames $video_i = \{f_1, f_2, \cdots, f
 The video's duration (in seconds) can be calculated as $\text{Duration} = \frac{N}{F}$ where $F$ is the video's frame rate which will be fixed to $25$ during our experiments.
 
 \subsection{Annotation Representation}
-Each video's annotations are provided at the frame level. Given a video $video_i$, its corresponding annotations are defined as $a_i = \{c_1, c_2, \cdots, c_N\}$ where $c_i \in C$, and $C$ is the set of all possible activity labels. In our case $C = \{\text{Observing}, \: \text{Brushing}, \: \text{Cleaning}, \: \text{Stopwatch} \}$
+Each video's annotations are provided at the frame level. Given a video $video_i$, its corresponding annotations are defined as $a_i = \{c_1, c_2, \cdots, c_N\}$ where $c_i \in C$, and $C$ is the set of all possible activity labels.
 
 \subsection{Problem Formulation}
-The goal is to develop a model $f$ that takes a video as input and predicts the corresponding sequence of frame-level annotations $f : video_i \rightarrow a_i$. Alternatively, the model can be designed to:
+The goal is to develop a model $f$ that takes a video as input and predicts the corresponding sequence of frame-level annotations $f : video_i \rightarrow a_i$. Alternatively, the model can be designed as follows:
 
-\quad \emph{1. Frame-wise Prediction:} The model processes each frame independently and predicts its corresponding label:  
-    $f_{frame} : f_t \rightarrow c_t$.
+\textbf{1. Frame-wise Prediction:} The model processes each frame independently and predicts its corresponding label.
 
-\quad \emph{2. Sequence-based Prediction:} The model processes a sequence of $T$ frames and predicts a single label for the entire sequence:  
-    $f_{seq} : \{f_{t}, f_{t+1}, \cdots, f_{t+T-1} \} \rightarrow c_t$.
+\textbf{2. Sequence-based Prediction:} The model processes a sequence of $T$ frames and predicts a single label for the entire sequence.
 
 The choice between these formulations may depend on the desired balance between temporal context awareness and computational efficiency.
 
-\todo[inline]{Read papers and check for other possible alternative formulations.}
-
 \subsection{Statistics}
-
-Scores and statistics to better explore the data and videos.
 
 For the data we'll be mainly using two statistics to access information about our data, these two statistics are \textbf{Repetition Score} and \textbf{Order Variation Score} that have been introduced in \cite{tas-survey}.
 
-\textbf{Repetition Score}: Definition..
+\textbf{Repetition Score} $= \frac{\# of Unique Actions}{Total Number of Actions}$, it quantifies how much action repetition occurs within the video. It ranges between 0 and 1 where 0 indicates no repetition and 1 indicates that the same action is repeated throughout the video.
 
-\textbf{Order Variation Score}: Definition..
+\textbf{Order Variation Score} it measures how consistent the order of actions is across different videos / sequences / activities. It is defined as the average of the pairwise distances between the order of actions in each video. It ranges between 0 and 1 where 0 indicates that the order of actions is consistent across all videos and 1 indicates that the order of actions is completely different across all videos.
 
-\subsection{Metrics \& Scores}
+\subsection{Evaluation Metrics}
 
-In order to access the model's performance, the most commonly used metrics in the literature are the following:
+To evaluate the performance of the model, several metrics are commonly used in the literature:
 
-- MoF (Accuracy): Define.., Pros, Cos.
+\textbf{MoF (Accuracy)}: This metric measures the overall accuracy of the predictions, calculated as the ratio of correct predictions to the total number of predictions. 
+- \textbf{Pros}: Simple to compute and provides a clear overall performance indicator. 
+- \textbf{Cons}: It may not be informative when dealing with imbalanced classes, as high accuracy can be achieved by simply predicting the majority class.
 
-- IoU: Define.., Pros, Cos.
+\textbf{IoU (Intersection over Union)}: IoU measures how well the predicted activity segments overlap with the ground truth, defined as the ratio of the intersection of predicted and actual segments to their union. 
+- \textbf{Pros}: It provides a good measure of how well the model identifies activity boundaries and is robust to small shifts in predicted segments.
+- \textbf{Cons}: It can be sensitive to misaligned boundaries and may not perform well when the predicted segments are consistently shifted or incomplete.
 
-- F1: Define.., Pros, Cos.
+\textbf{Precision}: Precision quantifies the proportion of true positive predictions among all positive predictions made by the model. 
+- \textbf{Pros}: Useful when the cost of false positives is high, such as in applications where false alarms are critical.
+- \textbf{Cons}: It may suffer if the model misses many true positives, as it only considers positive predictions, ignoring missed instances.
 
-- Precision: Define.., Pros, Cos.
+\textbf{Recall}: Recall measures the proportion of true positive predictions among all actual positives. 
+- \textbf{Pros}: Essential when the cost of false negatives is high, such as in critical detection tasks where missing an instance is costly. 
+- \textbf{Cons}: A high recall can lead to many false positives, which might degrade performance in certain applications.
 
-- Recall: Define.., Pros, Cos.
+\textbf{F1 Score}: The F1 score is the harmonic mean of precision and recall, balancing the trade-off between false positives and false negatives. 
+- \textbf{Pros}: It provides a balanced evaluation of the model's performance, considering both precision and recall. 
+- \textbf{Cons}: It can be less intuitive to interpret than accuracy and might mask poor performance in specific classes.
