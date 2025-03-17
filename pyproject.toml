@@ -37,11 +37,11 @@ ipykernel = "^6.29.5"
 transformers = "^4.49.0"
 open-clip-torch = "^2.31.0"
 tas-helpers = {git = "https://github.com/raideno/tas-helpers.git"}
-video-dataset = "0.3.0.dev20250308093214"
 timesformer = {git = "https://github.com/facebookresearch/TimeSformer"}
 simplejson = "^3.20.1"
 data-augmentation = {git = "https://github.com/raideno/data-augmentation.git"}
 cached-dataset = {git = "https://github.com/raideno/cached-dataset.git"}
+video-dataset = "0.3.0.dev20250316222650"
 
 [tool.poetry.scripts]
 main = "chambery.index:main"
