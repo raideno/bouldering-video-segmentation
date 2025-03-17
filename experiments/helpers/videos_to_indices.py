@@ -23,7 +23,8 @@ def video_segments_mapping_generator(video_dataset: VideoDataset):
         with open(CACHE_FILE_PATH, 'wb') as f:
             pickle.dump(mapping, f)
 
-    video_segments_mapping = load_cache()
+    # video_segments_mapping = load_cache()
+    video_segments_mapping = None
 
     if video_segments_mapping is None:
         video_segments_mapping = {}

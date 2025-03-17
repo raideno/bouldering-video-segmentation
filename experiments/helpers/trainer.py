@@ -25,7 +25,7 @@ class Trainer():
             labels = labels.to(device)
             
             outputs = self.model.forward(features)
-            
+
             loss = criterion(outputs, labels)
             loss.backward()
             
@@ -76,9 +76,10 @@ class Trainer():
             "testing_loss": [],
             "testing_accuracy": []
         }
-        
         best_validation_accuracy = 0
         best_training_accuracy = 0
+        best_training_loss = float('inf')
+        best_validation_loss = float('inf')
         best_epoch = 0
         
         with tqdm.tqdm(iterable=range(32), desc=title or "[training]", unit="epoch") as progress_bar:
@@ -92,9 +93,19 @@ class Trainer():
                 history["testing_loss"].append(validation_loss)
                 history["testing_accuracy"].append(validation_accuracy)
                 
-                if validation_accuracy > best_validation_accuracy:
+                # if validation_accuracy > best_validation_accuracy:
+                #     best_validation_accuracy = validation_accuracy
+                #     best_training_accuracy = training_accuracy
+                #     best_epoch = epoch
+                
+                # NOTE: update best losses and accuracies only when validation loss improves
+                if validation_loss < best_validation_loss:
+                    best_validation_loss = validation_loss
+                    best_training_loss = training_loss
+                    
                     best_validation_accuracy = validation_accuracy
                     best_training_accuracy = training_accuracy
+                    
                     best_epoch = epoch
                     
                 progress_bar.set_postfix({
@@ -105,5 +116,12 @@ class Trainer():
                     "best-validation-accuracy": best_validation_accuracy,
                     "best-training-accuracy": best_training_accuracy
                 })
-                
-        return history, best_training_accuracy, best_validation_accuracy, best_epoch
+        
+        return {
+            "history": history,
+            "best_training_accuracy": best_training_accuracy,
+            "best_validation_accuracy": best_validation_accuracy,
+            "best_epoch": best_epoch,
+            "best_training_loss": best_training_loss,
+            "best_validation_loss": best_validation_loss
+        }

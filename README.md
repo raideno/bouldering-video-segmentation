@@ -12,6 +12,31 @@ Present the pre trained models & their different backbones.
 
 Show how to install and use one of the pre-trained models on some example video.
 
+```python
+from video_dataset.video import VideoFromVideoFile
+from bouldering_video_segmentation.extractors import ResNetFeatureExtractor
+
+VIDEO_FILE_NAME = "bouldering-video.mp4"
+
+video_name, video_file_extension = VIDEO_FILE_PATH.split(".")
+
+video = VideoFromVideoFile(
+    videos_dir_path="./",
+    id=video_name
+    video_extension=video_file_extension
+)
+
+extractor = ResNetFeatureExtractor(
+    weights=".../..."
+)
+
+classifier = ...
+
+
+for segment in segments:
+
+```
+
 ## Re Produce Training
 
 This section goal is to make it possible for the research team to add new videos and easily re train the model if needed.
