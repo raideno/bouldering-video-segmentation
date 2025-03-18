@@ -14,19 +14,22 @@ class S3DTrainingDataset(StrEnum):
     KINETICS = "kinetics"
     HOWTO100M = "howto100m"
     
-def load_model(dataset: S3DTrainingDataset, verbose: bool):
+def load_model(dataset: S3DTrainingDataset, weights_path: str=None, verbose: bool=False):
+    
+    DEFAULT_WEIGHTS_PATH = '../weights/s3d-kinetics400.pt' if dataset == S3DTrainingDataset.KINETICS else '../weights/s3d-howto100m.pt'
+    
+    weights_path = weights_path if weights_path is not None else DEFAULT_WEIGHTS_PATH
+    
     if dataset == S3DTrainingDataset.KINETICS:
         model = S3D(num_class=400)
         
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        
-        weights_file = '../weights/s3d_kinetics400.pt'
-        
-        if os.path.isfile(weights_file):
+                
+        if os.path.isfile(weights_path):
             if verbose:
                 print('[s3d]: loading weights.')
                 
-            weight_dict = torch.load(weights_file, map_location=device)
+            weight_dict = torch.load(weights_path, map_location=device)
             model_dict = model.state_dict()
             for name, param in weight_dict.items():
                 if 'module' in name:
@@ -52,12 +55,9 @@ def load_model(dataset: S3DTrainingDataset, verbose: bool):
         
         return model
     elif dataset == S3DTrainingDataset.HOWTO100M:
-        network = S3DG(
-            dict_path='../weights/s3d_dict.npy',
-            num_classes=512
-        )
+        network = S3DG(num_classes=512)
 
-        network.load_state_dict(torch.load('../weights/s3d_howto100m.pth'))
+        network.load_state_dict(torch.load(weights_path))
 
         network.eval()
         
@@ -68,14 +68,15 @@ def load_model(dataset: S3DTrainingDataset, verbose: bool):
 # SOURCE: https://github.com/kylemin/S3D
 # SOURCE: https://github.com/antoine77340/S3D_HowTo100M
 class S3DFeatureExtractor(FeatureExtractor):
-    def __init__(self, dataset:S3DTrainingDataset=S3DTrainingDataset.KINETICS, verbose:bool=False):
-        self.verbose = verbose
+    def __init__(self, dataset:S3DTrainingDataset=S3DTrainingDataset.KINETICS, weights_path:str=None, verbose:bool=False):
         self.dataset = dataset
+        self.verbose = verbose
+        self.weights_path = weights_path
         
         if self.dataset != S3DTrainingDataset.KINETICS and self.dataset != S3DTrainingDataset.HOWTO100M:
             raise ValueError('Invalid dataset.')
         
-        self.model = load_model(self.dataset, self.verbose)
+        self.model = load_model(self.dataset, self.weights_path, self.verbose)
         
         self.model.eval()
     

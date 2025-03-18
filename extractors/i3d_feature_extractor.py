@@ -11,18 +11,26 @@ from utils import UniformTemporalSubsample
 
 from extractors.feature_extractor import FeatureExtractor, FeaturesType
 
+DEFAULT_WEIGHTS_PATH = '../weights/i3d.pt'
+
 # SOURCE: https://github.com/google-deepmind/kinetics-i3d
 class I3DFeatureExtractor(FeatureExtractor):
-    def __init__(self, verbose=True):
+    def __init__(self, weights_path=DEFAULT_WEIGHTS_PATH, verbose=True):
+        self.verbose = verbose
+        self.weights_path = weights_path
+        
         self.model = InceptionI3d(
             num_classes=400,
             in_channels=3
         )
         
-        missing_keys = self.model.load_state_dict(torch.load('../weights/i3d.pt'))
+        missing_keys = self.model.load_state_dict(torch.load(self.weights_path))
         
-        if verbose:
+        if self.verbose:
             print(f"[missing-keys]: {missing_keys}")
+            
+        if missing_keys.count() > 0:
+            raise ValueError("Some keys are missing in the given weights.")
         
         self.model.eval()
         

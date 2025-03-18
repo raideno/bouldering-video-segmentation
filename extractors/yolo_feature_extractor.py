@@ -6,16 +6,20 @@ from ultralytics import YOLO
 from utils import UniformTemporalSubsample
 from extractors.feature_extractor import FeatureExtractor, FeaturesType
 
+DEFAULT_WEIGHTS_PATH = '../weights/yolo-11n-pose.pt'
+
 class YoloFeatureExtractor(FeatureExtractor):
-    def __init__(self, average_pool:bool):
+    def __init__(self, average_pool:bool, weights_path:str=DEFAULT_WEIGHTS_PATH, verbose:bool=False):
         """
         Initialize YOLO pose estimation model
         :param num_keypoints: Number of keypoints to extract (default is 17 for COCO keypoints)
         """
         self.num_key_points = 17
         self.coordinates_dimension = 2
+        self.weights_path = weights_path
         self.average_pool = average_pool
-        self.model = YOLO('../weights/yolo11n-pose.pt', verbose=False)
+        self.verbose = verbose
+        self.model = YOLO(self.weights_path, verbose=self.verbose)
         
     def get_name(self):
         if self.average_pool:
@@ -49,7 +53,7 @@ class YoloFeatureExtractor(FeatureExtractor):
         :param x: Transformed video clip tensor (Time, Channel, Height, Width)
         :return: Tensor of keypoint coordinates for each frame, or zeros for frames with no detected person
         """
-        results = self.model(x, verbose=False)
+        results = self.model(x, verbose=self.verbose)
         
         frames_keypoints = []
         
@@ -73,20 +77,6 @@ class YoloFeatureExtractor(FeatureExtractor):
             frames_keypoints = frames_keypoints.mean(dim=0)
         
         return frames_keypoints
-
-    def count_persons(self, x):
-        """
-        Count the number of humans detected in the input video clip.
-        
-        :param x: Transformed video clip tensor (Time, Channel, Height, Width)
-        :return: Tensor of the shape (Time, #Persons), where for each frame we get the number of persons
-        """
-        results = self.model(x, verbose=False)
-        
-        # Count the number of persons in each frame
-        num_persons_per_frame = torch.tensor([len(result.keypoints) for result in results], dtype=torch.int)
-        
-        return num_persons_per_frame
 
     def transform_and_extract(self, x):
         """

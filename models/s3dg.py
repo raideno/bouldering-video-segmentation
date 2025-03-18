@@ -237,7 +237,7 @@ class Sentence_Embedding(nn.Module):
 
 
 class S3D(nn.Module):
-    def __init__(self, dict_path, num_classes=512, gating=True, space_to_depth=True):
+    def __init__(self, num_classes=512, gating=True, space_to_depth=True):
         super(S3D, self).__init__()
         self.num_classes = num_classes
         self.gating = gating
@@ -291,12 +291,11 @@ class S3D(nn.Module):
             self.mixed_5b.output_dim, 384, 192, 384, 48, 128, 128
         )
         self.fc = nn.Linear(self.mixed_5c.output_dim, num_classes)
-        self.text_module = Sentence_Embedding(num_classes,
-            token_to_word_path=dict_path)
-
+        
     def _space_to_depth(self, input):
-        """3D space to depth trick for TPU optimization.
-      """
+        """
+        3D space to depth trick for TPU optimization.
+        """
         B, C, T, H, W = input.shape
         input = input.view(B, C, T // 2, 2, H // 2, 2, W // 2, 2)
         input = input.permute(0, 3, 5, 7, 1, 2, 4, 6)
@@ -304,8 +303,9 @@ class S3D(nn.Module):
         return input
 
     def forward(self, inputs):
-        """Defines the S3DG base architecture.
-      """
+        """
+        Defines the S3DG base architecture.
+        """
         if self.space_to_depth:
             inputs = self._space_to_depth(inputs)
         net = self.conv1(inputs)
