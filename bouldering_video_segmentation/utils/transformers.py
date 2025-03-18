@@ -1,4 +1,3 @@
-import cv2
 import math
 import torch
 import numbers
@@ -136,7 +135,6 @@ class UniformTemporalSubsample(torch.nn.Module):
             x, self._num_samples, self._temporal_dim
         )
         
-import cv2
 import math
 import torch
 import numbers
