@@ -6,7 +6,7 @@ from ultralytics import YOLO
 from bouldering_video_segmentation.utils import UniformTemporalSubsample
 from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
 
-DEFAULT_WEIGHTS_PATH = '../weights/yolo-11n-pose.pt'
+DEFAULT_WEIGHTS_PATH = '../extractors-weights/yolo-11n-pose.pt'
 
 class YoloFeatureExtractor(FeatureExtractor):
     def __init__(self, average_pool:bool, weights_path:str=DEFAULT_WEIGHTS_PATH, verbose:bool=False):

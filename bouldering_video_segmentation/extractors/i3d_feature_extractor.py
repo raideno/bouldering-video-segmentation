@@ -9,7 +9,7 @@ from bouldering_video_segmentation.utils import UniformTemporalSubsample
 from bouldering_video_segmentation.extractors.models.i3d import InceptionI3d
 from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
 
-DEFAULT_WEIGHTS_PATH = '../weights/i3d.pt'
+DEFAULT_WEIGHTS_PATH = '../extractors-weights/i3d.pt'
 
 # SOURCE: https://github.com/google-deepmind/kinetics-i3d
 class I3DFeatureExtractor(FeatureExtractor):

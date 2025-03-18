@@ -16,7 +16,7 @@ class S3DTrainingDataset(StrEnum):
     
 def load_model(dataset: S3DTrainingDataset, weights_path: str=None, verbose: bool=False):
     
-    DEFAULT_WEIGHTS_PATH = '../weights/s3d-kinetics400.pt' if dataset == S3DTrainingDataset.KINETICS else '../weights/s3d-howto100m.pt'
+    DEFAULT_WEIGHTS_PATH = '../extractors-weights/s3d-kinetics400.pt' if dataset == S3DTrainingDataset.KINETICS else '../extractors-weights/s3d-howto100m.pt'
     
     weights_path = weights_path if weights_path is not None else DEFAULT_WEIGHTS_PATH
     
