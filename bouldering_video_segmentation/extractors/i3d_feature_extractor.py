@@ -1,15 +1,13 @@
 import torch
 import torchvision
 
-from models.i3d import InceptionI3d
-
 from torchvision.transforms._transforms_video import (
     NormalizeVideo,
 )
 
-from utils import UniformTemporalSubsample
-
-from extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.utils import UniformTemporalSubsample
+from bouldering_video_segmentation.extractors.models.i3d import InceptionI3d
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
 
 DEFAULT_WEIGHTS_PATH = '../weights/i3d.pt'
 

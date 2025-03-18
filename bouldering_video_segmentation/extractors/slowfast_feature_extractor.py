@@ -6,11 +6,9 @@ from torchvision.transforms._transforms_video import (
     NormalizeVideo,
 )
 
-from utils import UniformTemporalSubsample, ShortSideScale
+from bouldering_video_segmentation.utils import UniformTemporalSubsample, ShortSideScale, PackPathway
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
 
-from extractors.feature_extractor import FeatureExtractor, FeaturesType
-
-from utils import PackPathway
 
 # SOURCE: https://pytorch.org/hub/facebookresearch_pytorchvideo_slowfast/
 class SlowFastFeatureExtractor(FeatureExtractor):

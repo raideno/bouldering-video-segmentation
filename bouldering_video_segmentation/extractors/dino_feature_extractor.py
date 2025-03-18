@@ -5,8 +5,8 @@ from torchvision.transforms._transforms_video import (
     NormalizeVideo,
 )
 
-from utils import UniformTemporalSubsample
-from extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.utils import UniformTemporalSubsample
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
   
 # SOURCE: https://github.com/facebookresearch/dinov2
 class DinoFeatureExtractor(FeatureExtractor):

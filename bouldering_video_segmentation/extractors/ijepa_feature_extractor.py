@@ -2,9 +2,9 @@ import torch
 import torchvision
 
 from transformers import AutoModel, AutoProcessor
-from utils import UniformTemporalSubsample
 
-from extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.utils import UniformTemporalSubsample
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
 
 class IJepaFeatureExtractor(FeatureExtractor):
     def __init__(self, average_pool):

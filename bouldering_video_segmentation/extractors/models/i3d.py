@@ -1,14 +1,10 @@
 import torch
+import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.autograd import Variable
 
-import numpy as np
-
-import os
-import sys
 from collections import OrderedDict
-
+from torch.autograd import Variable
 
 class MaxPool3dSamePadding(nn.MaxPool3d):
     

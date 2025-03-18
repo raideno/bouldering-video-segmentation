@@ -39,7 +39,7 @@ class FilteringOperator(StrEnum):
 DEFAULT_FILTERING_MODE = FilteringMode(0)
 DEFAULT_FILTERING_OPERATOR = FilteringOperator.OR
 
-def preliminary(filtering_mode: FilteringMode = DEFAULT_FILTERING_MODE, filtering_operator: FilteringOperator = DEFAULT_FILTERING_OPERATOR):
+def preliminary(filtering_mode: FilteringMode = DEFAULT_FILTERING_MODE, filtering_operator: FilteringOperator = DEFAULT_FILTERING_OPERATOR, ignore_frames_extraction: bool = False):
     """
     Prepares and processes datasets by extracting video frames, applying feature extraction, and filtering segments based on specified criteria.
 
@@ -83,11 +83,12 @@ def preliminary(filtering_mode: FilteringMode = DEFAULT_FILTERING_MODE, filterin
         VIDEOS_DIRECTORY_NAME, \
         VIDEOS_FRAMES_DIRECTORY_NAME \
         
-    extract_frames_from_videos(
-        videos_dir=os.path.join(DATASET_PATH, VIDEOS_DIRECTORY_NAME),
-        output_dir=os.path.join(DATASET_PATH, VIDEOS_FRAMES_DIRECTORY_NAME),
-        verbose=True
-    )
+    if not ignore_frames_extraction:
+        extract_frames_from_videos(
+            videos_dir=os.path.join(DATASET_PATH, VIDEOS_DIRECTORY_NAME),
+            output_dir=os.path.join(DATASET_PATH, VIDEOS_FRAMES_DIRECTORY_NAME),
+            verbose=True
+        )
     
     from helpers.constants import \
     FEATURES_EXTRACTORS, \
@@ -95,7 +96,7 @@ def preliminary(filtering_mode: FilteringMode = DEFAULT_FILTERING_MODE, filterin
     VIDEOS_FRAMES_DIRECTORY_NAME, \
     ANNOTATIONS_DIRECTORY_NAME, \
     ANNOTATED_IDS_FILE_NAME
-    from utils import LabelEncoderFactory
+    from bouldering_video_segmentation.utils import LabelEncoderFactory
     from cached_dataset import DiskCachedDataset
 
     from video_dataset import VideoDataset, VideoShapeComponents

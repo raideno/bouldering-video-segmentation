@@ -3,8 +3,8 @@ import torchvision
 
 from ultralytics import YOLO
 
-from utils import UniformTemporalSubsample
-from extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.utils import UniformTemporalSubsample
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
 
 DEFAULT_WEIGHTS_PATH = '../weights/yolo-11n-pose.pt'
 

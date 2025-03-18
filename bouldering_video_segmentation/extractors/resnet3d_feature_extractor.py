@@ -6,8 +6,8 @@ from torchvision.transforms._transforms_video import (
     NormalizeVideo,
 )
 
-from extractors.feature_extractor import FeatureExtractor, FeaturesType
-from utils import UniformTemporalSubsample, ShortSideScale
+from bouldering_video_segmentation.utils import UniformTemporalSubsample, ShortSideScale
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
     
 # SOURCE: https://pytorch.org/hub/facebookresearch_pytorchvideo_resnet/
 class ResNet3DFeatureExtractor(FeatureExtractor):

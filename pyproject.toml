@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "chambery"
+name = "bouldering_video_segmentation"
 version = "0.1.0"
 description = "video-action-segmentation"
 authors = ["Kichou Nadir <nadirkichou@hotmail.fr>"]
 readme = "README.md"
 
 packages = [
-    { include = "chambery", from = "." }
+    { include = "bouldering_video_segmentation", from = "." }
 ]
 
 [tool.poetry.dependencies]

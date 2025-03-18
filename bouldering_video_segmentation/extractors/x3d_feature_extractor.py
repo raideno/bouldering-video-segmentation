@@ -8,8 +8,8 @@ from torchvision.transforms._transforms_video import (
     NormalizeVideo,
 )
 
-from extractors.feature_extractor import FeatureExtractor, FeaturesType
-from utils import UniformTemporalSubsample, ShortSideScale
+from bouldering_video_segmentation.utils import UniformTemporalSubsample, ShortSideScale
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
 
 class X3DModelType(StrEnum):
     XS = "x3d_xs"
