@@ -60,6 +60,9 @@ class X3DSFeatureExtractor(FeatureExtractor):
     def get_features_type(self):
         return FeaturesType.TEMPORAL
     
+    def get_features_shape(self):
+        return (2048)
+    
     def get_required_number_of_frames(self):
         num_frames = self.__model_transform_params[self.model_name]["num_frames"]
         

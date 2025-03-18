@@ -25,6 +25,9 @@ class IJepaFeatureExtractor(FeatureExtractor):
     def get_features_type(self):
         return FeaturesType.FRAME_BY_FRAME
     
+    def get_features_shape(self):
+        raise NotImplementedError("Not implemented yet")
+    
     def get_required_number_of_frames(self):
         return 8
     

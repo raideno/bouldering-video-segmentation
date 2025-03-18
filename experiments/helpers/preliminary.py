@@ -78,7 +78,7 @@ def preliminary(filtering_mode: FilteringMode = DEFAULT_FILTERING_MODE, filterin
     """
     from video_dataset.preprocessor import extract_frames_from_videos
 
-    from helpers.constants import \
+    from experiments.helpers.constants import \
         DATASET_PATH, \
         VIDEOS_DIRECTORY_NAME, \
         VIDEOS_FRAMES_DIRECTORY_NAME \
@@ -90,7 +90,7 @@ def preliminary(filtering_mode: FilteringMode = DEFAULT_FILTERING_MODE, filterin
             verbose=True
         )
     
-    from helpers.constants import \
+    from experiments.helpers.constants import \
     FEATURES_EXTRACTORS, \
     DATASET_PATH, \
     VIDEOS_FRAMES_DIRECTORY_NAME, \

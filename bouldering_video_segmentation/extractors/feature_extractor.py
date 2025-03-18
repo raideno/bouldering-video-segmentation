@@ -9,6 +9,9 @@ class FeaturesType(StrEnum):
 class FeatureExtractor(ABC):
     @abstractmethod
     def get_features_type(self) -> FeaturesType:
+        """
+        Return the type of features extracted. It can either be temporal or frame by frame.
+        """
         pass
     
     @abstractmethod
@@ -20,6 +23,16 @@ class FeatureExtractor(ABC):
     
     @abstractmethod
     def get_required_number_of_frames(self):
+        """
+        Return the required number of frames to pass for frame extraction.
+        """
+        pass
+    
+    @abstractmethod
+    def get_features_shape(self):
+        """
+        Return the shape of the extracted features.
+        """
         pass
     
     @abstractmethod

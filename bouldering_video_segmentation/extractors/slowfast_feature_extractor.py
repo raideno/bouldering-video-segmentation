@@ -41,6 +41,9 @@ class SlowFastFeatureExtractor(FeatureExtractor):
             PackPathway(slowfast_alpha=slowfast_alpha)
         ])(x)
         
+    def get_features_shape(self):
+        return (2304)
+        
     def get_required_number_of_frames(self):
         return 32
         

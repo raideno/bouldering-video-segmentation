@@ -27,6 +27,9 @@ class ClipFeatureExtractor(FeatureExtractor):
         
     def get_required_number_of_frames(self):
         return 8
+    
+    def get_features_shape(self):
+        return (self.get_required_number_of_frames(), 512)
         
     def transform(self, x):
         mean = [0.48145466, 0.4578275, 0.40821073]

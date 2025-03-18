@@ -1,4 +1,4 @@
-from extractors import \
+from bouldering_video_segmentation.extractors import \
     FeatureExtractor, \
     ResNet3DFeatureExtractor, \
     DinoFeatureExtractor, \
@@ -22,7 +22,7 @@ UNANNOTATED_IDS_FILE_NAME = "unannotated_ids.txt"
 
 FEATURES_EXTRACTORS: list[FeatureExtractor] = [
     YoloFeatureExtractor(average_pool=False),
-    # DinoFeatureExtractor(average_pool=False),
+    DinoFeatureExtractor(average_pool=False),
     ResNet3DFeatureExtractor(),
     I3DFeatureExtractor(),
     ClipFeatureExtractor(average_pool=False),

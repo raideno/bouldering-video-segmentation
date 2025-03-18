@@ -26,11 +26,11 @@ class I3DFeatureExtractor(FeatureExtractor):
         
         if self.verbose:
             print(f"[missing-keys]: {missing_keys}")
-            
-        if missing_keys.count() > 0:
-            raise ValueError("Some keys are missing in the given weights.")
         
         self.model.eval()
+        
+    def get_features_shape(self):
+        return (1024)
         
     def get_features_type(self):
         return FeaturesType.TEMPORAL

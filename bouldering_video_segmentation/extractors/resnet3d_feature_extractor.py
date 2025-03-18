@@ -27,6 +27,9 @@ class ResNet3DFeatureExtractor(FeatureExtractor):
     
     def get_required_number_of_frames(self):
         return 8
+    
+    def get_features_shape(self):
+        return (2048)
         
     def transform(self, x):
         side_size = 256

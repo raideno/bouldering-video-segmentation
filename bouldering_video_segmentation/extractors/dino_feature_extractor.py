@@ -19,6 +19,9 @@ class DinoFeatureExtractor(FeatureExtractor):
         
     def get_features_type(self):
         return FeaturesType.FRAME_BY_FRAME
+    
+    def get_features_shape(self):
+        return (self.get_required_number_of_frames(), 384)
         
     def get_name(self):
         if self.average_pool:

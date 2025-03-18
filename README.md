@@ -10,6 +10,10 @@ Present the pre trained models & their different backbones.
 
 ## Usage & Installation
 
+```bash
+pip install git+https://github.com/raideno/bouldering-video-segmentation.git
+```
+
 Show how to install and use one of the pre-trained models on some example video.
 
 ```python

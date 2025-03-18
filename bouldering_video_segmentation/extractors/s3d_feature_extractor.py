@@ -57,7 +57,14 @@ def load_model(dataset: S3DTrainingDataset, weights_path: str=None, verbose: boo
     elif dataset == S3DTrainingDataset.HOWTO100M:
         network = S3DG(num_classes=512)
 
-        network.load_state_dict(torch.load(weights_path))
+        missing_keys, unexpected_keys = network.load_state_dict(state_dict=torch.load(weights_path), strict=False)
+        
+        if verbose:
+            print(f'[s3d]: missing keys: {missing_keys}')
+            print(f'[s3d]: unexpected keys: {unexpected_keys}')
+            
+        if len(missing_keys) > 0:
+            raise ValueError('Missing keys.')
 
         network.eval()
         
@@ -88,6 +95,9 @@ class S3DFeatureExtractor(FeatureExtractor):
         
     def get_required_number_of_frames(self):
         return 16
+    
+    def get_features_shape(self):
+        return (1024)
         
     def transform(self, x):
         num_frames = 16

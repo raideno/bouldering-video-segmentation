@@ -23,6 +23,9 @@ class ViVitFeatureExtractor(FeatureExtractor):
     def get_required_number_of_frames(self):
         return 32
     
+    def get_features_shape(self):
+        raise NotImplementedError("Not implemented yet")
+    
     def transform(self, x):
         """
         Expect the clip in the format shape (Channel, Time, Height, Width)
