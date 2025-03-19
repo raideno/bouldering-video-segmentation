@@ -6,23 +6,23 @@ Below you'll be able to find instructions related to how to train and do inferen
 
 ## Pre-Trained Models
 
-A detailed list of pre-trained models and their weights can be found in **[models-weights/README.md](models-weights/README.md)**. A resumed list can also be found just below.
+A detailed list of pre-trained models and their weights can be found in **[models-weights/mlp.README.md](models-weights/mlp.README.md)** or **[models-weights/lstm.README.md](models-weights/lstm.README.md)**. A resumed list can also be found just below.
 
-| Backbone Name | Backbone Type    | Model | Accuracy      | Download Link                                                                                                         |
-| :------------ | :--------------- | :---- | :------------ | :-------------------------------------------------------------------------------------------------------------------- |
-| yolo          | `FRAME_BY_FRAME` | `MLP` | 61.68% ± 1.94 | [Download Weights](https://github.com/raideno/bouldering-video-segmentation/blob/main/models-weights/mlp.yolo.pt)     |
-| dino          | `FRAME_BY_FRAME` | `MLP` | 80.00% ± 0.94 | [Download Weights](https://github.com/raideno/bouldering-video-segmentation/blob/main/models-weights/mlp.dino.pt)     |
-| r3d           | `TEMPORAL`       | `MLP` | 84.26% ± 2.92 | [Download Weights](https://github.com/raideno/bouldering-video-segmentation/blob/main/models-weights/mlp.r3d.pt)      |
-| i3d           | `TEMPORAL`       | `MLP` | 77.47% ± 4.82 | [Download Weights](https://github.com/raideno/bouldering-video-segmentation/blob/main/models-weights/mlp.i3d.pt)      |
-| clip          | `FRAME_BY_FRAME` | `MLP` | 74.39% ± 0.37 | [Download Weights](https://github.com/raideno/bouldering-video-segmentation/blob/main/models-weights/mlp.clip.pt)     |
-| x3d-xs        | `TEMPORAL`       | `MLP` | 81.65% ± 1.87 | [Download Weights](https://github.com/raideno/bouldering-video-segmentation/blob/main/models-weights/mlp.x3d-xs.pt)   |
-| x3d-s         | `TEMPORAL`       | `MLP` | 83.31% ± 2.14 | [Download Weights](https://github.com/raideno/bouldering-video-segmentation/blob/main/models-weights/mlp.x3d-s.pt)    |
-| x3d-m         | `TEMPORAL`       | `MLP` | 84.95% ± 3.91 | [Download Weights](https://github.com/raideno/bouldering-video-segmentation/blob/main/models-weights/mlp.x3d-m.pt)    |
-| x3d-l         | `TEMPORAL`       | `MLP` | 82.77% ± 2.74 | [Download Weights](https://github.com/raideno/bouldering-video-segmentation/blob/main/models-weights/mlp.x3d-l.pt)    |
-| s3d-k         | `TEMPORAL`       | `MLP` | 77.01% ± 2.32 | [Download Weights](https://github.com/raideno/bouldering-video-segmentation/blob/main/models-weights/mlp.s3d-k.pt)    |
-| s3d-h         | `TEMPORAL`       | `MLP` | 60.82% ± 0.55 | [Download Weights](https://github.com/raideno/bouldering-video-segmentation/blob/main/models-weights/mlp.s3d-h.pt)    |
-| slowfast      | `TEMPORAL`       | `MLP` | 83.98% ± 2.63 | [Download Weights](https://github.com/raideno/bouldering-video-segmentation/blob/main/models-weights/mlp.slowfast.pt) |
-| vivit         | `TEMPORAL`       | `MLP` | 77.81% ± 2.16 | [Download Weights](https://github.com/raideno/bouldering-video-segmentation/blob/main/models-weights/mlp.vivit.pt)    |
+| Backbone Name | Backbone Type    | MLP-Accuracy  | LSTM-Accuracy | Download Weights                                                                                  |
+| :------------ | :--------------- | :------------ | :------------ | :------------------------------------------------------------------------------------------------ |
+| yolo          | `FRAME_BY_FRAME` | 65.01% ± 4.41 | 69.94% ± 2.40 | [MLP - Weights](models-weights/mlp.yolo.pt) / [LSTM weights](models-weights/lstm.yolo.pt)         |
+| dino          | `FRAME_BY_FRAME` | 80.58% ± 4.56 | 83.20% ± 3.26 | [MLP - Weights](models-weights/mlp.dino.pt) / [LSTM weights](models-weights/lstm.dino.pt)         |
+| r3d           | `TEMPORAL`       | 84.27% ± 5.03 | 85.68% ± 3.64 | [MLP - Weights](models-weights/mlp.r3d.pt) / [LSTM weights](models-weights/lstm.r3d.pt)           |
+| i3d           | `TEMPORAL`       | 76.53% ± 8.81 | 79.38% ± 5.11 | [MLP - Weights](models-weights/mlp.i3d.pt) / [LSTM weights](models-weights/lstm.i3d.pt)           |
+| clip          | `FRAME_BY_FRAME` | 76.49% ± 2.36 | 79.92% ± 2.74 | [MLP - Weights](models-weights/mlp.clip.pt) / [LSTM weights](models-weights/lstm.clip.pt)         |
+| x3d-xs        | `TEMPORAL`       | 82.11% ± 3.73 | 83.87% ± 2.68 | [MLP - Weights](models-weights/mlp.x3d-xs.pt) / [LSTM weights](models-weights/lstm.x3d-xs.pt)     |
+| x3d-s         | `TEMPORAL`       | 85.28% ± 4.54 | 85.84% ± 3.63 | [MLP - Weights](models-weights/mlp.x3d-s.pt) / [LSTM weights](models-weights/lstm.x3d-s.pt)       |
+| x3d-m         | `TEMPORAL`       | 85.01% ± 4.75 | 86.61% ± 2.32 | [MLP - Weights](models-weights/mlp.x3d-m.pt) / [LSTM weights](models-weights/lstm.x3d-m.pt)       |
+| x3d-l         | `TEMPORAL`       | 84.65% ± 4.10 | 85.91% ± 2.32 | [MLP - Weights](models-weights/mlp.x3d-l.pt) / [LSTM weights](models-weights/lstm.x3d-l.pt)       |
+| s3d-k         | `TEMPORAL`       | 78.08% ± 5.20 | 78.04% ± 3.33 | [MLP - Weights](models-weights/mlp.s3d-k.pt) / [LSTM weights](models-weights/lstm.s3d-k.pt)       |
+| s3d-h         | `TEMPORAL`       | 59.37% ± 9.10 | 47.19% ± 6.22 | [MLP - Weights](models-weights/mlp.s3d-h.pt) / [LSTM weights](models-weights/lstm.s3d-h.pt)       |
+| slowfast      | `TEMPORAL`       | 84.22% ± 3.07 | 82.49% ± 4.61 | [MLP - Weights](models-weights/mlp.slowfast.pt) / [LSTM weights](models-weights/lstm.slowfast.pt) |
+| vivit         | `TEMPORAL`       | 78.42% ± 3.70 | 81.41% ± 3.75 | [MLP - Weights](models-weights/mlp.vivit.pt) / [LSTM weights](models-weights/lstm.vivit.pt)       |
 
 ## Doing Inference
 
