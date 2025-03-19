@@ -1,18 +1,9 @@
 \begin{figure*}[t]
     \centering
-    \begin{minipage}{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{assets/mwe/example-image-16x9}
-        \caption{Local Temporal Modeling}
-        \label{figure:local-temporal-modeling}
-    \end{minipage}
-    \hfill
-    \begin{minipage}{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{assets/mwe/example-image-16x9}
-        \caption{Global Temporal Modeling}
-        \label{figure:global-temporal-modeling}
-    \end{minipage}
+    % TODO: change the image base size in order to remove the skewness effect
+    \includegraphics[width=\textwidth]{../../assets/figures/model-overview-v1.png}
+    \caption{A timeline overview of the evolution of video analysis models.}
+    \label{fig:your-label}
 \end{figure*}
 
 \section{Our Approach}
@@ -23,16 +14,6 @@ This is why we took the decision to profit from networks that are pre-trained on
 The idea is that this network we are going to use as a backbone for sure contains some relevant features that understand the video teporality and sptiality in some way and this features must contains enough information about the video segment to do some sort of classification such as for the kinetics dataset, and thus we'll try to extract this information and use it in order to classify on our custom classes. 
 
 In addition to minimizing the damage made by the dataset constraints, taking this approach also reduces the required computational power as it is limited in our case, since we are not training a big network from scratch. And on top of that designing a neural network architecture would require more expertise and time (only 120 hours for the research project) which i don't have yet.
-
-\begin{figure*}[t]
-    \centering
-    \begin{minipage}{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{assets/mwe/example-image-16x9}
-        \caption{Illustration of our Model}
-        \label{figure:local-temporal-modeling}
-    \end{minipage}
-\end{figure*}
 
 \subsection*{Considered Variants}
 

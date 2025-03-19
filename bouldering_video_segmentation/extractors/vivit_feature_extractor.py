@@ -4,7 +4,7 @@ import torchvision
 from transformers import VivitForVideoClassification
 
 from bouldering_video_segmentation.utils import UniformTemporalSubsample
-from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 class ViVitFeatureExtractor(FeatureExtractor):
     def __init__(self):
@@ -17,14 +17,14 @@ class ViVitFeatureExtractor(FeatureExtractor):
     def get_features_type(self) -> FeaturesType:
         return FeaturesType.TEMPORAL
     
-    def get_name(self):
+    def get_name(self, version: FeatureExtractorNameVersion = FeatureExtractorNameVersion.LONG):
         return "vivit"
     
     def get_required_number_of_frames(self):
         return 32
     
     def get_features_shape(self):
-        raise NotImplementedError("Not implemented yet")
+        raise (768)
     
     def transform(self, x):
         """

@@ -2,7 +2,7 @@ import torch
 
 class VideoSegmentMlp(torch.nn.Module):
     def __init__(self, input_size, output_size):
-        super(VideoSegmentMlp, self).__init__()
+        super().__init__()
         
         self.network = torch.nn.Sequential(
             torch.nn.Flatten(),

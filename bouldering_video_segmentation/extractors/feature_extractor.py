@@ -6,6 +6,10 @@ class FeaturesType(StrEnum):
     TEMPORAL = "TEMPORAL"
     FRAME_BY_FRAME = "FRAME_BY_FRAME"
 
+class FeatureExtractorNameVersion(StrEnum):
+    LONG = "LONG"
+    SHORT = "SHORT"
+
 class FeatureExtractor(ABC):
     @abstractmethod
     def get_features_type(self) -> FeaturesType:
@@ -15,7 +19,7 @@ class FeatureExtractor(ABC):
         pass
     
     @abstractmethod
-    def get_name(self):
+    def get_name(self, version: FeatureExtractorNameVersion = FeatureExtractorNameVersion.LONG) -> str:
         """
         Return the name of the feature extractor. Might be utilized for saving / loading purposes such as naming a directory, etc.
         """

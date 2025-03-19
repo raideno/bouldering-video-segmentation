@@ -11,7 +11,7 @@ class FullVideoLstm(torch.nn.Module):
         num_layers: The number of LSTM layers. Default is 1.
         dropout: The dropout probability. Default is 0.0.
         """
-        super(FullVideoLstm, self).__init__()
+        super().__init__()
         
         self.lstm = torch.nn.LSTM(input_size, hidden_size, num_layers, batch_first=True, dropout=dropout)
         self.fc = torch.nn.Linear(hidden_size, output_size)

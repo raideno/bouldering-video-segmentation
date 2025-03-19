@@ -2,29 +2,31 @@
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.475\textwidth]{assets/figures/models-scores.png}
+    \includegraphics[width=1\linewidth]{../../assets/figures/mlp.training-results.boxplot.png}
     \caption{Your figure caption here.}
     \label{figure:models-performances}
 \end{figure}
 
-\begin{table}[h]
-    \centering
-    \tiny
-    \begin{tabular}{|l|c|c|c|c|}
-    \hline
-    \textbf{Backbone} & \textbf{Accuracy} & \textbf{Edit Score} & \textbf{F1 Score} & \textbf{\# Parameters} \\
-    \hline
-    ResNet50          & 95 ± 0.1\%              & 92 ± 0.1\%                & 94 ± 0.1\%              & 25M                   \\
-    VGG16             & 93 ± 0.1\%              & 90 ± 0.1\%                & 92 ± 0.1\%              & 138M                  \\
-    InceptionV3       & 96 ± 0.1\%              & 94 ± 0.1\%                & 95 ± 0.1\%              & 23M                   \\
-    EfficientNetB0    & 97 ± 0.1\%              & 95 ± 0.1\%                & 96 ± 0.1\%              & 5.3M                  \\
-    $\cdots$            & $\cdots$                  & $\cdots$                    & $\cdots$                  & $\cdots$                \\
-    Kinetics-SotA     & 95 \%                   & 95 \%                     & 95 \%                   & NA                    \\
-    \hline
-    \end{tabular}
-    \caption{Model Performance Comparison}
-    \label{table:models-performances}
-\end{table}
+\input{../../assets/tables/mlp.training-results.tex}
+
+% \begin{table}[h]
+%     \centering
+%     \tiny
+%     \begin{tabular}{|l|c|c|c|c|}
+%     \hline
+%     \textbf{Backbone} & \textbf{Accuracy} & \textbf{Edit Score} & \textbf{F1 Score} & \textbf{\# Parameters} \\
+%     \hline
+%     ResNet50          & 95 ± 0.1\%              & 92 ± 0.1\%                & 94 ± 0.1\%              & 25M                   \\
+%     VGG16             & 93 ± 0.1\%              & 90 ± 0.1\%                & 92 ± 0.1\%              & 138M                  \\
+%     InceptionV3       & 96 ± 0.1\%              & 94 ± 0.1\%                & 95 ± 0.1\%              & 23M                   \\
+%     EfficientNetB0    & 97 ± 0.1\%              & 95 ± 0.1\%                & 96 ± 0.1\%              & 5.3M                  \\
+%     $\cdots$            & $\cdots$                  & $\cdots$                    & $\cdots$                  & $\cdots$                \\
+%     Kinetics-SotA     & 95 \%                   & 95 \%                     & 95 \%                   & NA                    \\
+%     \hline
+%     \end{tabular}
+%     \caption{Model Performance Comparison}
+%     \label{table:models-performances}
+% \end{table}
 
 \todo[inline]{Add a training time or number of epochs column in the table.}
 \todo[inline]{Add a column to say whether the backbone is temporal or frame by frame.}

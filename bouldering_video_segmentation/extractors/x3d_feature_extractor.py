@@ -9,7 +9,7 @@ from torchvision.transforms._transforms_video import (
 )
 
 from bouldering_video_segmentation.utils import UniformTemporalSubsample, ShortSideScale
-from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 class X3DModelType(StrEnum):
     XS = "x3d_xs"
@@ -54,8 +54,8 @@ class X3DSFeatureExtractor(FeatureExtractor):
         
         self.model.eval()
         
-    def get_name(self):
-        return self.model_name
+    def get_name(self, version: FeatureExtractorNameVersion = FeatureExtractorNameVersion.LONG):
+        return self.model_name.replace("_", "-")
     
     def get_features_type(self):
         return FeaturesType.TEMPORAL

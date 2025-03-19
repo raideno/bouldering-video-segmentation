@@ -6,7 +6,7 @@ from torchvision.transforms._transforms_video import (
 )
 
 from bouldering_video_segmentation.utils import UniformTemporalSubsample
-from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeatureExtractorNameVersion, FeaturesType
   
 # SOURCE: https://github.com/facebookresearch/dinov2
 class DinoFeatureExtractor(FeatureExtractor):
@@ -23,7 +23,7 @@ class DinoFeatureExtractor(FeatureExtractor):
     def get_features_shape(self):
         return (self.get_required_number_of_frames(), 384)
         
-    def get_name(self):
+    def get_name(self, version: FeatureExtractorNameVersion = FeatureExtractorNameVersion.LONG):
         if self.average_pool:
             return "averaged-dino"
         else:

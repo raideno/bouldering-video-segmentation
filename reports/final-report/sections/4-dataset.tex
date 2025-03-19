@@ -1,47 +1,16 @@
 \begin{figure*}[t]
     \centering
-    \begin{minipage}{0.245\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{assets/figures/average-duration-of-actions.png}
-        % \caption{Statistic 1}
-        \label{fig:distribution-of-actions-in-dataset}
-    \end{minipage}%
-    \hspace{0.02\textwidth} % Spacing between the figures
-    \begin{minipage}{0.245\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{assets/figures/average-number-of-action-occurences-per-video.png}
-        % \caption{Statistic 2}
-        \label{fig:average-number-of-action-occurences-per-video}
-    \end{minipage}%
-    \hspace{0.02\textwidth} % Spacing between the figures
-    \begin{minipage}{0.245\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{assets/figures/distribution-of-actions-in-dataset.png}
-        % \caption{Statistic 3}
-        \label{fig:average-duration-of-actions}
-    \end{minipage}%
-\end{figure*}
-
-\begin{table*}[t]
-    \centering
-    \small
-    \renewcommand{\arraystretch}{0.9}
-    \setlength{\tabcolsep}{6pt}
-    \begin{tabular}{|l|c|c|c|c|c|}
-      \hline
-      \textbf{Name} & \textbf{\#Classes} & \textbf{\#Videos} & \textbf{Duration (h)} & \textbf{Repetition} & \textbf{Order Variation} \\ \hline
-      50 Salads & 5 & 20 & 3.5 & NA & NA \\ \hline
-      GTEA & 8 & 35 & 6.0 & NA & NA \\ \hline
-      Breakfasts & 4 & 15 & 2.0 & NA & NA \\ \hline
-      Kinetics-400 & 6 & 25 & 4.5 & NA & NA \\ \hline
-      Assembly 101 & 6 & 25 & 4.5 & NA & NA \\ \hline
-      Howto100M & 6 & 25 & 4.5 & NA & NA \\ \hline
-      Something-Something-V2 & 6 & 25 & 4.5 & NA & NA \\ \hline
-      \textbf{Ours} & 6 & 25 & 4.5 & NA & NA \\ \hline
+    \begin{tabular}{@{}cccc@{}}
+      \includegraphics[width=0.23\textwidth]{../../assets/figures/average-duration-of-actions.png} &
+      \includegraphics[width=0.23\textwidth]{../../assets/figures/average-number-of-action-occurrences-per-video.png} &
+      \includegraphics[width=0.23\textwidth]{../../assets/figures/distribution-of-actions-in-dataset.png} &
+      \includegraphics[width=0.23\textwidth]{../../assets/figures/temporal-distribution-of-actions.png} \\
+      \begin{minipage}{0.23\textwidth}\centering\caption{Average duration of actions in the dataset.}\label{fig:average-duration-of-actions}\end{minipage} &
+      \begin{minipage}{0.23\textwidth}\centering\caption{Average Action Count per Video.}\label{fig:average-number-of-action-occurences-per-video}\end{minipage} &
+      \begin{minipage}{0.23\textwidth}\centering\caption{Distribution of actions in the dataset.}\label{fig:distribution-of-actions-in-dataset}\end{minipage} &
+      \begin{minipage}{0.23\textwidth}\centering\caption{Temporal distribution of actions in the dataset}\label{fig:temporal-distribution-of-actions}\end{minipage}
     \end{tabular}
-    \caption{Other popular datasets.}
-    \label{tab:dataset_stats}
-\end{table*}
+  \end{figure*}
 
 \section{Dataset}
 
@@ -103,7 +72,17 @@ From the \ref{fig:average-duration-of-actions} we can see that the longest actio
 \todo[inline]{Add a fourth plot about the dataset.}
 
 \subsection{Popular Video Datasets}
+
 \label{subsection:popular-video-datasets}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{../../assets/figures/popular-datasets.png}
+    \caption{A visualization of popular video datasets.}
+    \label{fig:your-label}
+\end{figure}
+
+\input{../../assets/tables/popular-datasets.tex}
 
 When it comes to temporal action segmentation, there are very few datasets available, and the most popular ones are:
 

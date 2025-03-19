@@ -33,7 +33,7 @@ FEATURES_EXTRACTORS: list[FeatureExtractor] = [
     S3DFeatureExtractor(S3DTrainingDataset.KINETICS),
     S3DFeatureExtractor(S3DTrainingDataset.HOWTO100M),
     SlowFastFeatureExtractor(),
-    # ViVitFeatureExtractor(),
+    ViVitFeatureExtractor(),
     # --- --- ---
     # ClipFeatureExtractor(average_pool=True),
     # DinoFeatureExtractor(average_pool=True),

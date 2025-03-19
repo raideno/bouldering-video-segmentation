@@ -4,7 +4,7 @@ import torchvision
 from ultralytics import YOLO
 
 from bouldering_video_segmentation.utils import UniformTemporalSubsample
-from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 DEFAULT_WEIGHTS_PATH = '../extractors-weights/yolo-11n-pose.pt'
 
@@ -21,9 +21,9 @@ class YoloFeatureExtractor(FeatureExtractor):
         self.verbose = verbose
         self.model = YOLO(self.weights_path, verbose=self.verbose)
         
-    def get_name(self):
+    def get_name(self, version: FeatureExtractorNameVersion = FeatureExtractorNameVersion.LONG):
         if self.average_pool:
-            return "averaged-yolo"
+            return "avg(yolo)"
         else:
             return "yolo"
         

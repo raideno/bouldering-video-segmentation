@@ -5,14 +5,14 @@ import torchvision
 from enum import StrEnum
 
 from bouldering_video_segmentation.utils import UniformTemporalSubsample
-from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 from bouldering_video_segmentation.extractors.models.s3d import S3D
 from bouldering_video_segmentation.extractors.models.s3dg import S3D as S3DG
 
 class S3DTrainingDataset(StrEnum):
-    KINETICS = "kinetics"
-    HOWTO100M = "howto100m"
+    KINETICS = "k"
+    HOWTO100M = "h"
     
 def load_model(dataset: S3DTrainingDataset, weights_path: str=None, verbose: bool=False):
     
@@ -87,7 +87,7 @@ class S3DFeatureExtractor(FeatureExtractor):
         
         self.model.eval()
     
-    def get_name(self):
+    def get_name(self, version: FeatureExtractorNameVersion = FeatureExtractorNameVersion.LONG):
         return f"s3d-{self.dataset.value}"
     
     def get_features_type(self):

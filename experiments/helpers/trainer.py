@@ -82,6 +82,8 @@ class Trainer():
         best_validation_loss = float('inf')
         best_epoch = 0
         
+        best_model_state_dict = None
+        
         with tqdm.tqdm(iterable=range(32), desc=title or "[training]", unit="epoch") as progress_bar:
             for epoch in progress_bar:
                 training_loss, training_accuracy = self.__train_one_epoch(training_dataloader, learning_rate=0.001)
@@ -108,6 +110,9 @@ class Trainer():
                     
                     best_epoch = epoch
                     
+                    best_model_state_dict = self.model.state_dict()
+
+                    
                 progress_bar.set_postfix({
                     "training-loss": training_loss,
                     "training-accuracy": training_accuracy,
@@ -123,5 +128,6 @@ class Trainer():
             "best_validation_accuracy": best_validation_accuracy,
             "best_epoch": best_epoch,
             "best_training_loss": best_training_loss,
-            "best_validation_loss": best_validation_loss
+            "best_validation_loss": best_validation_loss,
+            "best_model_state_dict": best_model_state_dict
         }

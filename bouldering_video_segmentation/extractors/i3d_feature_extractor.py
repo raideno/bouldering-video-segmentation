@@ -7,7 +7,7 @@ from torchvision.transforms._transforms_video import (
 
 from bouldering_video_segmentation.utils import UniformTemporalSubsample
 from bouldering_video_segmentation.extractors.models.i3d import InceptionI3d
-from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 DEFAULT_WEIGHTS_PATH = '../extractors-weights/i3d.pt'
 
@@ -35,7 +35,7 @@ class I3DFeatureExtractor(FeatureExtractor):
     def get_features_type(self):
         return FeaturesType.TEMPORAL
         
-    def get_name(self):
+    def get_name(self, version: FeatureExtractorNameVersion = FeatureExtractorNameVersion.LONG):
         return "i3d"
     
     def get_required_number_of_frames(self):

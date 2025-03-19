@@ -1,31 +1,26 @@
 \begin{table}
-\begin{center}
-\scalebox{0.85}{
-\begin{tabular}{l|c|c|c|c}
-Dataset & Year & \# Samples& Ave. Len & \# Actions\\
-\hline
-HMDB51 \cite{hmdb51} & 2011 & 7K & $\sim$5s &51  \\
-UCF101 \cite{ucf101} & 2012 & 13.3K & $\sim$6s &  101 \\
-Sports1M \cite{karpathy_CVPR2014_videoCNN} & 2014 & 1.1M & $\sim$5.5m &487  \\
-ActivityNet \cite{activityNet} & 2015 & 28K & $[5,10]m$&200  \\
-YouTube8M \cite{youtube8m} & 2016 & 8M & $ 229.6s$ & 3862  \\
-Charades \cite{charades} &2016 & 9.8K & $30.1s$ & 157  \\
-Kinetics400 \cite{kinetics400} &2017 & 306K & $10s$ &400  \\
-Kinetics600 \cite{carreira2018short} &2018 & 482K & $10s$ &600  \\
-Kinetics700 \cite{carreira2019short} &2019 & 650K & $10s$ &700  \\
-Sth-Sth V1 \cite{sthsth} &2017 & 108.5K & $[2,6]s$ &174  \\
-Sth-Sth V2 \cite{sthsth} &2017 & 220.8K & $[2,6]s$ &174  \\
-AVA \cite{ava} & 2017 & 385K & $15m$ & 80 \\
-AVA-kinetics \cite{li2020ava} & 2020 & 624K & $15m,10s$ & 80 \\
-MIT \cite{mit} & 2018 & 1M & $3s$  &339  \\
-HACS Clips \cite{hacs} & 2019 & 1.55M & $2s$  &200  \\
-HVU~\cite{hvu} & 2020 & 572K & $10s$ & 739\\
-AViD~\cite{piergiovanni2020avid}& 2020 & 450K & $[3,15]s$ & 887 \\
-\hline
+\centering
+\small
+
+\resizebox{1\linewidth}{!}{
+\begin{tabular}{lrrr}
+\toprule
+Dataset & Year & Samples & Actions \\
+\midrule
+Ours & 2021 & 22 & 4 \\
+HMDB51 & 2011 & 7000 & 51 \\
+UCF101 & 2012 & 13300 & 101 \\
+Sports1M & 2014 & 1100000 & 487 \\
+ActivityNet & 2015 & 28000 & 200 \\
+Sth-Sth V2 & 2017 & 220800 & 174 \\
+AVA & 2017 & 385000 & 80 \\
+AVA-kinetics & 2020 & 624000 & 80 \\
+MIT & 2018 & 1000000 & 339 \\
+HACS Clips & 2019 & 1550000 & 200 \\
+HVU & 2020 & 572000 & 739 \\
+AViD & 2020 & 450000 & 887 \\
+\bottomrule
 \end{tabular}
 }
-\end{center}
-\caption{\textbf{A list of popular datasets for video action recognition}}
-\label{tab:dataset}
-\vspace{-2ex}
+\vspace{-2ex}\caption{A list of popular video datasets.}
 \end{table}

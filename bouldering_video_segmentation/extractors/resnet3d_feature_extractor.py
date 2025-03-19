@@ -7,7 +7,7 @@ from torchvision.transforms._transforms_video import (
 )
 
 from bouldering_video_segmentation.utils import UniformTemporalSubsample, ShortSideScale
-from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
     
 # SOURCE: https://pytorch.org/hub/facebookresearch_pytorchvideo_resnet/
 class ResNet3DFeatureExtractor(FeatureExtractor):
@@ -19,8 +19,8 @@ class ResNet3DFeatureExtractor(FeatureExtractor):
         
         self.model.eval()
         
-    def get_name(self):
-        return "resnet-3d"
+    def get_name(self,  version: FeatureExtractorNameVersion = FeatureExtractorNameVersion.LONG):
+        return "r3d"
     
     def get_features_type(self):
         return FeaturesType.TEMPORAL

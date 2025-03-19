@@ -7,7 +7,7 @@ from torchvision.transforms._transforms_video import (
 )
 
 from bouldering_video_segmentation.utils import UniformTemporalSubsample
-from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 class ClipFeatureExtractor(FeatureExtractor):
     def __init__(self, average_pool:bool):
@@ -19,7 +19,7 @@ class ClipFeatureExtractor(FeatureExtractor):
     def get_features_type(self):
         return FeaturesType.FRAME_BY_FRAME
         
-    def get_name(self):
+    def get_name(self, version: FeatureExtractorNameVersion = FeatureExtractorNameVersion.LONG):
         if self.average_pool:
             return "averaged-clip"
         else:

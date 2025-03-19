@@ -7,7 +7,7 @@ from torchvision.transforms._transforms_video import (
 )
 
 from bouldering_video_segmentation.utils import UniformTemporalSubsample, ShortSideScale, PackPathway
-from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 
 # SOURCE: https://pytorch.org/hub/facebookresearch_pytorchvideo_slowfast/
@@ -47,7 +47,7 @@ class SlowFastFeatureExtractor(FeatureExtractor):
     def get_required_number_of_frames(self):
         return 32
         
-    def get_name(self):
+    def get_name(self, version: FeatureExtractorNameVersion = FeatureExtractorNameVersion.LONG):
         return "slowfast"
     
     def get_features_type(self):

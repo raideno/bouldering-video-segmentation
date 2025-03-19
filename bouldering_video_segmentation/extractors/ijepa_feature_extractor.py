@@ -4,7 +4,7 @@ import torchvision
 from transformers import AutoModel, AutoProcessor
 
 from bouldering_video_segmentation.utils import UniformTemporalSubsample
-from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType
+from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 class IJepaFeatureExtractor(FeatureExtractor):
     def __init__(self, average_pool):
@@ -16,9 +16,10 @@ class IJepaFeatureExtractor(FeatureExtractor):
 
         self.model.eval()
         
-    def get_name(self):
+    def get_name(self, version: FeatureExtractorNameVersion = FeatureExtractorNameVersion.LONG):
         if self.average_pool:
-            return "averaged-ijepa"
+            
+            return "avg(ijepa)"
         else:
             return "ijepa"
     
