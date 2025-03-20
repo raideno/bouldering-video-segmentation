@@ -7,7 +7,7 @@ from bouldering_video_segmentation.extractors import \
     YoloFeatureExtractor, \
     IJepaFeatureExtractor, \
     S3DFeatureExtractor, S3DTrainingDataset, \
-    X3DSFeatureExtractor, X3DModelType, \
+    X3DFeatureExtractor, X3DModelType, \
     SlowFastFeatureExtractor, \
     ViVitFeatureExtractor
 
@@ -26,10 +26,10 @@ FEATURES_EXTRACTORS: list[FeatureExtractor] = [
     ResNet3DFeatureExtractor(),
     I3DFeatureExtractor(),
     ClipFeatureExtractor(average_pool=False),
-    X3DSFeatureExtractor(X3DModelType.XS),
-    X3DSFeatureExtractor(X3DModelType.S),
-    X3DSFeatureExtractor(X3DModelType.M),
-    X3DSFeatureExtractor(X3DModelType.L),
+    X3DFeatureExtractor(X3DModelType.XS),
+    X3DFeatureExtractor(X3DModelType.S),
+    X3DFeatureExtractor(X3DModelType.M),
+    X3DFeatureExtractor(X3DModelType.L),
     S3DFeatureExtractor(S3DTrainingDataset.KINETICS),
     S3DFeatureExtractor(S3DTrainingDataset.HOWTO100M),
     SlowFastFeatureExtractor(),

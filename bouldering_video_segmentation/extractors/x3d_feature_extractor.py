@@ -18,7 +18,7 @@ class X3DModelType(StrEnum):
     L = "x3d_l"
 
 # SOURCE: https://pytorch.org/hub/facebookresearch_pytorchvideo_x3d/
-class X3DSFeatureExtractor(FeatureExtractor):
+class X3DFeatureExtractor(FeatureExtractor):
     def __init__(self, model_name: X3DModelType):
         self.model_name = model_name
         self.model = torch.hub.load('facebookresearch/pytorchvideo', self.model_name, pretrained=True)

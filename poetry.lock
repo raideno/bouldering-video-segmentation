@@ -6,7 +6,7 @@ version = "0.7.0"
 description = "Reusable constraint types to use with typing.Annotated"
 optional = false
 python-versions = ">=3.8"
-groups = ["main", "experiments"]
+groups = ["main"]
 files = [
     {file = "annotated_types-0.7.0-py3-none-any.whl", hash = "sha256:1f02e8b43a8fbbc3f3e0d4f0f4bfc8131bcb4eebe8849b8e5c773f3a1c582a53"},
     {file = "annotated_types-0.7.0.tar.gz", hash = "sha256:aff07c09a53a08bc8cfccb9c85b05f1aa9a2a6f23728d790723543408344ce89"},
@@ -2198,7 +2198,7 @@ version = "2.10.6"
 description = "Data validation using Python type hints"
 optional = false
 python-versions = ">=3.8"
-groups = ["main", "experiments"]
+groups = ["main"]
 files = [
     {file = "pydantic-2.10.6-py3-none-any.whl", hash = "sha256:427d664bf0b8a2b34ff5dd0f5a18df00591adcee7198fbd71981054cef37b584"},
     {file = "pydantic-2.10.6.tar.gz", hash = "sha256:ca5daa827cce33de7a42be142548b0096bf05a7e7b365aebfa5f8eeec7128236"},
@@ -2219,7 +2219,7 @@ version = "2.27.2"
 description = "Core functionality for Pydantic validation and serialization"
 optional = false
 python-versions = ">=3.8"
-groups = ["main", "experiments"]
+groups = ["main"]
 files = [
     {file = "pydantic_core-2.27.2-cp310-cp310-macosx_10_12_x86_64.whl", hash = "sha256:2d367ca20b2f14095a8f4fa1210f5a7b78b8a20009ecced6b12818f455b1e9fa"},
     {file = "pydantic_core-2.27.2-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:491a2b73db93fab69731eaee494f320faa4e093dbed776be1a829c2eb222c34c"},
@@ -3764,14 +3764,14 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "video-dataset"
-version = "0.3.0.dev20250316222650"
+version = "0.3.0.dev20250320163639"
 description = "A pytorch compatible video dataset that is fully customizable."
 optional = false
-python-versions = ">=3.12"
-groups = ["experiments"]
+python-versions = ">=3.10"
+groups = ["main"]
 files = [
-    {file = "video_dataset-0.3.0.dev20250316222650-py3-none-any.whl", hash = "sha256:996e4938653c5c78933fe1a78ef9a909fe471b3b368628688cc7b466a9754496"},
-    {file = "video_dataset-0.3.0.dev20250316222650.tar.gz", hash = "sha256:3425c4f4af9dea9fc75dbad9876f1028b4f21b2fc662a561a45dc3bd62e03e32"},
+    {file = "video_dataset-0.3.0.dev20250320163639-py3-none-any.whl", hash = "sha256:9af910b8b9564f860053b648b849e4d92742fbbbbf559e07ab276a8bd53171ea"},
+    {file = "video_dataset-0.3.0.dev20250320163639.tar.gz", hash = "sha256:ead4bb8031ded1887083ee33a0c0682562e399f1f8ed672de10beb7c69323f6d"},
 ]
 
 [package.dependencies]
@@ -3811,4 +3811,4 @@ PyYAML = "*"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "515b25d1893351cf708932ebe7339fe5af16f5bb83fc008132a17379704eec29"
+content-hash = "d918526947abd32e7ffc373edefde664055c19fae8e1b52dbe5e42732d8291fd"
