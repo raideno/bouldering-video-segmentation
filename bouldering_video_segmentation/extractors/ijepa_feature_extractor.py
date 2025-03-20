@@ -3,7 +3,7 @@ import torchvision
 
 from transformers import AutoModel, AutoProcessor
 
-from bouldering_video_segmentation.utils import UniformTemporalSubsample
+from bouldering_video_segmentation.utils import UniformTemporalSubsample, to_millions
 from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 class IJepaFeatureExtractor(FeatureExtractor):
@@ -25,6 +25,10 @@ class IJepaFeatureExtractor(FeatureExtractor):
     
     def get_features_type(self):
         return FeaturesType.FRAME_BY_FRAME
+    
+    def get_number_of_params(self):
+        return to_millions(sum(parameter.numel() for parameter in self.model.parameters()))
+        # return "632M"
     
     def get_features_shape(self):
         raise NotImplementedError("Not implemented yet")

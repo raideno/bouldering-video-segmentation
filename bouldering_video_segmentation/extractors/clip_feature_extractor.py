@@ -6,7 +6,7 @@ from torchvision.transforms._transforms_video import (
     NormalizeVideo,
 )
 
-from bouldering_video_segmentation.utils import UniformTemporalSubsample
+from bouldering_video_segmentation.utils import UniformTemporalSubsample, to_millions
 from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 class ClipFeatureExtractor(FeatureExtractor):
@@ -27,6 +27,9 @@ class ClipFeatureExtractor(FeatureExtractor):
         
     def get_required_number_of_frames(self):
         return 8
+    
+    def get_number_of_params(self):
+        return to_millions(sum(parameter.numel() for parameter in self.model.parameters()))
     
     def get_features_shape(self):
         return (self.get_required_number_of_frames(), 512)

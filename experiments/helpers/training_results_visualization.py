@@ -226,11 +226,17 @@ def create_performance_table(aggregated_training_results: AggregatedTrainingResu
     
     return dataframe
 
+SEPARATION_LINE = "<THIS IS A SEPARATION LINE>"
+
+get_separation_line_string = lambda number_of_columns: " & ".join([SEPARATION_LINE] * number_of_columns) + " \\\\"
+
 def write_latex_table(dataframe, path, caption, small:bool=True):
     latex_code = dataframe.to_latex(
         index=False,
         caption=caption,
     )
+    
+    number_of_columns = len(dataframe.columns)
 
     if small:
         latex_code = latex_code.replace("\\begin{table}", "\\begin{table}\n\\centering\n\\small")
@@ -242,6 +248,8 @@ def write_latex_table(dataframe, path, caption, small:bool=True):
     
     latex_code = latex_code.replace("\\begin{tabular}", "\\resizebox{1\linewidth}{!}{\n\\begin{tabular}")
     latex_code = latex_code.replace("\\end{tabular}", "\end{tabular}\n}")
+    
+    latex_code = latex_code.replace(get_separation_line_string(number_of_columns), "\\midrule")
 
     with open(path, "w") as file:
         file.write(latex_code)

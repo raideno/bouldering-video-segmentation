@@ -1,4 +1,5 @@
 from bouldering_video_segmentation.utils.transformers import *
+from bouldering_video_segmentation.utils.to_millions import to_millions
 from bouldering_video_segmentation.utils.early_stopper import EarlyStopper
 from bouldering_video_segmentation.utils.label_encoder import LabelEncoderFactory
 from bouldering_video_segmentation.utils.positional_encoding import generate_positional_encoding

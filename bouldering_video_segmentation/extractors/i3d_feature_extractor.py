@@ -5,8 +5,8 @@ from torchvision.transforms._transforms_video import (
     NormalizeVideo,
 )
 
-from bouldering_video_segmentation.utils import UniformTemporalSubsample
 from bouldering_video_segmentation.extractors.models.i3d import InceptionI3d
+from bouldering_video_segmentation.utils import UniformTemporalSubsample, to_millions
 from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 DEFAULT_WEIGHTS_PATH = '../extractors-weights/i3d.pt'
@@ -28,6 +28,9 @@ class I3DFeatureExtractor(FeatureExtractor):
             print(f"[missing-keys]: {missing_keys}")
         
         self.model.eval()
+        
+    def get_number_of_params(self):
+        return to_millions(sum(parameter.numel() for parameter in self.model.parameters()))
         
     def get_features_shape(self):
         return (1024)

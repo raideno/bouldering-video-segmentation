@@ -3,7 +3,7 @@ import torchvision
 
 from ultralytics import YOLO
 
-from bouldering_video_segmentation.utils import UniformTemporalSubsample
+from bouldering_video_segmentation.utils import UniformTemporalSubsample, to_millions
 from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 DEFAULT_WEIGHTS_PATH = '../extractors-weights/yolo-11n-pose.pt'
@@ -26,6 +26,10 @@ class YoloFeatureExtractor(FeatureExtractor):
             return "avg(yolo)"
         else:
             return "yolo"
+        
+    def get_number_of_params(self):
+        return to_millions(sum(parameter.numel() for parameter in self.model.parameters()))
+        # return "2.9M"
         
     def get_features_type(self):
         return FeaturesType.FRAME_BY_FRAME

@@ -8,7 +8,7 @@ from torchvision.transforms._transforms_video import (
     NormalizeVideo,
 )
 
-from bouldering_video_segmentation.utils import UniformTemporalSubsample, ShortSideScale
+from bouldering_video_segmentation.utils import UniformTemporalSubsample, ShortSideScale, to_millions
 from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 class X3DModelType(StrEnum):
@@ -62,6 +62,9 @@ class X3DSFeatureExtractor(FeatureExtractor):
     
     def get_features_shape(self):
         return (2048)
+    
+    def get_number_of_params(self):
+        return to_millions(sum(parameter.numel() for parameter in self.model.parameters()))
     
     def get_required_number_of_frames(self):
         num_frames = self.__model_transform_params[self.model_name]["num_frames"]

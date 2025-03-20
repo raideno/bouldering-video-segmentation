@@ -3,23 +3,23 @@
 \small
 
 \resizebox{1\linewidth}{!}{
-\begin{tabular}{llll}
+\begin{tabular}{lllll}
 \toprule
-Backbone Name & Backbone Type & Model & Accuracy \\
+Backbone Name & Backbone Type & Model & Accuracy & \#Parameters \\
 \midrule
-yolo & By Frame & MLP & 69.94\% ± 2.40 \\
-dino & By Frame & MLP & 83.20\% ± 3.26 \\
-r3d & By Segment & MLP & 85.68\% ± 3.64 \\
-i3d & By Segment & MLP & 79.38\% ± 5.11 \\
-clip & By Frame & MLP & 79.92\% ± 2.74 \\
-x3d-xs & By Segment & MLP & 83.87\% ± 2.68 \\
-x3d-s & By Segment & MLP & 85.84\% ± 3.63 \\
-x3d-m & By Segment & MLP & 86.61\% ± 2.32 \\
-x3d-l & By Segment & MLP & 85.91\% ± 2.32 \\
-s3d-k & By Segment & MLP & 78.04\% ± 3.33 \\
-s3d-h & By Segment & MLP & 47.19\% ± 6.22 \\
-slowfast & By Segment & MLP & 82.49\% ± 4.61 \\
-vivit & By Segment & MLP & 81.41\% ± 3.75 \\
+yolo & By Frame & LSTM & 69.94\% ± 2.40 & 2.9M \\
+dino & By Frame & LSTM & 83.20\% ± 3.26 & 22.1M \\
+r3d & By Segment & LSTM & 85.68\% ± 3.64 & 31.6M \\
+i3d & By Segment & LSTM & 79.38\% ± 5.11 & 12.7M \\
+clip & By Frame & LSTM & 79.92\% ± 2.74 & 151.3M \\
+x3d-xs & By Segment & LSTM & 83.87\% ± 2.68 & 3.0M \\
+x3d-s & By Segment & LSTM & 85.84\% ± 3.63 & 3.0M \\
+x3d-m & By Segment & LSTM & 86.61\% ± 2.32 & 3.0M \\
+x3d-l & By Segment & LSTM & 85.91\% ± 2.32 & 5.3M \\
+s3d-k & By Segment & LSTM & 78.04\% ± 3.33 & 7.9M \\
+s3d-h & By Segment & LSTM & 47.19\% ± 6.22 & 9.7M \\
+slowfast & By Segment & LSTM & 82.49\% ± 4.61 & 33.6M \\
+vivit & By Segment & LSTM & 81.41\% ± 3.75 & 88.6M \\
 \bottomrule
 \end{tabular}
 }

@@ -18,6 +18,12 @@ class FeatureExtractor(ABC):
         """
         pass
     
+    def get_number_of_params(self):
+        """
+        Return the number of parameters of the feature extractor.
+        """
+        raise NotImplementedError("Not implemented.")
+    
     @abstractmethod
     def get_name(self, version: FeatureExtractorNameVersion = FeatureExtractorNameVersion.LONG) -> str:
         """

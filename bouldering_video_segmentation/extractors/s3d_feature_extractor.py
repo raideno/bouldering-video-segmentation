@@ -4,7 +4,7 @@ import torchvision
 
 from enum import StrEnum
 
-from bouldering_video_segmentation.utils import UniformTemporalSubsample
+from bouldering_video_segmentation.utils import UniformTemporalSubsample, to_millions
 from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 from bouldering_video_segmentation.extractors.models.s3d import S3D
@@ -95,6 +95,9 @@ class S3DFeatureExtractor(FeatureExtractor):
         
     def get_required_number_of_frames(self):
         return 16
+    
+    def get_number_of_params(self):
+        return to_millions(sum(parameter.numel() for parameter in self.model.parameters()))
     
     def get_features_shape(self):
         return (1024)

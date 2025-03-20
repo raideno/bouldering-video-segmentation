@@ -3,7 +3,7 @@ import torchvision
 
 from transformers import VivitForVideoClassification
 
-from bouldering_video_segmentation.utils import UniformTemporalSubsample
+from bouldering_video_segmentation.utils import UniformTemporalSubsample, to_millions
 from bouldering_video_segmentation.extractors.feature_extractor import FeatureExtractor, FeaturesType, FeatureExtractorNameVersion
 
 class ViVitFeatureExtractor(FeatureExtractor):
@@ -22,6 +22,9 @@ class ViVitFeatureExtractor(FeatureExtractor):
     
     def get_required_number_of_frames(self):
         return 32
+    
+    def get_number_of_params(self):
+        return to_millions(sum(parameter.numel() for parameter in self.model.parameters()))
     
     def get_features_shape(self):
         raise (768)
