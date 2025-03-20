@@ -101,7 +101,8 @@
 
 %%%%%%%% Options
 \DeclareOption{accepted}{%
-  \renewcommand{\Notice@String}{\ICML@appearing}
+  % \renewcommand{\Notice@String}{\ICML@appearing}
+  \renewcommand{\Notice@String}{}
   \gdef\isaccepted{1}
 }
 
@@ -541,7 +542,8 @@ the offending package(s), or layout-changing commands and try again.
 \fi
 }.
 \ifdefined\icmlcorrespondingauthor@text
-Correspondence to: \icmlcorrespondingauthor@text.
+% Correspondence to: \icmlcorrespondingauthor@text.
+\\\icmlcorrespondingauthor@text.
 \else
 {\bf AUTHORERR: Missing \textbackslash{}icmlcorrespondingauthor.}
 \fi

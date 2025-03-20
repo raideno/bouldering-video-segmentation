@@ -33,6 +33,7 @@ While the dataset provides valuable data for action segmentation tasks, it has s
 \textbf{2.} The annotations are provided in Excel format, which is not ideal for modern data science workflows.
 \textbf{3.} The annotations themselves are not perfect, as they may be shifted in time, and the videos do not always start precisely at the beginning of the event.
 \textbf{4.} Climbers occasionally leave the frame during the video, and in some instances, other people may enter the frame, which introduces noise to the data.
+\textbf{5.} The dataset includes a 'nothing' class, representing periods with no relevant activity, which can further imbalance the dataset and affect model performance.  
 
 Despite these limitations, this dataset provides an essential foundation for the development and evaluation of action segmentation models in the context of bouldering.
 \subsection{Chosen Structure}
@@ -65,21 +66,24 @@ A related tool, \href{https://github.com/raideno/cached-dataset}{https://github.
 
 By utilizing this structure and the provided tools, we were able to quickly load the dataset and begin training the model.
 
-\subsection{Data Exploration}
+\subsection{Data Exploration}  
+In this section, we explore key aspects of our bouldering dataset to better understand its characteristics and potential challenges for model training.
 
-In this section we are going to explore various aspects and statistics about our dataset.
+\input{../../assets/tables/dataset-statistics.tex}
 
-As the plot in Figure \ref{fig:distribution-of-actions-in-dataset} shows, the dataset contains 5 different actions, with each action occurring a different number of times. The distribution of actions is not uniform, with some actions appearing more frequently than others. This non-uniform distribution can be challenging for the model to learn, as it may lead to biases in the predictions. The dataset is unbalanced
+As shown in Figure \ref{fig:distribution-of-actions-in-dataset}, our dataset contains five action classes: cleaning ("brossage"), climbing ("grimpe"), observation ("lecture"), nothing, and break ("chrono"). The distribution is notably unbalanced, with "lecture" being the most frequent at 34.7\%, followed by "grimpe" at 30.8\%. The cleaning action ("brossage") represents 19.0\%, while "chrono" accounts for only 2.5\%. This imbalance is reflected in the dataset's imbalance ratio of \textbf{14.16}, indicating a significant risk of the model overfitting to the dominant classes.
 
-\todo[inline]{Explain the plotst.}
+Figure \ref{fig:temporal-distribution-of-actions} reveals that "grimpe" is less common at the beginning of videos, aligning with climbers preparing their attempts through cleaning or observation. Conversely, "lecture" and "brossage" actions are rare at the end of videos, suggesting that climbers tend to finalize their attempts rather than engage in preparation during these moments. This temporal pattern highlights the importance of incorporating time-dependent features in our model.
 
-We can also see that a significant portion of the dataset (15\%) frames don't contain any person in the frame. We can also observe that 3\% of the time there is more than one person in the frame which can be a source of noise for the model.
-\todo[inline]{Add the plot that talks about the percentage of frames with more than 1 peron.}
-In addition to that we can see that 13\% of the climbs are not annotated at all and we thus replaced it by a "Nothing" label.
+From Figure \ref{fig:average-number-of-action-occurences-per-video}, we observe that "nothing" appears most frequently, averaging 8.5 instances per video. While this class is important for capturing pauses and transitions, its dominance risks overwhelming the model if not carefully balanced. Additionally, the low frequency of "chrono" (3.4 occurrences per video) may challenge the model's ability to accurately detect this class.
 
-From \ref{fig:average-number-of-action-occurences-per-video} we  can see that the most recurrent actions are "Lecture" and "Nothing".
+Figure \ref{fig:average-duration-of-actions} highlights further complexities: "brossage" has the longest average duration at 17.5 seconds, while "chrono" has the shortest at just 1.9 seconds. The brief duration of "chrono," combined with its low frequency, makes it particularly vulnerable to misclassification.
 
-From the \ref{fig:average-duration-of-actions} we can see that the longest actions on average are the cleaning, climbing and observation. Even tho the nothing class is the most recurrent it is the shortest in duration on average.
+Lastly, the dataset's \textbf{average repetition score of 0.81} suggests a high degree of repetitive patterns in action sequences, which may lead the model to exploit these patterns rather than learning meaningful action transitions. Additionally, the \textbf{order variation score of 0.49} reveals some variability in action order, which may require the model to adapt to less predictable sequences.
+
+In addition to these challenges, approximately 15\% of the frames contain no visible person, and 3\% include multiple people, introducing further noise. Moreover, 13\% of climbs lack proper annotations and are labeled as "nothing" by default.
+
+These insights highlight key challenges for our model: class imbalance, varying action durations, repetitive patterns, and noisy data. Addressing these issues will be crucial for achieving robust action segmentation performance.
 
 \subsection{Popular Video Datasets}
 

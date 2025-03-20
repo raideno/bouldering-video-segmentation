@@ -230,10 +230,17 @@ SEPARATION_LINE = "<THIS IS A SEPARATION LINE>"
 
 get_separation_line_string = lambda number_of_columns: " & ".join([SEPARATION_LINE] * number_of_columns) + " \\\\"
 
-def write_latex_table(dataframe, path, caption, small:bool=True):
+def write_latex_table(dataframe, path, caption, small:bool=True, exact_position:bool=False, columns_alignments:str|list[str]=None):
+    if isinstance(columns_alignments, str):
+        columns_alignments = [columns_alignments] * len(dataframe.columns)
+        
+    if len(columns_alignments) != len(dataframe.columns):
+        raise ValueError("The number of columns alignments must match the number of columns in the dataframe.")
+    
     latex_code = dataframe.to_latex(
         index=False,
         caption=caption,
+        column_format="".join(columns_alignments)
     )
     
     number_of_columns = len(dataframe.columns)
@@ -242,6 +249,9 @@ def write_latex_table(dataframe, path, caption, small:bool=True):
         latex_code = latex_code.replace("\\begin{table}", "\\begin{table}\n\\centering\n\\small")
     else:
         latex_code = latex_code.replace("\\begin{table}", "\\begin{table}\n\\center")
+        
+    if exact_position:
+        latex_code = latex_code.replace("\\begin{table}", "\\begin{table}[!h]")
                                         
     latex_code = latex_code.replace("\\caption{%s}" % caption, "")
     latex_code = latex_code.replace("\\end{table}", "\\vspace{-2ex}\\caption{%s}\n\\end{table}" % caption)

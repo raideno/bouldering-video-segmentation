@@ -1,9 +1,27 @@
-\section{Other Paths to Explore}
-Talk about using a different loss, other training techniques and models such as transformers, etc.
+\section{Limitations \& Future Directions}
 
-Talk about self supervision, annotating the videos using our best performing model or a mix of models and reuse this annotations to retrain our model with a lower loss. Validation wouldn't be performed on this videos as it would be biased, they would only be used for training.
+While our approach demonstrates promising results for bouldering video segmentation, several limitations remain to be addressed in future work.
 
-Talk about data augmentation.
+\subsection*{Methodological Limitations}
+Our current implementation faces several methodological constraints. First, the cross-entropy loss function used may not be optimal for temporal segmentation tasks with class imbalance. Alternative losses such as focal loss or Dice loss could potentially improve performance on underrepresented classes. Second, despite the strong performance of convolutional architectures, we did not extensively explore transformer-based approaches specifically designed for video understanding, such as TimeSformer or MViT, which have shown state-of-the-art results in related action recognition tasks.
 
-\todo[inline]{This should maybe be done in the results section ?}
-Criticize our model and tell its drawbacks and limitations.
+Real-time processing remains a significant limitation of our current approach. The segment-based models that achieved the highest accuracy operate with inherent latency due to their temporal window requirements. For practical applications in climbing gyms or coaching scenarios, developing optimized versions of these models through techniques like knowledge distillation or model pruning would be beneficial.
+
+\subsection*{Data-Related Challenges}
+Limited training data remains a fundamental constraint. Our dataset, while sufficient to demonstrate the viability of automated bouldering segmentation, lacks the scale and diversity needed for robust real-world deployment. We identify several potential approaches to address this:
+
+\noindent\textbf{Semi-supervised Learning.}
+Using our best-performing models to pseudo-label unlabeled climbing videos, then leveraging these annotations for additional training data. This bootstrapping approach could substantially increase our effective dataset size while maintaining a manually verified validation set to avoid bias.
+
+\noindent\textbf{External Data Integration.}
+Augmenting training with targeted external data from sources like YouTube or subsets of action recognition datasets like Kinetics that contain climbing or similar activities. This would require careful selection and possibly domain adaptation techniques to ensure relevance.
+
+\noindent\textbf{Data Augmentation.}
+While we employed basic augmentation techniques, more advanced video-specific augmentations such as temporal shifts, speed variation, and view synthesis could improve model robustness to variations in climbing styles and camera positions.
+
+\subsection*{Practical Deployment Considerations}
+The current model architecture presents challenges for practical deployment in climbing facilities. The reliance on high-quality video and computational resources limits accessibility for smaller climbing gyms or individual coaches. Development of lightweight models optimized for mobile or edge devices would significantly expand the potential user base.
+
+Additionally, the model's robustness across different climbing environments (rock types, lighting conditions, camera angles) requires further investigation. Techniques such as domain randomization or unsupervised domain adaptation could help address these challenges by leveraging unlabeled videos from diverse climbing settings.
+
+Future work should also explore integration with other climbing analysis tasks, such as difficulty estimation, style classification, and climber-specific technique analysis, to create comprehensive tools for climbing performance assessment and training.

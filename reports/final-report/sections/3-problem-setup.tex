@@ -51,17 +51,11 @@ where $d(a_i, a_j)$ represents the pairwise distance between the action sequence
 
 Several metrics are commonly used to evaluate model performance, each with its pros and cons. 
 
-\noindent\textbf{MoF (Accuracy).} Measures the overall accuracy of the model, defined as:
+\noindent\textbf{Accuracy.} Measures the overall accuracy of the model, defined as:
 $$
 \text{Accuracy} = \frac{\text{Correct Predictions}}{\text{Total Predictions}}.
 $$
 \noindent\textbf{\small{Pros.}} Simple to compute and provides a clear overall performance indicator. \textbf{\small{Cons.}} Not informative for imbalanced classes, as high accuracy can be achieved by predicting the majority class.
-
-\noindent\textbf{IoU (Intersection over Union).} Measures the overlap between predicted and ground truth segments, defined as:
-$$
-\text{IoU} = \frac{\text{Intersection of Predicted and Ground Truth}}{\text{Union of Predicted and Ground Truth}}.
-$$
-\noindent\textbf{\small{Pros.}} Effective at measuring activity boundary prediction. \textbf{\small{Cons.}} Sensitive to misaligned boundaries and incomplete predictions.
 
 \noindent\textbf{F1 Score.} The harmonic mean of precision and recall, defined as:
 $$
