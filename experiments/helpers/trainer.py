@@ -97,16 +97,38 @@ class Trainer():
         
         total_scores_evaluations = {name: 0.0 for name in self.scores.keys()}
         
+        # Add tracking for per-class accuracy
+        class_correct = {}
+        class_total = {}
+        
         with torch.no_grad():
             for features, labels in validation_loader:
                 features = features.to(device)
                 labels = labels.to(device)
                 
                 outputs = self.model.forward(features)
-                # loss = criterion(outputs, labels)
                 
                 if self.variant == TrainerVariant.MLP:
                     loss = criterion(outputs, labels)
+                    _, predicted = torch.max(outputs.data, 1)
+                    total += labels.size(0)
+                    correct += (predicted == labels).sum().item()
+                    
+                    # Calculate per-class accuracy for MLP
+                    for i in range(len(labels)):
+                        label = labels[i].item()
+                        pred = predicted[i].item()
+                        
+                        if label not in class_total:
+                            class_total[label] = 0
+                            class_correct[label] = 0
+                        
+                        class_total[label] += 1
+                        if pred == label:
+                            class_correct[label] += 1
+                    
+                    total_scores_evaluations = {name: total_scores_evaluations[name] + score(predicted, labels) for name, score in self.scores.items()}
+                    
                 elif self.variant == TrainerVariant.LSTM:
                     # Reshape outputs to [batch_size * seq_length, num_classes]
                     batch_size, seq_length, num_classes = outputs.size()
@@ -121,28 +143,48 @@ class Trainer():
                         loss = criterion(outputs_reshaped[mask], labels_reshaped[mask])
                     else:
                         loss = torch.tensor(0.0, device=device)
-                
-                if self.variant == TrainerVariant.MLP:
-                    _, predicted = torch.max(outputs.data, 1)
-                    total += labels.size(0)
-                    correct += (predicted == labels).sum().item()
                     
-                    total_scores_evaluations = {name: total_scores_evaluations[name] + score(predicted, labels) for name, score in self.scores.items()}
-                elif self.variant == TrainerVariant.LSTM:
                     _, predicted = torch.max(outputs.data, 2)
-                    _, labels = torch.max(labels, 2)
-                    # Calculate accuracy considering the temporal dimension
-                    total += labels.size(0) * labels.size(1)  # batch_size * sequence_length
-                    correct += (predicted == labels).sum().item()
+                    _, labels_max = torch.max(labels, 2)
                     
-                    total_scores_evaluations = {name: total_scores_evaluations[name] + score(predicted, labels) for name, score in self.scores.items()}
+                    # Calculate accuracy considering the temporal dimension
+                    total += labels_max.size(0) * labels_max.size(1)  # batch_size * sequence_length
+                    correct += (predicted == labels_max).sum().item()
+                    
+                    # Calculate per-class accuracy for LSTM
+                    for b in range(batch_size):
+                        for s in range(seq_length):
+                            label = labels_max[b, s].item()
+                            pred = predicted[b, s].item()
+                            
+                            # Skip padding (-1)
+                            if label == -1:
+                                continue
+                                
+                            if label not in class_total:
+                                class_total[label] = 0
+                                class_correct[label] = 0
+                            
+                            class_total[label] += 1
+                            if pred == label:
+                                class_correct[label] += 1
+                    
+                    total_scores_evaluations = {name: total_scores_evaluations[name] + score(predicted, labels_max) for name, score in self.scores.items()}
                 
                 total_loss += loss.item()
                 num_batches += 1
-                
+        
+        # Calculate per-class accuracy
+        per_class_accuracy = {}
+        for class_id in class_total:
+            if class_total[class_id] > 0:
+                per_class_accuracy[class_id] = class_correct[class_id] / class_total[class_id]
+            else:
+                per_class_accuracy[class_id] = 0.0
+        
         scores_evaluations = {name: total_scores_evaluations[name] / num_batches for name in self.scores.keys()}
         
-        return total_loss / num_batches, correct / total, scores_evaluations
+        return total_loss / num_batches, correct / total, scores_evaluations, per_class_accuracy
     
     def train(self, training_dataloader, validation_loader, title=None):
         history = {
@@ -160,6 +202,7 @@ class Trainer():
         best_validation_accuracy = 0
         best_validation_loss = float('inf')
         best_validation_scores = None
+        best_per_class_accuracy = None
         
         best_epoch = 0
         
@@ -168,7 +211,7 @@ class Trainer():
         with tqdm.tqdm(iterable=range(32), desc=title or "[training]", unit="epoch") as progress_bar:
             for epoch in progress_bar:
                 training_loss, training_accuracy, training_scores = self.__train_one_epoch(training_dataloader, learning_rate=0.001)
-                validation_loss, validation_accuracy, validation_scores = self.validate(validation_loader)
+                validation_loss, validation_accuracy, validation_scores, per_class_accuracy = self.validate(validation_loader)
                 
                 # NOTE: store history
                 history["training_loss"].append(training_loss)
@@ -193,6 +236,8 @@ class Trainer():
                     best_epoch = epoch
                     
                     best_model_state_dict = self.model.state_dict()
+                    
+                    best_per_class_accuracy = per_class_accuracy
 
                 progress_bar.set_postfix({
                     "training-loss": training_loss,
@@ -223,5 +268,7 @@ class Trainer():
             "best_training_scores": best_training_scores,
             "best_validation_scores": best_validation_scores,
             # --- --- ---
-            "best_model_state_dict": best_model_state_dict
+            "best_model_state_dict": best_model_state_dict,
+            # --- --- ---
+            "best_per_class_accuracy": best_per_class_accuracy
         }

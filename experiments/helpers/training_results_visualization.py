@@ -11,7 +11,7 @@ class AggregatedTrainingResults:
     models_training_losses: Dict[str, List[float]] = field(default_factory=dict)
     models_validation_losses: Dict[str, List[float]] = field(default_factory=dict)
     
-
+# TODO: modify to get the per class accuracy
 def aggregate_training_results(folds_histories):
     # NOTE: For each model we are going to put a plot, a box plot or something to display the variance of the validation accuracy between each fold
     models_training_accuracies = {}

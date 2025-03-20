@@ -43,6 +43,7 @@ Interestingly, our experiments reveal that larger models do not necessarily yiel
 
 \subsubsection{Temporal Modeling with LSTM}
 When comparing MLP and LSTM classifiers, we observe that LSTM generally provides modest improvements across most backbones. For instance, DINO shows a 2.62 percentage point improvement when switching from MLP to LSTM. However, this pattern is not universal—SlowFast actually performs 1.73 percentage points worse with LSTM compared to MLP. The inconsistent benefits of additional temporal modeling through LSTM may be due to our dataset size constraints, as larger datasets typically show more significant improvements from temporal modeling, as demonstrated in prior work \cite{example-paper-doing-temporal-modeling}.
+\todo[inline]{Cite the Action Clip Paper which uses LSTMS on the CLIP features.}
 
 Beyond improvements in accuracy, we also observe a reduction in variance across multiple runs when using LSTM classifiers. For example, the X3D-M model shows a standard deviation of 4.75\% with MLP but only 2.32\% with LSTM, representing a nearly 50\% reduction in variance. This increased stability is a significant advantage in practical applications, as it indicates more reliable and consistent performance across different climbing sessions and environmental conditions.
 
