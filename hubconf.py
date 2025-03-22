@@ -15,13 +15,17 @@ def video_segment_mlp(backbone_name:str, number_of_classes:int=DEFAULT_NUMBER_OF
 
     model = VideoSegmentMlp(output_size=number_of_classes)
     
-    if pretrained:
-        dirname = os.path.dirname(__file__)
-        checkpoint = os.path.join(dirname, f"models-weights/mlp.{backbone_name}.pt")
-        state_dict = torch.load(checkpoint)
-        model.load_state_dict(state_dict)
+    # if pretrained:
+    #     dirname = os.path.dirname(__file__)
+    #     checkpoint = os.path.join(dirname, f"models-weights/mlp.{backbone_name}.pt")
+    #     state_dict = torch.load(checkpoint)
+    #     model.load_state_dict(state_dict)
     
-    return model
+    if pretrained:
+        checkpoint = f"https://media.githubusercontent.com/media/raideno/bouldering-video-segmentation/refs/heads/main/models-weights/mlp.{backbone_name}.pt?download=true"
+        model.load_state_dict(torch.hub.load_state_dict_from_url(checkpoint, progress=False))
+    
+    return extractor, model
 
 def video_segment_lstm(backbone_name:str, number_of_classes:int=DEFAULT_NUMBER_OF_CLASSES, pretrained:bool=False, **kwargs):
     """
@@ -36,13 +40,17 @@ def video_segment_lstm(backbone_name:str, number_of_classes:int=DEFAULT_NUMBER_O
         output_size=number_of_classes
     )
 
-    if pretrained:
-        dirname = os.path.dirname(__file__)
-        checkpoint = os.path.join(dirname, f"models-weights/lstm.{backbone_name}.pt")
-        state_dict = torch.load(checkpoint)
-        model.load_state_dict(state_dict)
+    # if pretrained:
+    #     dirname = os.path.dirname(__file__)
+    #     checkpoint = os.path.join(dirname, f"models-weights/lstm.{backbone_name}.pt")
+    #     state_dict = torch.load(checkpoint)
+    #     model.load_state_dict(state_dict)
     
-    return model
+    if pretrained:
+        checkpoint = f"https://media.githubusercontent.com/media/raideno/bouldering-video-segmentation/refs/heads/main/models-weights/lstm.{backbone_name}.pt?download=true"
+        model.load_state_dict(torch.hub.load_state_dict_from_url(checkpoint, progress=False))
+    
+    return extractor, model
 
 from bouldering_video_segmentation.extractors import \
     FeatureExtractor, \
