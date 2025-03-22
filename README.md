@@ -67,7 +67,6 @@ video_name, video_extension = VIDEO_PATH.split("/")[-1].split(".")
 extractor = ResNet3DFeatureExtractor()
 
 model = VideoSegmentMlp(
-    input_size=extractor.get_features_shape(),
     # NOTE: the model has been trained on 5 classes, thus the output size is 5 and can't be changed when used with the provided weights
     output_size=NUMBER_OF_CLASSES
 )

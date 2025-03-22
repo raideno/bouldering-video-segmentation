@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 from typing import Dict, List
 from dataclasses import dataclass, field
+from bouldering_video_segmentation.utils import LabelEncoderFactory
 
 @dataclass
 class AggregatedTrainingResults:
@@ -10,6 +11,7 @@ class AggregatedTrainingResults:
     models_validation_accuracies: Dict[str, List[float]] = field(default_factory=dict)
     models_training_losses: Dict[str, List[float]] = field(default_factory=dict)
     models_validation_losses: Dict[str, List[float]] = field(default_factory=dict)
+    models_per_class_accuracies: Dict[str, List[Dict[str, float]]] = field(default_factory=dict)
     
 # TODO: modify to get the per class accuracy
 def aggregate_training_results(folds_histories):
@@ -43,15 +45,55 @@ def aggregate_training_results(folds_histories):
                 models_training_losses[extractor_name] = [details["best_training_loss"]] 
             else:
                 models_training_losses[extractor_name].append(details["best_training_loss"])
-            
-            
+    
+    models_per_class_accuracies = {}
+    
+    for fold_history in folds_histories:
+        for extractor_name, details in fold_history.items():
+            if models_per_class_accuracies.get(extractor_name) is None:
+                models_per_class_accuracies[extractor_name] = [details["best_validation_per_class_accuracy"]]
+            else:
+                models_per_class_accuracies[extractor_name].append(details["best_validation_per_class_accuracy"])
+    
     return AggregatedTrainingResults(
         models_training_accuracies=models_training_accuracies,
         models_validation_accuracies=models_validation_accuracies,
         models_training_losses=models_training_losses,
         models_validation_losses=models_validation_losses,
+        models_per_class_accuracies=models_per_class_accuracies
     )    
     
+def generate_models_per_class_accuracies_dataframe(aggregated_training_results: AggregatedTrainingResults, classes_to_exclude: list):
+    data = {}
+
+    label_encoder = LabelEncoderFactory.get()
+
+    for model, results in aggregated_training_results.models_per_class_accuracies.items():
+        class_accuracies = {}
+        
+        for result in results:
+            for class_id, accuracy in result.items():
+                if class_id in classes_to_exclude:
+                    continue  # Skip excluded classes
+                if class_id not in class_accuracies:
+                    class_accuracies[class_id] = []
+                class_accuracies[class_id].append(accuracy)
+        
+        model_stats = {}
+        for class_id, accuracies in class_accuracies.items():
+            mean = np.mean(accuracies)
+            std = np.std(accuracies)
+            model_stats[f"class-{label_encoder.inverse_transform([class_id])[0]}"] = f"{mean * 100:.2f} ± {std * 100:.2f}"
+
+        data[model] = model_stats
+
+    dataframe = pd.DataFrame.from_dict(data, orient="index").fillna(0)
+
+    dataframe.index.name = "Model"
+    dataframe.reset_index(inplace=True)
+    
+    return dataframe
+
 from experiments.helpers.plots_formatting import ICML
 
 from enum import IntFlag, auto
@@ -194,7 +236,7 @@ import pandas as pd
 
 from bouldering_video_segmentation.extractors import FeatureExtractor
     
-def create_performance_table(aggregated_training_results: AggregatedTrainingResults, extractors: list[FeatureExtractor], latex: bool=False) -> pd.DataFrame:
+def create_performance_dataframe(aggregated_training_results: AggregatedTrainingResults, extractors: list[FeatureExtractor], latex: bool=False) -> pd.DataFrame:
     models_validation_accuracies = aggregated_training_results.models_validation_accuracies
     
     data = []
@@ -210,19 +252,20 @@ def create_performance_table(aggregated_training_results: AggregatedTrainingResu
         if latex:
             accuracy_with_std = f"{(avg_accuracy * 100):.2f}\% ± {(std_accuracy * 100):.2f}"
         else:
-            accuracy_with_std = f"{(avg_accuracy * 100):.2f}% ± {(std_accuracy * 100):.2f}"
+            accuracy_with_std = f"{(avg_accuracy * 100):.2f}\% ± {(std_accuracy * 100):.2f}"
         
         # Create a row for this model
         row = {
             "Backbone Name": extractors[i].get_name(),
-            "Backbone Type": extractors[i].get_features_type() if not latex else extractors[i].get_features_type().replace("FRAME_BY_FRAME","By Frame").replace("TEMPORAL", "By Segment"),
-            "Model": "MLP",
+            "Type": extractors[i].get_features_type() if not latex else extractors[i].get_features_type().replace("FRAME_BY_FRAME","By Frame").replace("TEMPORAL", "By Segment"),
             "Accuracy": accuracy_with_std
         }
         
         data.append(row)
     
     dataframe = pd.DataFrame(data)
+    
+    dataframe['\\#Parameters'] = [f"{extractor.get_number_of_params()}" for extractor in extractors]
     
     return dataframe
 
@@ -231,6 +274,9 @@ SEPARATION_LINE = "<THIS IS A SEPARATION LINE>"
 get_separation_line_string = lambda number_of_columns: " & ".join([SEPARATION_LINE] * number_of_columns) + " \\\\"
 
 def write_latex_table(dataframe, path, caption, small:bool=True, exact_position:bool=False, columns_alignments:str|list[str]=None):
+    if columns_alignments is None:
+        columns_alignments = ["l"] * len(dataframe.columns)
+    
     if isinstance(columns_alignments, str):
         columns_alignments = [columns_alignments] * len(dataframe.columns)
         

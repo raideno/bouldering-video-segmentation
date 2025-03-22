@@ -202,7 +202,7 @@ class Trainer():
         best_validation_accuracy = 0
         best_validation_loss = float('inf')
         best_validation_scores = None
-        best_per_class_accuracy = None
+        best_validation_per_class_accuracy = None
         
         best_epoch = 0
         
@@ -211,7 +211,7 @@ class Trainer():
         with tqdm.tqdm(iterable=range(32), desc=title or "[training]", unit="epoch") as progress_bar:
             for epoch in progress_bar:
                 training_loss, training_accuracy, training_scores = self.__train_one_epoch(training_dataloader, learning_rate=0.001)
-                validation_loss, validation_accuracy, validation_scores, per_class_accuracy = self.validate(validation_loader)
+                validation_loss, validation_accuracy, validation_scores, validation_per_class_accuracy = self.validate(validation_loader)
                 
                 # NOTE: store history
                 history["training_loss"].append(training_loss)
@@ -237,7 +237,7 @@ class Trainer():
                     
                     best_model_state_dict = self.model.state_dict()
                     
-                    best_per_class_accuracy = per_class_accuracy
+                    best_validation_per_class_accuracy = validation_per_class_accuracy
 
                 progress_bar.set_postfix({
                     "training-loss": training_loss,
@@ -270,5 +270,5 @@ class Trainer():
             # --- --- ---
             "best_model_state_dict": best_model_state_dict,
             # --- --- ---
-            "best_per_class_accuracy": best_per_class_accuracy
+            "best_validation_per_class_accuracy": best_validation_per_class_accuracy
         }

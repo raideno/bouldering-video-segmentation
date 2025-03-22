@@ -22,7 +22,7 @@ pytorchvideo = "^0.1.5"
 transformers = "^4.49.0"
 open-clip-torch = "^2.31.0"
 tas-helpers = {git = "https://github.com/raideno/tas-helpers.git"}
-video-dataset = "0.3.0.dev20250320163639"
+video-dataset = "0.3.0.dev20250322125011"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.29.5"

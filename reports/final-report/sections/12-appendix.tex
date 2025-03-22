@@ -7,6 +7,35 @@
 \todo[inline]{Describe in more details each backbone network.}
 \todo[inline]{Describe the different small functions used for computing the different scores and metrics.}
 
+\todo[inline]{For each model describe: its architecture in a few words, how it was trained and on what, how we extract features from it.}
+
+\subsection*{Yolo}
+It is a model developed by Ultralytics, based on CNNs and is able to detect 2d key points (17) of a person in a frame. It is used for pose estimation and action recognition.
+
+\subsection*{Dino}
+It is a model developed FAIR that is based on a vision transformer. It is a general purpose model that was pre-trained on a large dataset of images. It contains a class token that is used for classification, we use the state of this class token at the last layer as the features for our model.
+
+\subsection*{R3D}
+Resnet 3D is based on the Resnet model but that was inflated into 3D by duplicating the parameters of the original resnet network  and retraining it on the kinetics dataset.
+
+\subsection*{I3D}
+Inception 3D is a model developed by google and that...
+
+\subsection*{Clip}
+Initially intended to be used for zero-shot learning, the CLIP model is a vision transformer that was trained on a large dataset of images and text. It is able to classify images based on text descriptions and vice versa.
+
+\subsection*{X3D}
+Describe
+
+\subsection*{S3D}
+Describe
+
+\subsection*{Slowfast}
+Describe
+
+\subsection*{ViVit}
+Describe
+
 \newpage
 \section{Figures and Tables}
 
