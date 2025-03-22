@@ -42,57 +42,39 @@ Now you'll need to download the weights of the model you wish to use from the [P
 
 Once this is done you can use the code below in order to test the model on a video. An example video can be found here if necessary: [example-bouldering-video.mp4](https://google.com).
 
+**Note**: For a detailed inference example you can refer to one of [`bouldering_video_segmentation/inference.py`](bouldering_video_segmentation/inference.py) or [`example.inference.ipynb`](example.inference.ipynb).
+
 ```python
-import torch
-
-from video_dataset.video import VideoFromVideoFile
-
 from tas_helpers.visualization import SegmentationVisualizer
 
-from bouldering_video_segmentation.models import VideoSegmentMlp
-from bouldering_video_segmentation.extractors import ResNet3DFeatureExtractor
+from bouldering_video_segmentation.inference import segment_video
+from bouldering_video_segmentation.utils import LabelEncoderFactory
+# --- --- --- ---
+
+VIDEO_PATH = "./climbing-video.mp4"
 
 # --- --- --- ---
 
-VIDEO_PATH = "./example-video.mp4"
-SEGMENT_SIZE = 32
-NUMBER_OF_CLASSES = 5
-VIDEO_SEGMENT_MLP_MODEL_WEIGHTS_PATH = "./mlp.resnet.weights.pt"
-
-video_dir_path = "/".join(VIDEO_PATH.split("/")[:-1])
-video_name, video_extension = VIDEO_PATH.split("/")[-1].split(".")
+frames_predictions = segment_video(VIDEO_PATH)
 
 # --- --- --- ---
 
-extractor = ResNet3DFeatureExtractor()
+label_encoder = LabelEncoderFactory.get()
 
-model = VideoSegmentMlp(
-    # NOTE: the model has been trained on 5 classes, thus the output size is 5 and can't be changed when used with the provided weights
-    output_size=NUMBER_OF_CLASSES
+visualizer = SegmentationVisualizer(
+    labels_values=label_encoder.transform(label_encoder.classes_),
+    labels_names=label_encoder.classes_
 )
 
-model = model.load_state_dict(torch.load(VIDEO_SEGMENT_MLP_MODEL_WEIGHTS_PATH))
-
-video = VideoFromVideoFile(
-    videos_dir_path=video_dir_path,
-    id=video_name,
-    video_extension=video_extension
+visualizer.plot_segmentation(
+    frames_labels=frames_predictions,
+    fps=25
 )
+```
 
-# --- --- --- ---
+```python
+extractor, classifier = torch.hub.load("raideno/bouldering-video-segmentation", "mlp", backbone_name="x3d-xs", pretrained=True)
 
-predictions = []
-
-for segment in video.get_segments(segment_size=SEGMENT_SIZE):
-    features = extractor.transform_and_extract(segment)
-
-    prediction = model(features)
-
-    predictions.append(prediction)
-
-# --- --- --- ---
-
-SegmentationVisualizer(segment, prediction).show()
 ```
 
 ## Training the Model

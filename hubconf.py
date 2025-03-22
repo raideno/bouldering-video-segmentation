@@ -7,7 +7,7 @@ from bouldering_video_segmentation.models import VideoSegmentMlp, FullVideoLstm
 
 DEFAULT_NUMBER_OF_CLASSES = 5
 
-def video_segment_mlp(backbone_name:str, number_of_classes:int=DEFAULT_NUMBER_OF_CLASSES, pretrained:bool=False, **kwargs):
+def mlp(backbone_name:str, number_of_classes:int=DEFAULT_NUMBER_OF_CLASSES, pretrained:bool=False, **kwargs):
     """
     # TODO: complete docstring
     """
@@ -27,7 +27,7 @@ def video_segment_mlp(backbone_name:str, number_of_classes:int=DEFAULT_NUMBER_OF
     
     return extractor, model
 
-def video_segment_lstm(backbone_name:str, number_of_classes:int=DEFAULT_NUMBER_OF_CLASSES, pretrained:bool=False, **kwargs):
+def lstm(backbone_name:str, number_of_classes:int=DEFAULT_NUMBER_OF_CLASSES, pretrained:bool=False, **kwargs):
     """
     # TODO: complete docstring
     """

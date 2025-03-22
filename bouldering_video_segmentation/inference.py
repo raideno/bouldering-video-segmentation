@@ -3,23 +3,28 @@ import tqdm
 
 import numpy as np
 
-from video_dataset.video import read_video
-from bouldering_video_segmentation.extractors import FeatureExtractor, X3DFeatureExtractor, X3DModelType
-from bouldering_video_segmentation.models import VideoSegmentMlp
+from enum import StrEnum
 
-NUMBER_OF_CLASSES = 5
-DEFAULT_CLASSIFIER = VideoSegmentMlp(output_size=NUMBER_OF_CLASSES)
-DEFAULT_FEATURE_EXTRACTOR = X3DFeatureExtractor(model_name=X3DModelType.XS)
+from video_dataset.video import read_video
+
+class FeatureExtractorName(StrEnum):
+    X3D_XS = "x3d-xs"
+
+class ClassifierType(StrEnum):
+    MLP = "mlp"
+    LSTM = "lstm"
 
 SEGMENT_SIZE = 32
 
 def segment_video(
     video_path: str,
-    feature_extractor: FeatureExtractor = DEFAULT_FEATURE_EXTRACTOR,
-    classifier: torch.nn.Module = DEFAULT_CLASSIFIER,
+    feature_extractor_name: FeatureExtractorName = FeatureExtractorName.X3D_XS,
+    classifier_type: ClassifierType = ClassifierType.MLP,
     verbose: bool=True
 ):
     video = read_video(video_path)
+    
+    extractor,  model = torch.hub.load("raideno/bouldering-video-segmentation", str(classifier_type), backbone_name=str(feature_extractor_name), pretrained=True)
     
     features = []
     predictions = []
@@ -29,9 +34,9 @@ def segment_video(
         
         # NOTE: required to be transposed to (Channel, Time, Height, Width)
         segment = segment.transpose(3, 0, 1, 2)
-        feature = feature_extractor.transform_and_extract(segment)
+        feature = extractor.transform_and_extract(segment)
         feature = feature.unsqueeze(0)
-        prediction = classifier(feature)
+        prediction = model(feature)
         
         features.append(feature)
         predictions.append(prediction)
