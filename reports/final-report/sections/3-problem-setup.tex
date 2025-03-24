@@ -5,51 +5,73 @@
 \end{tcolorbox}
 
 \subsection{Video Representation}
-We represent each video as a sequence of frames $video_i = \{f_1, f_2, \dots, f_N\}$, where each frame $f_i$ corresponds to the image captured at position $i$ in the video. Each frame $f_i$ is a tensor with shape $(C \times H \times W)$, where $C$ denotes the number of channels, $H$ is the height of the video, and $W$ is the width of the video. The total number of frames in the video is denoted by $N$.
+We represent each video as a sequence of frames $video_i = \{f_1, f_2, \dots, f_{N_i}\}$, where each frame $f_i$ corresponds to the image captured at position $i$ in the video. Each frame $f_i$ is a tensor with shape $(3 \times H \times W)$, where $3$ denotes the number of channels, $H$ is the height of the video, and $W$ is the width of the video. The total number of frames in the video is denoted by $N_i$.
 
-The video's duration, $d_i$, in seconds is given by $d_i = N / F$, where $F$ is the frame rate of the video. In our experiments, we fix $F = 25 \, \text{fps}$, which matches the frame rate used in our dataset.
+The $i$-th video's duration, $d_i$, in seconds is given by $d_i = N_i / F$, where $F$ is the frame rate of the video. In our experiments, we fix $F = 25 \, \text{fps}$, which matches the frame rate used in our dataset.
 
-\subsection{Annotation Representation}
-Each video's annotations are provided at the frame level. Given a video $video_i$, its corresponding annotations are defined as $a_i = \{c_1, c_2, \cdots, c_N\}$, where $c_i \in C$ is the annotation corresponding to the frame $f_i$, and $C$ is the set of all possible activity labels. In this case, each $c_i$ represents the label for the specific frame $f_i$.
+\subsection{Annotation Representation}  
+Each video's annotations are provided at the frame level. Given a video $video_i$, its corresponding annotations are defined as $a_i = \{c_1, c_2, \cdots, c_{N_i}\}$, where $c_j \in C$ is the annotation corresponding to the frame $f_i$, and $C = \{\text{Climbing, Brushing, Observing, Stopwatch}\}$ is the set of all possible activity labels.
 
-Alternatively, the annotations can be represented using start and end timestamps. In this format, each annotation is defined as a tuple $(s_j, e_j, l_j)$, where $s_j$ is the start frame of the $j$-th action segment, $e_j$ is the end frame of the $j$-th action segment, and $l_j \in C$ is the label corresponding to that segment. 
+Alternatively, the annotations can be represented using start and end timestamps. In this format, the annotations are defined as a set of tuples:  
+\[
+\{(s_1, e_1, c_1), (s_2, e_2, c_2), \dots \}
+\]  
+where $s_j$ is the index of the starting frame for the $j$-th action segment, $e_j$ is the index of the ending frame, and $c_j \in C$ is the corresponding action label.
 
-This alternative representation is more compact and especially useful when dealing with longer videos or when visualizing action intervals. While the first representation provides more precision at the frame level, the second representation offers a higher-level view of the video’s structure, facilitating analysis of action segments and their durations.
+Depending on the context, the starting frame $s_j$ and ending frame $e_j$ can alternatively be expressed as timestamps (e.g., seconds, milliseconds) or as a starting timestamp combined with a duration. 
+
+This alternative representation is more compact and especially useful when dealing with longer videos or when visualizing action intervals and it is the preferred format when annotating videos as it is easier to deal with. While the first representation provides more precision at the frame level, the second representation offers a higher-level view of the video’s structure, facilitating analysis of action segments and their durations.
+
+Note that it is easy to convert between these two representations by computing the starting and ending frames from the timestamps and vice versa.
 
 \subsection{Problem Formulation}
-The goal is to develop a model $\mathcal{M}$ that takes a video as input and predicts the corresponding sequence of frame-level annotations, $\mathcal{M} : video_i \rightarrow a_i$. 
+The goal is to develop a model $\mathcal{M}$ that takes a sequence of frames as input and predicts the corresponding sequence of frame-level annotations, $\mathcal{M}: \{f_1, f_2, \dots, f_{N_i}\} \rightarrow \{c_1, c_2, \dots, c_{N_i}\}$.
 
-In this context, we define the **segment length** (or **sequence length**) as the number of frames the model processes at each step. This segment length plays a crucial role in balancing temporal context awareness and computational efficiency.
+\noindent\textbf{Frame-wise Prediction.}  
+In this formulation, the model processes each frame independently and predicts its corresponding label. The model processes each frame locally, as a sequence of frames is passed through a convolutional layer or a similar architecture. The model predicts a label $c_j$ for each frame $f_j$, i.e.,
 
-\noindent\textbf{Frame-wise Prediction.}
-In this formulation, the model processes each frame independently and predicts its corresponding label. While this approach is computationally efficient, it may struggle to capture temporal dependencies between consecutive frames.
+\[
+c_j = \mathcal{M}(f_j)
+\]
 
-\noindent\textbf{Sequence-based Prediction.}
-Here, the model processes a sequence of $T$ frames and predicts a single label for the entire sequence. A larger segment length $T$ allows the model to leverage more temporal context, improving its ability to recognize complex patterns. However, this comes at the cost of increased computational complexity.
+While this approach is computationally efficient, it may struggle to capture temporal dependencies between consecutive frames.
 
-The choice between these approaches depends on the desired trade-off: a smaller segment length favors computational efficiency, while a larger segment length enhances the model's capacity to capture temporal dependencies.
+\noindent\textbf{Sequence-based Prediction.}  
+Here, the model processes a sequence of $T$ consecutive frames and predicts a single label for the entire sequence. A larger segment length $T$ allows the model to leverage more temporal context, improving its ability to recognize complex patterns. This can be expressed as:
+
+\[
+c_{j:j+T-1} = \mathcal{M}(f_j, f_{j+1}, \dots, f_{j+T-1})
+\]
+
+In this approach, the model predicts the activity label for the entire sequence of frames, taking into account their temporal dependencies. However, this comes at the cost of increased computational complexity.
+
+The choice between these approaches depends on the desired trade-off: a smaller segment length favors computational efficiency, while a larger segment length enhances the model's capacity to capture temporal dependencies. In the following $T$ is taken between $4$ and $32$ frames depending on the model's variant.
 
 \subsection{Additional Statistical Measures}
 
 Besides the usual statistics, such as the mean and average duration, we also utilize the following two metrics, introduced in \cite{tas-survey}, to gain further insights into the data: \textbf{Repetition Score} and \textbf{Order Variation Score}.
 
 \noindent\textbf{Repetition Score.}  
-The \textbf{Repetition Score} quantifies the degree of repetition of actions within a video. Formally, it is defined as:
-$$
-\text{Repetition Score} = \frac{\# \text{ of Unique Actions}}{\# \text{ of Total Actions}},
-$$
-where the numerator represents the number of unique action labels, and the denominator represents the total number of actions in the video. This score ranges from 0 to 1, where 0 indicates no repetition of actions, and 1 indicates that the same action is repeated throughout the video.
+The \textbf{Repetition Score} quantifies the degree of repetition of actions within a video. Using the notations defined earlier, it is expressed as:  
+
+\[
+\text{Repetition Score} = \frac{|\{c_j \mid c_j \in a_i\}|}{|a_i|}
+\]
+
+where \( |\{c_j \mid c_j \in a_i\}| \) denotes the number of unique action labels in the annotation sequence \( a_i \), and \( |a_i| \) represents the total number of annotated actions in the video. This score ranges from 0 to 1, where 0 indicates no repetition of actions, and 1 indicates that the same action is repeated throughout the video.
 
 \noindent\textbf{Order Variation Score.}  
-The \textbf{Order Variation Score} measures the consistency of the order of actions across different videos or sequences. Formally, it is defined as the average pairwise distance between the action orderings in different videos. Specifically, for a video $video_i$ with actions $a_i = \{c_1, c_2, \dots, c_N\}$, the score is computed by evaluating the pairwise differences between the action orderings:
-$$
-\text{Order Variation Score} = \frac{1}{|V|} \sum_{i,j \in V} d(a_i, a_j),
-$$
-where $d(a_i, a_j)$ represents the pairwise distance between the action sequences of videos $i$ and $j$, and $V$ is the set of all videos in the dataset. The score ranges from 0 to 1, where 0 indicates that the order of actions is identical across all videos, and 1 indicates that the order of actions is completely inconsistent across the videos.
+The \textbf{Order Variation Score} measures the consistency of the order of actions across different videos or sequences. Using the previously defined notations, it is expressed as:  
+
+\[
+\text{Order Variation Score} = \frac{1}{|V|} \sum_{i, j \in V} d(a_i, a_j)
+\]
+
+where \(d(a_i, a_j)\) represents the pairwise distance between the annotation sequences \(a_i\) and \(a_j\), and \(V\) is the set of all videos in the dataset. The score ranges from 0 to 1, where 0 indicates identical action order across all videos, and 1 indicates completely inconsistent action order.  
 
 \subsection{Evaluation Metrics}
 
-Several metrics are commonly used to evaluate model performance, each with its pros and cons. 
+A common metric used to evaluate model performance is accuracy.
 
 \noindent\textbf{Accuracy.} Measures the overall accuracy of the model, defined as:
 $$
@@ -57,12 +79,6 @@ $$
 $$
 \noindent\textbf{\small{Pros.}} Simple to compute and provides a clear overall performance indicator. \textbf{\small{Cons.}} Not informative for imbalanced classes, as high accuracy can be achieved by predicting the majority class.
 
-\noindent\textbf{F1 Score.} The harmonic mean of precision and recall, defined as:
-$$
-F1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}.
-$$
-\noindent\textbf{\small{Pros.}} Balances the trade-off between false positives and false negatives. \textbf{\small{Cons.}} Less intuitive than accuracy and may mask poor performance in specific cases.
-
 \begin{AIbox}{Pyhton Package - TAS Helpers.}
-    We introduce the \texttt{tas\_helpers} library, which contains implementations of various metrics and scores discussed above. Additionally, it offers utilities for visualizing video segmentations and more. The package is available at: \url{https://github.com/raideno/tas-helpers}.
+    We introduce the \texttt{tas\_helpers} (Temporal Action Segmentation Helpers) library, which contains implementations of various metrics and scores discussed above. Additionally, it offers utilities for visualizing video segmentations and more. The package is available at: \url{https://github.com/raideno/tas-helpers}.
 \end{AIbox}

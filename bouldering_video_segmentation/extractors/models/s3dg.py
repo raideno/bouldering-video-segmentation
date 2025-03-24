@@ -181,61 +181,6 @@ class MaxPool3dTFPadding(th.nn.Module):
         out = self.pool(inp)
         return out
 
-
-class Sentence_Embedding(nn.Module):
-    def __init__(
-        self,
-        embd_dim,
-        num_embeddings=66250,
-        word_embedding_dim=300,
-        token_to_word_path="dict.npy",
-        max_words=16,
-        output_dim=2048,
-    ):
-        super(Sentence_Embedding, self).__init__()
-        self.word_embd = nn.Embedding(num_embeddings, word_embedding_dim)
-        self.fc1 = nn.Linear(word_embedding_dim, output_dim)
-        self.fc2 = nn.Linear(output_dim, embd_dim)
-        self.word_to_token = {}
-        self.max_words = max_words
-        token_to_word = np.load(token_to_word_path)
-        for i, t in enumerate(token_to_word):
-            self.word_to_token[t] = i + 1
-
-    def _zero_pad_tensor_token(self, tensor, size):
-        if len(tensor) >= size:
-            return tensor[:size]
-        else:
-            zero = th.zeros(size - len(tensor)).long()
-            return th.cat((tensor, zero), dim=0)
-
-    def _split_text(self, sentence):
-        w = re.findall(r"[\w']+", str(sentence))
-        return w
-
-    def _words_to_token(self, words):
-        words = [
-            self.word_to_token[word] for word in words if word in self.word_to_token
-        ]
-        if words:
-            we = self._zero_pad_tensor_token(th.LongTensor(words), self.max_words)
-            return we
-        else:
-            return th.zeros(self.max_words).long()
-
-    def _words_to_ids(self, x):
-        split_x = [self._words_to_token(self._split_text(sent.lower())) for sent in x]
-        return th.stack(split_x, dim=0)
-
-    def forward(self, x):
-        x = self._words_to_ids(x)
-        x = self.word_embd(x)
-        x = F.relu(self.fc1(x))
-        x = th.max(x, dim=1)[0]
-        x = self.fc2(x)
-        return {'text_embedding': x}
-
-
 class S3D(nn.Module):
     def __init__(self, num_classes=512, gating=True, space_to_depth=True):
         super(S3D, self).__init__()

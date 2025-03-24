@@ -1,0 +1,26 @@
+\begin{table}[!h]
+    \centering
+    \small
+    % \resizebox{1\linewidth}{!}{
+    \begin{tabular}{lcrrr}
+    \toprule
+    Backbone & Type & $\#$Parameters & $\#$Frames & Features Shape \\
+    \midrule
+    yolo & By Frame & 2.9M & 8 & (8, 34) \\
+    dino & By Frame & 22.1M & 8 & (8, 384) \\
+    clip & By Frame & 151.3M & 8 & (8, 512) \\
+    r3d & By Segment & 31.6M & 8 & (2048, 1) \\
+    i3d & By Segment & 12.7M & 16 & (1024, 1) \\
+    x3d-xs & By Segment & 3.0M & 4 & (2048, 1) \\
+    x3d-s & By Segment & 3.0M & 16 & (2048, 1) \\
+    x3d-m & By Segment & 3.0M & 16 & (2048, 1) \\
+    x3d-l & By Segment & 5.3M & 16 & (2048, 1) \\
+    s3d-k & By Segment & 7.9M & 16 & (1024, 1) \\
+    s3d-h & By Segment & 9.7M & 16 & (1024, 1) \\
+    slowfast & By Segment & 33.6M & 32 & (2304, 1) \\
+    vivit & By Segment & 88.6M & 32 & (768, 1) \\
+    \bottomrule
+    \end{tabular}
+    % }
+    \vspace{-2ex}\caption{Detailed Descriptions of Feature Extractors.}
+    \end{table}

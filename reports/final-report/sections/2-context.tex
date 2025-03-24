@@ -1,3 +1,4 @@
+\newpage
 \section{Context}
 \label{section:context}
 
@@ -14,24 +15,24 @@ Among these tools are: Grip Detection, Path Tracking, Performance Analysis, and 
 These models provide valuable data, but in order to fully analyze a climber's performance, it is essential to distinguish between the different phases of a bouldering event (Climbing, Observing, Brushing). By doing so, we can apply the appropriate model to each phase and gather the corresponding statistics.
 
 \noindent\textbf{Research Focus.} 
-This brings us to my current research project. I will be focusing on Temporal Action Segmentation (TAS), a technique that will allow us to run the grip and path analysis models at the correct timestamps. This step is crucial for gaining deeper insights into the different phases of climbing, such as observing, reading the route, and brushing the grips. By analyzing the durations, order, and impact of these phases on a climber's final performance, we can provide more precise guidance to coaches and improve training methods.
+This brings us to the current research project. The project will focus on Temporal Action Segmentation (TAS), a technique that will enable us to identify the different phases of a bouldering event. By accurately distinguishing between phases such as observing, reading the route, and brushing the grips, we can gain deeper insights into the climber's performance. Analyzing the duration, order, and impact of these phases will allow coaches to provide more targeted guidance and improve training methods.
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
     \centering
     \begin{tabular}{@{}c@{\hspace{15pt}}c@{\hspace{15pt}}c@{\hspace{15pt}}c@{}}
       \setlength{\fboxsep}{0pt}
       \fbox{\includegraphics[width=0.2\textwidth]{../../assets/images/observing.2.png}} &
       \setlength{\fboxsep}{0pt}
-      \fbox{\includegraphics[width=0.2\textwidth]{../../assets/images/brushing.3.png}} &
-      \setlength{\fboxsep}{0pt}
       \fbox{\includegraphics[width=0.2\textwidth]{../../assets/images/climbing.1.png}} &
+      \setlength{\fboxsep}{0pt}
+      \fbox{\includegraphics[width=0.2\textwidth]{../../assets/images/brushing.3.png}} &
       \setlength{\fboxsep}{0pt}
       \fbox{\includegraphics[width=0.2\textwidth]{../../assets/images/climbing.2.png}} \\[6pt]
       (a) Observing the block. &
-      (b) Brushing the grips. &
-      (c) Climbing the block. &
+      (b) Climbing the block. &
+      (c) Brushing the grips. &
       (d) Climbing the block.
     \end{tabular}
     \caption{Different phases of bouldering.}
-    \label{fig:phases-of-bouldering}
+    \label{figure:phases-of-bouldering}
   \end{figure*}

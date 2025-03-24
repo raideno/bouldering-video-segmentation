@@ -1,17 +1,25 @@
+% TODO/NOTE: When introducing different parts of our model architecture, refer each of them as trying to solve one of the issues cited above.
+% TODO/NOTE: So the 0.50 order variation score suggest that there is a balanced variability in ordering of actions suggesting that maybe the timestamp can tell us some info about which action is currently happening, this can further justify the use of LSTMs and the increase in performance & accuracy due to them.
+% TODO/NOTE: When discussing the results talk about the temporal context window of each model.
+% TODO/NOTE: Talk also about the fact that is it is fixed and can’t be changed.
+% TODO/NOTE: Say that if we were able to change it we would set it the the minimum duration of some action or the minimum average as otherwise we would potentially lose and not be able to detect some classes.
+
 \section{Our Approach}
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=\textwidth]{../../assets/figures/model-overview.png}
     \caption{Model Architecture Overview.}
-    \label{fig:your-label}
+    \label{figure:model-architecture-overview}
 \end{figure*}
+
+\todo[inline]{- Reference the figure and each sub figure when describing the model.- Add a figure description that name each sub figure (a), (b), etc.}
 
 Given the dataset size constraint, training a neural network from scratch with our data is infeasible and unlikely to yield meaningful results. To address this, we leverage pre-trained networks trained on large-scale datasets that contain similar types of actions to those found in our data. These actions are broad, non-atomic, and not highly granular, making them comparable to activities present in popular datasets like Kinetics.
 
 Our strategy involves utilizing these pre-trained networks to extract feature representations from our videos, clips, and frames. Specifically, we extract features from the hidden layers of these networks — typically the layer immediately preceding the final classification layer — as they encode rich spatio-temporal information relevant to our task. These extracted features are then fed into a custom network designed for classification on our custom action labels.
 
-This approach addresses multiple constraints simultaneously. First, it mitigates the impact of our limited dataset by capitalizing on robust features learned from extensive pre-training. Second, it reduces the computational burden, as we avoid the costly process of training a deep network from scratch. Finally, this method is well-suited to our project timeline, as designing and training a complex architecture would exceed our allocated 120 hours.
+This approach addresses multiple constraints simultaneously. First, it mitigates the impact of our limited dataset by capitalizing on robust features learned from extensive pre-training. Second, it reduces the computational burden, as we avoid the costly process of training a deep network from scratch. Finally, this method is well-suited to our project timeline, as designing and training a complex architecture would exceed our allocated 120 hours for this project.
 
 In the following sections, we describe the key components of our approach and how we train it.
 
@@ -21,22 +29,24 @@ The backbone of our model is a spatio-temporal feature extractor designed to cap
 Two types of models are explored for this purpose: frame-level feature extractors and segment-level feature extractors.
 
 \subsubsection{Frame-Level Extractors}
-Frame-level extractors process individual frames independently to extract spatial features. Examples include 2D CNNs such as ResNet, vision transformers like DINO, CLIP, or ViT, and potentially handcrafted features such as object presence (e.g., brushes) or positional key points.
+Frame-level extractors process individual frames independently to extract spatial features. Examples include 2D CNNs such as \textbf{ResNet}, vision transformers like \textbf{DINO}, \textbf{CLIP}, or \textbf{ViT}, and potentially pseudo handcrafted features such as object presence (e.g., brushes) or positional key points.
 
-While handcrafted features can be informative, they introduce biases and require additional training for object detection, which is resource-intensive. Thus, our approach prioritizes automated feature extractors to maximize efficiency and robustness.
+While handcrafted features can be interpretable and informative, they introduce biases and require additional training for object detection - to detect the presence and position of a brush for example -, which is resource-intensive. Thus, our approach prioritizes automated feature extractors to maximize efficiency and robustness.
 
 Once frame-level features are extracted, we explore several strategies to aggregate these features into a single representation for each video segment:
 
-\noindent\textbf{\small{Averaging.}} The most common method, recommended in the literature for its simplicity and effectiveness.  
-\noindent\textbf{\small{Addition.}} Similar to averaging but involves summing the features directly.  
-\noindent\textbf{\small{Concatenation.}} Combines frame features without additional operations.  
+\noindent\textbf{\small{Averaging.}} The most common method, recommended in the literature \cite{dinov2} for its simplicity and effectiveness.
+\noindent\textbf{\small{Addition.}} Similar to averaging but involves summing the features directly. 
+\noindent\textbf{\small{Concatenation.}} Combines frame features without any additional operations. According to \cite{dinov2}, this method is the most effective in capturing temporal information \& thus it is the one we opted to use.
 \noindent\textbf{\small{Temporal Modeling.}} Uses models like LSTMs or Transformers to capture temporal dependencies, offering improved contextual understanding at the cost of higher computational complexity.
 
 \subsubsection{Segment-Level Extractors}
 Segment-level extractors process multiple consecutive frames directly, capturing both spatial and temporal patterns. Examples include 3D CNNs, which extend 2D CNN architectures to model motion and temporal dynamics, and transformer-based models that have demonstrated strong performance on video tasks. While effective, these models are typically more computationally demanding.
 
+A list of all the spatio-temporal feature extractors we considered can be found in the Appendix.
+
 \subsection{Temporal Sub-Sampling}
-To improve efficiency without sacrificing performance, we incorporate temporal sub-sampling. This technique involves reducing the frame rate before feature extraction, as consecutive frames in bouldering videos often exhibit minimal visual change. Studies in the field highlight that temporal sub-sampling is a simple yet highly effective method for reducing computational load without significant performance degradation.
+To improve efficiency without sacrificing performance, we incorporate temporal sub-sampling. This technique involves reducing the frame rate before feature extraction, as consecutive frames in bouldering videos often exhibit minimal visual change. Temporal sub-sampling is a simple yet highly effective method for reducing computational load without significant performance degradation \cite{impact-of-temporal-subsampling}.
 
 \subsection{Temporal Context Window}
 The temporal context window defines the number of consecutive frames the model processes at once. Choosing an optimal window size is crucial:
@@ -47,21 +57,21 @@ It may not capture sufficient context for accurate classification.
 \noindent\textbf{\small{Long Window.}}
 It risks embedding the entire video into a single feature, increasing computational costs and reducing model flexibility.
 
-As the temporal context window of the backbone networks is quite limited to around 16-32 frames usually, processing the whole 4 minutes of video and extracting a single feature for the entire video is both computationally costly and not practical in our case. This would be more practical for video classification tasks, where the goal is to classify the whole video. In our case, we aim to extract different time segments and classify them individually. This is why we present two approaches for processing these time segments.
+As the temporal context window of the backbone networks is quite limited to around 16-32 frames usually, processing the whole 4 minutes of video and extracting a single feature for the entire video is both computationally costly and not practical in our case. This would be more practical for video classification tasks, where the goal is to classify the whole video. In our case, we aim to extract different time segments and classify them individually.
 
 Balancing these factors is key to achieving optimal performance.
 
 By combining pre-trained feature extractors, temporal sub-sampling, and thoughtful hyperparameter tuning, our approach aims to achieve robust performance despite dataset limitations.
 
-\subsection{Classifier}
+\subsubsection*{Classifier Model}
 
-This is the component of our network that'll receive the spatio temporal features corresponding to a video segment / clip and output the class of the action that is being performed in this segment.
+For classification, we consider two different model architectures: a Multi-Layer Perceptron (MLP) and a Long Short-Term Memory (LSTM) network. Both approaches are designed to process the spatio-temporal features extracted from the pre-trained models.
 
-For this we consider two approaches, the first one is to use a simple MLP with a single hidden layer and the second one is to use an LSTM with a single layer. The idea behind the use of the LSTM is that it can capture the temporal dependencies between the frames / segments and thus potentially improve the model's performance.
+\noindent\textbf{MLP Approach.} The MLP used in our approach consists of a simple linear layer with no activation function and a bias term. This architecture has been shown to yield the best performance in our case, as more complex network structures tend to overfit the limited training data. The simplicity of the MLP helps avoid overfitting while maintaining efficiency, making it ideal for our constraints. The output of this linear layer is fed directly into the softmax function to produce class probabilities for the classification task.
 
-We could also use an attention mechanism to allow the model to focus on the most important frames / segments but this would increase the model's complexity and thus the training time and the computational cost.
+\noindent\textbf{LSTM Approach.} The LSTM used in our approach consists of a single LSTM layer with a hidden state size of 128. This configuration enables the model to capture temporal dependencies between frames or video segments, which is critical for action recognition tasks where context across time is crucial. The LSTM’s output is passed through a linear layer (similar to the MLP) to predict the class for each segment. We use this architecture when capturing temporal dynamics is important for improving performance.
 
-Another possible improvement would be to use fixed or learnable positional embeddings in combination with the MLP in order to incorporate temporal awareness into the MLP. 
+Both models were validated using cross-validation to identify the most effective hyperparameters for our dataset.
 
 %  --- --- ---
 
@@ -85,33 +95,21 @@ Our classification model is trained using the \textbf{cross-entropy loss} functi
 
 where \(y_i\) is the true label and \(\hat{y}_i\) is the predicted probability for class \(i\). While cross-entropy loss effectively handles multi-class classification, alternative losses such as focal loss or label-smoothing loss have been proposed in the literature to address class imbalance and calibration issues. These approaches may be worth exploring in future work.
 
-\subsubsection*{Classifier Model}
-\todo[inline]{Describe the architecture of the MLP and LSTM model that are going to be used for classification.}
-
 \subsubsection*{Training Setup}
-The training pipeline was configured as follows:
-
-\noindent\textbf{Optimizer.} Adam optimizer with a learning rate of $1 \times 10^{-4}$.
-
-\noindent\textbf{Batch Size.} 32 samples per batch for efficient convergence.
-
-\noindent\textbf{Early Stopping.} Applied based on validation loss with a patience of 5 epochs to prevent overfitting.
-
-\noindent\textbf{Batch Structure.} Each batch consists of video segments rather than entire videos. This approach ensures manageable memory usage and allows the model to learn from diverse temporal contexts within each batch.
 
 To prevent data leakage during validation, we ensured that segments from the same video were never split across training and validation sets. This avoids the model unintentionally learning video-specific patterns rather than generalizable features.
 
 \subsubsection*{Data Filtering and Preprocessing}
 To improve data quality and enhance model performance, we applied several preprocessing steps:
 
-\noindent\textbf{Removal of Personless Frames.} Frames without visible climbers were excluded to reduce noise.
+\noindent\textbf{Removal of Personless Frames.} Frames without visible climbers were excluded to reduce noise. This was done by detecting the presence of a person in each frame using a pre-trained object detection model (YOLO) \cite{yolo}.
 
 \noindent\textbf{Cleaning of Low-Quality Data.} Unannotated frames were removed rather than assigning them a generic "nothing" label. This improved class balance and reduced label ambiguity.
 
-\noindent\textbf{Stopwatch Class Removal.} We excluded segments showing only the competition timer, as these frames added no meaningful information to the model's predictions.
+\noindent\textbf{Stopwatch Class Removal.} We removed segments with the stopwatch class, as they were highly imbalanced and lacked distinction. Climbers often exit the frame while checking the timer, and it varies across competitions, making it inconsistent in our dataset.
 
 \begin{AIbox}{Python Package - Cached Dataset.}
-    To accelerate training, we developed a custom Python package called \textbf{cached-dataset} - \href{https://github.com/raideno/video-dataset}{https://github.com/raideno/video-dataset}. This tool caches the transformation of a dataset to disk, significantly reducing data loading overhead during training and feature extraction. This allow us to efficiently iterate through training experiments and hyperparameter tuning.
+    To accelerate training, we developed a custom Python package called \textbf{cached-dataset} - \href{https://github.com/raideno/cached-dataset}{https://github.com/raideno/cached-dataset}. This tool caches the transformation of a dataset to disk, significantly reducing data loading overhead during training and feature extraction. This allow us to efficiently iterate through training experiments and hyperparameter tuning.
 \end{AIbox}
 
-By combining robust pre-trained feature extractors, temporal sub-sampling, and thoughtful data filtering strategies, our training methodology effectively addresses the challenges posed by our limited dataset. These strategies ensured a stable and efficient training process while maximizing model performance.
+By combining robust pre-trained feature extractors, temporal sub-sampling, and thoughtful data filtering strategies, our training methodology effectively addresses the challenges (\ref{subsection:dataset-limitations}) posed by our limited dataset. These strategies ensured a stable and efficient training process while maximizing model performance.

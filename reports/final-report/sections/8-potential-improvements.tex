@@ -3,9 +3,11 @@
 While our approach demonstrates promising results for bouldering video segmentation, several limitations remain to be addressed in future work.
 
 \subsection*{Methodological Limitations}
-Our current implementation faces several methodological constraints. First, the cross-entropy loss function used may not be optimal for temporal segmentation tasks with class imbalance. Alternative losses could potentially improve performance on underrepresented classes. Second, despite the strong performance of convolution architectures, we did not extensively explore transformer-based approaches specifically designed for video understanding, such as TimeSformer or MViT, which have shown state-of-the-art results in related action recognition tasks.
+Our current implementation faces several methodological constraints. First, the cross-entropy loss function used may not be optimal for temporal segmentation tasks with class imbalance. Alternative losses could potentially improve performance on underrepresented classes. Second, despite the strong performance of convolution architectures, we did not extensively explore transformer-based approaches specifically designed for video understanding, such as TimeSformer \cite{time-s-former} or MViT \cite{mvit}, which have shown state-of-the-art results in related action recognition tasks.
 
-Real-time processing remains a significant limitation of our current approach. The segment-based models that achieved the highest accuracy operate with inherent latency due to their temporal window requirements. For practical applications coaches usually don't require realtime annotations.
+Real-time processing remains a significant limitation of our current approach. The segment-based models that achieved the highest accuracy operate with inherent latency due to their temporal window requirements. But for practical applications coaches usually don't require realtime annotations.
+
+\todo[inline]{Speak about the fact that we haven’t tried different temporal contexts sizes and that it should be done with backbones that support it to see whether results still hold up or not.}
 
 \subsection*{Data-Related Challenges}
 Limited training data remains a fundamental constraint. Our dataset, while sufficient to demonstrate the viability of automated bouldering segmentation, lacks the scale and diversity needed for robust real-world deployment. We identify several potential approaches to address this:
@@ -16,5 +18,11 @@ Using our best-performing models to pseudo-label unlabeled climbing videos, then
 \noindent\textbf{External Data Integration.}
 Augmenting training with targeted external data from sources like YouTube or subsets of action recognition datasets like Kinetics that contain climbing or similar activities. This would require careful selection and possibly domain adaptation techniques to ensure relevance.
 
-\noindent\textbf{Data Augmentation.}
-While we employed basic augmentation techniques, more advanced video-specific augmentations such as temporal shifts, speed variation, and view synthesis could improve model robustness to variations in climbing styles and camera positions.
+\noindent\textbf{Data Augmentation.}  
+More advanced video-specific augmentation techniques, such as temporal shifts, speed variation, and generating new views from different angles, could enhance model robustness to variations in climbing styles and camera positions \cite{i3d}.
+
+\todo[inline]{We could also use an attention mechanism to allow the model to focus on the most important frames/segments, but this would increase the model's complexity, thus increasing training time and computational cost.}
+
+\todo[inline]{Another possible improvement would be to use fixed or learnable positional embeddings in combination with the MLP to incorporate temporal awareness into the MLP.}
+
+\todo[inline]{Add as a possible improvment, the subsampling of segments, meaning we classify only some segments and fill in the blanks using interpolation, this might yield good results while lowering inference cost.}

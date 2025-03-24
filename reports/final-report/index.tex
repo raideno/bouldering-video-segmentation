@@ -5,15 +5,27 @@
 % NOTE: apparently when disabled latex will try to stretch the page's content to the bottom in order to fill the whole page
 % \raggedbottom
 
+\renewcommand{\ref}[1]{\textbf{\ref{#1}}}
+
 \begin{document}
 
 \input{sections/0-title-page.tex}
 
 \begin{abstract}
-    This research project focuses on temporal action segmentation in professional bouldering videos. The objective is to classify each frame of a video based on the climber’s activity to enable a detailed analysis of their performance. The project leverages pre-trained networks to extract spatio-temporal features, combining these with either a Multi-Layer Perceptron (MLP) or a Long Short-Term Memory (LSTM) network for classification. The dataset, collected during a bouldering competition, presents several challenges, including class imbalance, noise, and limited size. Experimental results demonstrate that models incorporating temporal context significantly outperform frame-based approaches. Notably, the X3D-M model with an LSTM classifier achieves the highest accuracy of 86.61\%. This work contributes valuable insights into effective model selection for bouldering video analysis and highlights potential improvements for real-world applications. Future work will focus on enhancing real-time capabilities, exploring alternative loss functions, and expanding the dataset through semi-supervised learning techniques.
+    This research project focuses on temporal action segmentation in professional bouldering videos.
+    The objective is to classify each frame of a video based on the climber’s activity to enable a detailed analysis of their performance.
+    The project leverages pre-trained networks, which are crucial for addressing the dataset's limited size by providing robust spatio-temporal feature extraction.
+    These features are then combined with either a Multi-Layer Perceptron (MLP) or a Long Short-Term Memory (LSTM) network for classification.
+    The dataset, collected during a bouldering competition, presents several challenges, including class imbalance, noise, and limited size.
+    \\\\
+    Experimental results demonstrate that models incorporating temporal context significantly outperform frame-based approaches.
+    Notably, the X3D-M model with an LSTM classifier achieves the highest accuracy of 86.61\%.
+    This work contributes valuable insights into effective model selection for bouldering video analysis and highlights potential improvements for real-world applications.
+    % Future work will focus on enhancing real-time capabilities, exploring alternative loss functions, and expanding the dataset through semi-supervised learning techniques.
+    The code and dataset used in this project are available at: \url{https://github.com/raideno/bouldering-video-segmentation}.
 \end{abstract}
 
-\input{sections/1-introduction.tex}
+% \input{sections/1-introduction.tex}
 \input{sections/2-context.tex}
 \input{sections/3-problem-setup.tex}
 \input{sections/4-dataset.tex}
