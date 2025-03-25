@@ -2,14 +2,14 @@
 
 While our approach demonstrates promising results for bouldering video segmentation, several limitations remain to be addressed in future work.
 
-\subsection*{Methodological Limitations}
+\subsection{Methodological Limitations}
 Our current implementation faces several methodological constraints. First, the cross-entropy loss function used may not be optimal for temporal segmentation tasks with class imbalance. Alternative losses could potentially improve performance on underrepresented classes. Second, despite the strong performance of convolution architectures, we did not extensively explore transformer-based approaches specifically designed for video understanding, such as TimeSformer \cite{time-s-former} or MViT \cite{mvit}, which have shown state-of-the-art results in related action recognition tasks.
 
-Real-time processing remains a significant limitation of our current approach. The segment-based models that achieved the highest accuracy operate with inherent latency due to their temporal window requirements. But for practical applications coaches usually don't require realtime annotations.
+Real-time processing remains a significant limitation of our current approach. The segment-based models that achieved the highest accuracy operate with inherent latency due to their temporal window requirements. However, for practical applications, coaches usually don't require real-time annotations.
 
-\todo[inline]{Speak about the fact that we haven’t tried different temporal contexts sizes and that it should be done with backbones that support it to see whether results still hold up or not.}
+Another limitation is that we did not explore varying temporal context sizes. Investigating different segment lengths, particularly with backbones that support flexible context sizes, would help assess the stability of our findings across different temporal resolutions.
 
-\subsection*{Data-Related Challenges}
+\subsection{Data-Related Challenges}
 Limited training data remains a fundamental constraint. Our dataset, while sufficient to demonstrate the viability of automated bouldering segmentation, lacks the scale and diversity needed for robust real-world deployment. We identify several potential approaches to address this:
 
 \noindent\textbf{Semi-supervised Learning.}
@@ -21,8 +21,11 @@ Augmenting training with targeted external data from sources like YouTube or sub
 \noindent\textbf{Data Augmentation.}  
 More advanced video-specific augmentation techniques, such as temporal shifts, speed variation, and generating new views from different angles, could enhance model robustness to variations in climbing styles and camera positions \cite{i3d}.
 
-\todo[inline]{We could also use an attention mechanism to allow the model to focus on the most important frames/segments, but this would increase the model's complexity, thus increasing training time and computational cost.}
+\subsection{Model Limitations}
+Our current model architecture may also benefit from additional enhancements. One potential improvement is integrating an attention mechanism to allow the model to focus on the most relevant frames or segments. This could improve performance by emphasizing key moments in the video; however, this would also increase the model's complexity, thus raising training time and computational costs.
 
-\todo[inline]{Another possible improvement would be to use fixed or learnable positional embeddings in combination with the MLP to incorporate temporal awareness into the MLP.}
+Another promising direction is incorporating fixed or learnable positional embeddings in combination with the MLP to improve temporal awareness. This enhancement could enable the model to better understand the sequential nature of climbing activities, particularly in scenarios where the temporal structure is crucial.
 
-\todo[inline]{Add as a possible improvment, the subsampling of segments, meaning we classify only some segments and fill in the blanks using interpolation, this might yield good results while lowering inference cost.}
+Finally, subsampling segments and interpolating between classified segments may offer a practical way to reduce inference costs while maintaining reliable predictions. This technique could improve the model's efficiency, especially in resource-constrained environments or when analyzing lengthy videos, by classifying only a subset of segments and filling the gaps through interpolation.
+
+By addressing these limitations, we aim to develop a more robust and efficient framework for automated bouldering video analysis, ultimately providing coaches with valuable insights to enhance athlete performance.

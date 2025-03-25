@@ -28,7 +28,7 @@ Note that it is easy to convert between these two representations by computing t
 The goal is to develop a model $\mathcal{M}$ that takes a sequence of frames as input and predicts the corresponding sequence of frame-level annotations, $\mathcal{M}: \{f_1, f_2, \dots, f_{N_i}\} \rightarrow \{c_1, c_2, \dots, c_{N_i}\}$.
 
 \noindent\textbf{Frame-wise Prediction.}  
-In this formulation, the model processes each frame independently and predicts its corresponding label. The model processes each frame locally, as a sequence of frames is passed through a convolutional layer or a similar architecture. The model predicts a label $c_j$ for each frame $f_j$, i.e.,
+In this formulation, the model processes each frame independently and predicts its corresponding label. As the each frame is passed through a convolutional layer or a similar architecture. The model predicts a label $c_j$ for each frame $f_j$, i.e.,
 
 \[
 c_j = \mathcal{M}(f_j)
@@ -49,10 +49,10 @@ The choice between these approaches depends on the desired trade-off: a smaller 
 
 \subsection{Additional Statistical Measures}
 
-Besides the usual statistics, such as the mean and average duration, we also utilize the following two metrics, introduced in \cite{tas-survey}, to gain further insights into the data: \textbf{Repetition Score} and \textbf{Order Variation Score}.
+Besides the usual statistics, such as the mean and average duration, we also utilize the following two metrics, introduced in \cite{tas-survey}, to gain further insights into the data:
 
 \noindent\textbf{Repetition Score.}  
-The \textbf{Repetition Score} quantifies the degree of repetition of actions within a video. Using the notations defined earlier, it is expressed as:  
+It quantifies the degree of repetition of actions within a video. Using the notations defined earlier, it is expressed as:  
 
 \[
 \text{Repetition Score} = \frac{|\{c_j \mid c_j \in a_i\}|}{|a_i|}
@@ -61,7 +61,7 @@ The \textbf{Repetition Score} quantifies the degree of repetition of actions wit
 where \( |\{c_j \mid c_j \in a_i\}| \) denotes the number of unique action labels in the annotation sequence \( a_i \), and \( |a_i| \) represents the total number of annotated actions in the video. This score ranges from 0 to 1, where 0 indicates no repetition of actions, and 1 indicates that the same action is repeated throughout the video.
 
 \noindent\textbf{Order Variation Score.}  
-The \textbf{Order Variation Score} measures the consistency of the order of actions across different videos or sequences. Using the previously defined notations, it is expressed as:  
+It measures the consistency of the order of actions across different videos or sequences. Using the previously defined notations, it is expressed as:  
 
 \[
 \text{Order Variation Score} = \frac{1}{|V|} \sum_{i, j \in V} d(a_i, a_j)
@@ -71,9 +71,8 @@ where \(d(a_i, a_j)\) represents the pairwise distance between the annotation se
 
 \subsection{Evaluation Metrics}
 
-A common metric used to evaluate model performance is accuracy.
+During the project we are going to use the \textbf{Accuracy} as a metric to evaluate the model's performance. It is defined as:
 
-\noindent\textbf{Accuracy.} Measures the overall accuracy of the model, defined as:
 $$
 \text{Accuracy} = \frac{\text{Correct Predictions}}{\text{Total Predictions}}.
 $$

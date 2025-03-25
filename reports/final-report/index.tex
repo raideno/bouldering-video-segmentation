@@ -6,6 +6,7 @@
 % \raggedbottom
 
 \renewcommand{\ref}[1]{\textbf{\ref{#1}}}
+\newcommand{\modelname}[1]{\textbf{#1}}
 
 \begin{document}
 
@@ -13,7 +14,7 @@
 
 \begin{abstract}
     This research project focuses on temporal action segmentation in professional bouldering videos.
-    The objective is to classify each frame of a video based on the climber’s activity to enable a detailed analysis of their performance.
+    The objective is to classify each frame of a video based on the climber's activity to enable a detailed analysis of their performance.
     The project leverages pre-trained networks, which are crucial for addressing the dataset's limited size by providing robust spatio-temporal feature extraction.
     These features are then combined with either a Multi-Layer Perceptron (MLP) or a Long Short-Term Memory (LSTM) network for classification.
     The dataset, collected during a bouldering competition, presents several challenges, including class imbalance, noise, and limited size.

@@ -1,6 +1,6 @@
+\twocolumn
 \newpage
 \appendix
-\onecolumn
 
 \section{Definitions}
 
@@ -36,14 +36,14 @@ SlowFast, introduced in \cite{slowfast}, is a two-stream network that processes 
 \subsection*{ViViT}
 ViViT, proposed in \cite{vivit}, extends the vision transformer architecture to video data. Each video frame is processed by a vision transformer, extracting CLS tokens that are then combined using a second transformer to capture temporal relationships and produce a final video embedding.
 
-\newpage
+% \newpage
 \section{Figures and Tables}
 
 \input{../../assets/tables/features-extractors.tex}
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{../../assets/figures/example-of-video-segmentation-1.png}
+    \includegraphics[width=1\linewidth]{../../assets/figures/example-of-video-segmentation-1.png}
     \caption{Example of video segmentation generated using the TAS helper Python package.}
     \label{fig:your-label}
 \end{figure}

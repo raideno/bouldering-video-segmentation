@@ -4,7 +4,7 @@ This repository contains the code related to my 120 hours research project that 
 
 Below you'll be able to find instructions related to how to train and do inference using the model / repository's code.
 
-For a detailed report on the model and the approach that was used, please refer to the [PDF report](https://google.com) of the research project.
+For a detailed report on the model and the approach that was used, please refer to the [PDF report](assets/report.pdf) of the research project.
 
 ![model-overview](assets/figures/model-overview-with-background.png)
 
@@ -72,9 +72,59 @@ visualizer.plot_segmentation(
 )
 ```
 
+A more detailed usage example can be found below:
+
 ```python
+import tqdm
+import torch
+import numpy as np
+
+from video_dataset.video import read_video
+from bouldering_video_segmentation.utils import LabelEncoderFactory
+
+# --- --- ---
+
+SEGMENT_SIZE = 32
+VIDEO_FILE_PATH = "./example-video.mp4"
+
+# --- --- ---
+
 extractor, classifier = torch.hub.load("raideno/bouldering-video-segmentation", "mlp", backbone_name="x3d-xs", pretrained=True)
 
+video = read_video(VIDEO_FILE_PATH)
+
+features = []
+predictions = []
+
+for i in tqdm.tqdm(iterable=range(0, len(video), SEGMENT_SIZE), desc="[processing-video-segments]:", disable=not verbose):
+    segment = video[i:i+SEGMENT_SIZE]
+
+    # NOTE: required to be transposed to (Channel, Time, Height, Width)
+    segment = segment.transpose(3, 0, 1, 2)
+    feature = extractor.transform_and_extract(segment)
+    feature = feature.unsqueeze(0)
+    prediction = model(feature)
+
+    features.append(feature)
+    predictions.append(prediction)
+
+_, labels = torch.max(torch.stack(predictions), dim=2)
+
+frames_predictions = np.repeat(labels.numpy(), SEGMENT_SIZE)
+
+# --- --- ---
+
+label_encoder = LabelEncoderFactory.get()
+
+visualizer = SegmentationVisualizer(
+    labels_values=label_encoder.transform(label_encoder.classes_),
+    labels_names=label_encoder.classes_
+)
+
+visualizer.plot_segmentation(
+    frames_labels=frames_predictions,
+    fps=25
+)
 ```
 
 ## Training the Model

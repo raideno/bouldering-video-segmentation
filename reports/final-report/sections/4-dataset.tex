@@ -21,26 +21,10 @@ Our dataset was collected during the "Manip Chambery" bouldering event. It consi
 
 The climbers' activities during the event are diverse. They may engage in actions such as brushing the holds, observing them, and climbing. These actions occur freely within the 4-minute duration of each video, providing a rich set of diverse activities.
 
-As specified in \cite{section:context}, the videos were annotated by the climbers themselves, and the annotations were provided in raw Excel format. The annotations are segment-level, meaning that for each action, we are given the start time and duration of the activity, along with the corresponding label. Out of the 20 climbs, only 11 have been annotated with action segments.
+As specified in \ref{section:context}, the videos were annotated by the climbers themselves, and the annotations were provided in raw Excel format. The annotations are segment-level, meaning that for each action, we are given the start time and duration of the activity, along with the corresponding label. Out of the 20 climbs, only 11 have been annotated.
 
-The total duration of the dataset is 2 hours and 40 minutes, of which 1 hour and 28 minutes are annotated, forming the basis of our experiments.
+The total duration of the dataset is 2 hours and 40 minutes, of which 1 hour and 28 minutes is annotated, forming the basis of our experiments.
 
-\noindent\textbf{Dataset Limitations.}
-\label{subsection:dataset-limitations}
-While the dataset provides valuable data for action segmentation tasks, it has several limitations: 
-
-
-\textbf{1.} The dataset size is relatively small, containing only 11 unique videos.
-\\
-\textbf{2.} The annotations are provided in Excel format, which is not ideal for modern data science workflows.
-\\
-\textbf{3.} The annotations themselves are not perfect, as they may be shifted in time, and the videos do not always start precisely at the beginning of the event.
-\\
-\textbf{4.} Climbers occasionally leave the frame during the video, and in some instances, other people may enter the frame, which introduces noise to the data.
-\\
-\textbf{5.} The dataset includes a 'nothing' class, representing periods with no relevant activity, which can further imbalance the dataset and affect model performance.  
-
-Despite these limitations, this dataset provides an essential foundation for the development and evaluation of action segmentation models in the context of bouldering.
 \subsection{Chosen Structure}
 
 We decided to structure the dataset in a way that is specifically suited for temporal action segmentation and classification tasks, with a focus on both ease of use and efficiency for training. This structure is designed to allow for easy scalability as new data is added to the project, an important consideration as the dataset will be updated by individuals who may not have a background in data science.
@@ -59,7 +43,7 @@ We decided to structure the dataset in a way that is specifically suited for tem
     |   +-- ...
 \end{verbatim}
 
-The advantage of this structure is that it does not require additional processing of the videos or annotations provided by the data collection team. As everything is automated by the tool we developed, adding new data can be done very easily, ensuring the dataset can be expanded effortlessly in the future.
+As everything is automated by the developed tools, adding new data can be done very easily, ensuring the dataset can be expanded effortlessly in the future.
 
 To optimize for video loading, we store each video as a sequence of JPG frames rather than the video file itself. This avoids the need for decoding during runtime, though it comes at the cost of additional storage space. This structure also makes the dataset more versatile and compatible with various libraries and tools.
 
@@ -74,7 +58,7 @@ In this section, we explore key aspects of our bouldering dataset to better unde
 
 \input{../../assets/tables/dataset-statistics.tex}
 
-As shown in Figure \ref{figure:distribution-of-actions-in-dataset}, our dataset contains five action classes: cleaning ("brossage"), climbing ("grimpe"), observation ("lecture"), nothing, and break ("chrono"). The distribution is notably unbalanced, with "lecture" being the most frequent at 34.7\%, followed by "grimpe" at 30.8\%. The cleaning action ("brossage") represents 19.0\%, while "chrono" accounts for only 2.5\%. This imbalance is reflected in the dataset's imbalance ratio of \textbf{14.16}, indicating a significant risk of the model overfitting to the dominant classes.
+As shown in Figure \ref{figure:distribution-of-actions-in-dataset}, our dataset contains five action classes: cleaning ("brossage"), climbing ("grimpe"), observation ("lecture"), nothing, and break ("chrono"). The distribution is notably unbalanced, with "lecture" being the most frequent at 34.7\%, followed by "grimpe" at 30.8\%. The cleaning action ("brossage") represents 19.0\%, while "chrono" accounts for only 2.5\%. This imbalance is reflected in the dataset's imbalance ratio of \textbf{14.16} (Table~\ref{table:dataset-statistics}), indicating a significant risk of the model overfitting to the dominant classes.
 
 Figure \ref{figure:temporal-distribution-of-actions} reveals that "grimpe" is less common at the beginning of videos, aligning with climbers preparing their attempts through cleaning or observation. Conversely, "lecture" and "brossage" actions are rare at the end of videos, suggesting that climbers tend to finalize their attempts rather than engage in preparation during these moments. This temporal pattern highlights the importance of incorporating time-dependent features in our model.
 
@@ -84,9 +68,25 @@ Figure \ref{figure:average-duration-of-actions} highlights further complexities:
 
 Lastly, from Figure \ref{table:dataset-statistics} we can see that the dataset's \textbf{average repetition score of 0.81} suggests a high degree of repetitive patterns in action sequences, which may lead the model to exploit these patterns rather than learning meaningful action transitions. Additionally, the \textbf{order variation score of 0.49} reveals some variability in action order, which may require the model to adapt to less predictable sequences.
 
-In addition to these challenges, approximately 15\% (\ref{figure:distribution-of-actions-in-dataset}) of the frames contain no visible person, and 3\% include multiple people, introducing further noise. Moreover, 13\% of climbs lack proper annotations and are labeled as "nothing" by default.
+In addition to these challenges, from Figure~\ref{figure:distribution-of-actions-in-dataset} we can see that approximately 15\% (\ref{figure:distribution-of-actions-in-dataset}) of the frames contain no visible person, and 3\% include multiple people, introducing further noise. Moreover, 13\% of climbs lack proper annotations and are labeled as "nothing" by default.
 
 These insights highlight key challenges for our model: class imbalance, varying action durations, repetitive patterns, and noisy data. Addressing these issues will be crucial for achieving robust action segmentation performance.
+
+\subsection{Dataset Limitations.}
+\label{subsection:dataset-limitations}
+While the dataset provides valuable data for action segmentation tasks, it has several limitations: 
+
+\textbf{1.} The dataset size is relatively small, containing only 11 unique videos.
+\\
+\textbf{2.} The annotations are provided in Excel format, which is not ideal for modern data science workflows.
+\\
+\textbf{3.} The annotations themselves are not perfect, as they may be shifted in time, and the videos do not always start precisely at the beginning of the event.
+\\
+\textbf{4.} Climbers occasionally leave the frame during the video, and in some instances, other people may enter the frame, which introduces noise to the data.
+\\
+\textbf{5.} The dataset includes a 'nothing' class, representing periods with no relevant activity, which can further imbalance the dataset and affect model performance.  
+
+Despite these limitations, this dataset provides an essential foundation for the development and evaluation of action segmentation models in the context of bouldering.
 
 \subsection{Popular Video Datasets}
 
@@ -113,8 +113,6 @@ Some of the most notable video datasets designed for temporal action segmentatio
 \noindent\textbf{HowTo100M Dataset.} A massive dataset of instructional (tutorial) videos, covering a broad range of activities \cite{howto100m-dataset}.
 
 \noindent\textbf{Something-Something V2.} Videos of basic actions such as picking up a pen, captured from a POV perspective, focusing on fine-grained interactions \cite{something-something-dataset}.
-
-Note that the first three datasets were specifically designed for temporal action segmentation.
 
 \input{../../assets/tables/popular-datasets.tex}
 
