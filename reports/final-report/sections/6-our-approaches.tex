@@ -7,8 +7,10 @@
     \label{figure:model-architecture-overview}
     \medskip
     \small\par
-    % \small
-    (a) Represent a global overview of our Model's architecture. (b) and (c) represent the types of spatio temporal feature extractors considered. (d), (e), (f) and (g) represent the different ways of aggregating the frame by frame feature into a single feature representing a sequence of frames. (h) and (i) represent the two architectures of feature classifiers we considered, and MLP and an LSTM respectively.
+    \textbf{(a)} Represent a global overview of our Model's architecture.
+    \textbf{(b)} and \textbf{(c)} represent the types of spatio temporal feature extractors considered.
+    \textbf{(d)}, \textbf{(e)}, \textbf{(f)} and \textbf{(g)} represent the different ways of aggregating the frame by frame features into a single feature, respectively, addition, stacking / concatenation, averaging, temporal modeling using an LSTM.
+    \textbf{(h)} and \textbf{(i)} represent the two architectures of feature classifiers we considered, an MLP and an LSTM.
 \end{figure*}
 
 Given the dataset size constraint, training a neural network from scratch with our data is infeasible and unlikely to yield meaningful results. To address this, we leverage pre-trained networks trained on large-scale datasets that contain similar types of actions to those found in our data. These actions are general, composed of multiple smaller movements, and not very detailed, making them comparable to activities present in popular datasets like Kinetics.

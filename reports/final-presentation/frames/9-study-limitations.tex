@@ -1,0 +1,33 @@
+\section{Study Limitations}
+
+\begin{frame}
+    \customframetitle{Study Limitations}
+
+    \vspace{1em}
+
+    \begin{itemize}
+        \itemsep1em
+        \item Loss Function.
+        \item Model Architecture.
+        \item Real Time Processing.
+        \item Data Limitation \& Solutions.
+        \item Model Performance Efficiency.
+        \item Fully Fine Tune a Model.
+    \end{itemize}
+    
+    % \begin{itemize}
+    %     \item Loss Limitations.
+    %     \item Data Augmentation; Expanding the dataset with new data from youtube; Semi supervised Learning (Annotate the data using the pre-existing model).
+    %     \item Model Limitation; Explore more transformer based extractors.
+    %     \item Fully fine tune and retrain a model rather than only the classification layer.
+    %     \item Mixture of Models; More complex architectures using positional embeddings or attention mechanisms or transformers.
+    %     \item Further Optimization; Segment based sub sampling; Better study the sub sampling strategy \& make it more efficient in term of performance or computational cost.
+    % \end{itemize}
+\end{frame}
+
+\comment{
+    - Loss Function & Transformer Models - Our current method uses cross-entropy loss, which may not be ideal for class-imbalanced data in temporal segmentation tasks. Exploring alternative loss functions could improve performance, especially for underrepresented classes. Additionally, we relied on convolutional models but didn’t experiment with transformer-based approaches like TimeSformer or MViT, which are tailored for video understanding and could enhance results.
+    - Real-time Processing & Context Sizes - While our models achieve good accuracy, they require temporal windows, adding latency. Fortunately, real-time performance isn’t critical for climbing coaches, who can work with delayed annotations. We also didn’t test different temporal context sizes, which could improve the model’s robustness across varying video lengths.
+    - Data Limitations & Solutions - Our dataset is limited in size and diversity, which restricts generalization. To address this, we suggest three approaches: (1) Semi-supervised learning, where our best models pseudo-label new climbing videos to expand the dataset; (2) External data integration, selectively adding related climbing content from public datasets like Kinetics; and (3) Advanced video-specific augmentations like temporal shifts or speed variations to improve robustness.
+    - Model Enhancements & Efficiency - Introducing an attention mechanism could help the model focus on key moments, improving accuracy but at the cost of added complexity. Additionally, adding positional embeddings might enhance the model’s understanding of climbing sequences. Finally, using subsampling with interpolation could reduce inference costs by analyzing fewer frames while maintaining reliable predictions.
+}

@@ -1,0 +1,25 @@
+\section{Results}
+
+\begin{frame}
+    \customframetitle{Training results}
+
+    \input{../../assets/tables/training-results.presentation.tex}
+\end{frame}
+
+\begin{frame}
+    \customframetitle{Results Conclusion}
+
+    \vspace{1em}
+
+    \begin{itemize}
+        \itemsep1em
+        \item Segment-based models consistently outperform frame-based models.
+        \item YOLO-based skeleton features and S3D-H models underperformed significantly.
+        \item Model size doesn’t always correlate with performance; lighter models can perform better.
+        \item LSTM classifiers generally improve accuracy and reduce variance.
+        \item R3D with LSTM achieves the highest accuracy for accuracy-critical applications.
+        \item X3D-XS with MLP offers a good trade-off for resource-constrained environments.
+    \end{itemize}
+
+    % TODO: display some segments examples.
+\end{frame}

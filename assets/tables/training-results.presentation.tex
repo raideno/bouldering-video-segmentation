@@ -1,0 +1,38 @@
+\begin{table}[t]
+    \centering
+    \tiny
+    \resizebox{0.95\linewidth}{!}{
+        \begin{tabular}{c||lrr||cc}
+            \toprule
+            \multirow{2}{*}{\textbf{Type}} 
+            % \multicolumn{1}{c|}{\textbf{Type}}
+            & \multicolumn{3}{c||}{\textbf{Backbone Information}} 
+            & \multicolumn{2}{c}{\textbf{Accuracy}} \\
+            \cmidrule(lr){2-4} \cmidrule(lr){5-6}
+            & Name & \#Params & \#Frames (Seconds) & MLP & LSTM \\
+            \midrule
+            \multirow{3}{*}{\rotatebox[origin=c]{90}{Frame}}
+            & yolo & 2.9M & 8 (0.32) & 65.84\% ± 3.93 & 70.61\% ± 3.62 \\
+            & dino & 22.1M & 8 (0.32) & 80.53\% ± 5.02 & 82.64\% ± 3.15 \\
+            & clip & 151.3M & 8 (0.32) & 77.08\% ± 1.88 & 78.72\% ± 3.04 \\
+            \midrule
+            \multirow{8}{*}{\rotatebox[origin=c]{90}{Segment}}
+            & r3d & 31.6M & 8 (0.32) & 84.15\% ± 4.59 & \textbf{86.80}\% ± 3.50 \\
+            & i3d & 12.7M & 16 (0.64) & 77.61\% ± 7.96 & 79.38\% ± 5.68 \\
+            & x3d-xs & 3.0M & 4 (0.16) & 81.64\% ± 3.76 & 84.90\% ± 2.68 \\
+            & x3d-s & 3.0M & 16 (0.64) & 84.89\% ± 4.90 & 85.97\% ± 2.84 \\
+            & x3d-m & 3.0M & 16 (0.64) & \textbf{85.39}\% ± 4.16 & 85.65\% ± 2.22 \\
+            & x3d-l & 5.3M & 16 (0.64) & 84.79\% ± 4.04 & 85.46\% ± 1.47 \\
+            & s3d-k & 7.9M & 16 (0.64) & 78.38\% ± 5.21 & 78.57\% ± 4.06 \\
+            & s3d-h & 7.9M & 16 (0.64) & 59.52\% ± 8.90 & 43.25\% ± 4.74 \\
+            & slowfast & 33.6M & 32 (1.28) & 84.06\% ± 2.94 & 85.16\% ± 1.80 \\
+            & vivit & 88.6M & 32 (1.28) & 77.65\% ± 5.19 & 81.46\% ± 2.21 \\
+            \bottomrule
+        \end{tabular}
+    }
+    % \vspace{-2ex}
+    \centering
+    \caption{Models Performance Results.}
+    \label{table:training-results}
+\end{table}
+    
