@@ -1,0 +1,5 @@
+backbones:
+  - name: resnet50
+    type: frame
+  - name: dino
+    type: frame

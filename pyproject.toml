@@ -28,6 +28,8 @@ video-dataset = "0.3.0.dev20250322125011"
 ipykernel = "^6.29.5"
 
 [tool.poetry.group.experiments.dependencies]
+omegaconf = "^2.3.0"
+hydra-core = "^1.3.2"
 tueplots = "^0.2.0"
 opencv-python = "^4.10.0.84"
 pandas = "^2.2.3"
