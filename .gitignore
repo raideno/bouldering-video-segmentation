@@ -6,6 +6,10 @@ temp/
 # weights/
 # weights/*
 
+models
+models/
+models/*
+
 *.zip
 
 # *.pt

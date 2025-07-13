@@ -1,0 +1,5 @@
+defaults:
+  # resnet, dino
+  - backbone: dino
+  # mlp, lstm
+  - classifier: mlp
